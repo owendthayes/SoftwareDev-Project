@@ -1,0 +1,292 @@
+html{
+    background: #0a0c1b;
+    margin: 0;
+    scroll-behavior: smooth;
+    font-family: 'railway', sans-serif;
+}
+
+.mainnav{
+    margin: 15px 25px 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.navigation{
+    height: 100%;
+}
+
+.mainnav .navi button{
+    box-shadow: 0px 4px 8px 0px rgba(104, 34, 206, 0.6);
+    font-family: 'railway', sans-serif;
+    padding: 5px 10px;
+    background: linear-gradient(150deg, #451ded, #8e0ce3);
+    border-radius: 10px;
+    cursor: pointer;
+    border-color: #8e0ce3;
+}
+
+.mainnav .navi a{
+    color: #fcfcfb;
+    text-decoration: none;
+    margin: 10px;
+    font-size: 18px;
+    letter-spacing: 1px;
+    transition: 0.5 ease-in-out;
+}
+
+.mainnav .navi a:hover{
+    border-bottom: 2px solid #8e0ce3;
+}
+
+
+.mainnav .imgnav img{
+    width: 125px;
+    height: 125px;
+    transition: transform .5s ease-in-out;
+}
+.mainnav .imgnav img:hover {
+    transform: rotate(360deg);
+    cursor: pointer;
+}
+
+.container{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #fbffff;
+    margin-bottom: 50px;
+}
+
+.container form{
+    border: 2px solid #9750e9;
+    width: 670px;
+    height: 550px;
+    display: flex;
+    justify-content: center;
+    /*box-shadow: rgba(80, 10, 120, 10) 0px 0px 50px;*/
+    box-shadow: 20px 20px 50px rgba(0, 0, 0, 0.5);
+    border-radius: 15px;
+    backdrop-filter: blur(10px);
+    flex-wrap: wrap;
+}
+
+.container form h1{
+    color: #fff;
+    font-weight: 500;
+    margin-top: 20px;
+    width: 500px;
+    text-align: center;
+}
+
+.container form input{
+    color: #fbffff;
+    width: 290px;
+    height: 40px;
+    padding-left: 10px;
+    outline: none;
+    border: none;
+    font-size: 15px;
+    margin-bottom: 10px;
+    background: none;
+    border-bottom: 2px solid #fff;
+    transition: 0.5s ease-in-out;
+    font-family: 'railway', sans-serif;
+}
+
+.container form input::placeholder{
+    color: #fbffff;
+}
+.container form input:focus{
+    border-bottom: 2px solid #9750e9;
+}
+
+.container form #firstName,
+.container form #email,
+.container form #mobile{
+    /*margin-left: 50px;*/
+    width: 500px
+}
+
+.container form h4{
+    color: #fff;
+    width: 600px;
+    font-weight: 300;
+    margin-top: 20px;
+    text-align: center;
+}
+
+.container form textarea{
+    background: none;
+    border: none;
+    border-bottom: 2px solid #fff;
+    color: #fff;
+    font-weight: 200;
+    font-size: 15px;
+    padding: 10px;
+    outline: none;
+    min-width: 600px;
+    max-width: 600px;
+    min-height: 80px;
+    max-height: 80px;
+    transition: 0.5s ease-in-out;
+}
+.container form textarea:focus{
+    border-bottom: 2px solid #9750e9;
+}
+textarea::-webkit-scrollbar{width: 1em;}
+textarea::-webkit-scrollbar-thumb{
+    background-color: #9750e9;
+}
+.container form #submitButton{
+    border: none;
+    /*background: linear-gradient(315deg, #9750e9 0%, #000000 60%);*/
+    background: transparent;
+    border: 2px solid #fbffff;
+    border-radius: 5px;
+    margin-top: 20px;
+    font-weight: 600;
+    font-size: 20px;
+    color: #fbffff;
+    width: 95%;
+    /*width: 100px;*/
+    padding: 0;
+    /*margin-right: 500px;*/
+    margin-bottom: 30px;
+    transition: 0.5s;
+}
+.container form #submitButton:hover{
+    opacity: .7s;
+    background: #9750e9;
+    border: 5px solid #9750e9;
+}
+
+.infocontainer{
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 30px;
+}
+.infocontainer .contactInfo{
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    /*flex-direction: column;*/
+}
+.infocontainer .contactInfo .boxinfo{
+    position: relative;
+    margin-left: 100px;
+    margin-right: 100px;
+    display: flex;
+}
+.infocontainer .contactInfo .boxinfo .iconinfo{
+    min-width: 60px;
+    height: 60px;
+    background: #9750e9;
+    box-shadow: 0 0 1px #fbffff, 0 0 2px #fbffff, 0 0 3px #fbffff, 0 0 4px #fbffff, 0 0 7px #fbffff, 0 0 8px #fbffff, 0 0 10px #fbffff;
+    display: flex;
+    color: #fbffff;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50%;
+    font-size: 22px;
+}
+.infocontainer .contactInfo .boxinfo .textinfo {
+    display: flex;
+    margin-left: 20px;
+    font-size: 16px;
+    color: #0c0c0b;
+    flex-direction: column;
+    font-weight: 300;
+    text-decoration:underline;
+    cursor:pointer;
+    transition: 0.5s ease-in-out;
+}
+.infocontainer .contactInfo .boxinfo:hover .textinfo, .infocontainer .contactInfo .boxinfo:hover .textinfo h3{
+    color: #fbffff;
+}
+
+.infocontainer .contactInfo .boxinfo .textinfo h3 {
+    margin-bottom: 0;
+    font-weight: 500;
+    color: #fbffff;
+    /*border-bottom: 2px solid #141414;*/
+    text-align: center;
+}
+
+.navigation{
+    border-bottom: 2px solid #ffffff;
+}
+.navigation:hover{
+    border-bottom: 2px solid #8e0ce3;
+}
+
+.otherbutton{
+    color: #fcfcfb;
+    margin: 10px;
+    box-shadow: 0px 4px 8px 0px rgba(104, 34, 206, 0.6);
+    font-family: 'railway', sans-serif;
+    padding: 10px 20px;
+    text-align: center;
+    text-decoration: none;
+    letter-spacing: 1px;
+    background: linear-gradient(150deg, #451ded, #8e0ce3);
+    border-radius: 10px;
+    font-size: 20px;
+    cursor: pointer;
+    border-color: #8e0ce3;
+}
+
+.otherbutton:hover{
+    color: #fcfcfb;
+    margin: 10px;
+    box-shadow: 0px 4px 8px 0px rgba(104, 34, 206, 0.6);
+    font-family: 'railway', sans-serif;
+    padding: 10px 20px;
+    text-align: center;
+    text-decoration: none;
+    letter-spacing: 1px;
+    background: linear-gradient(150deg, #3414b4, #6309a0);
+    border-radius: 10px;
+    font-size: 20px;
+    cursor: pointer;
+    border-color: #8e0ce3;
+}
+
+
+.inversebutton{
+    box-shadow: 0px 4px 8px 0px rgba(243, 236, 255, 0.6);
+    font-family: 'railway', sans-serif;
+    margin: 10px;
+    color: #8e0ce3;
+    padding: 10px 20px;
+    background: linear-gradient(150deg, #d8ceff, #e5beff);
+    border-radius: 10px;
+    font-size: 20px;
+    cursor: pointer;
+    border-color: white;
+}
+
+.inversebutton:hover{
+    box-shadow: 0px 4px 8px 0px rgba(194, 189, 204, 0.6);
+    font-family: 'railway', sans-serif;
+    margin: 10px;
+    color: #8e0ce3;
+    padding: 10px 20px;
+    background: linear-gradient(150deg, #b3abd3, #b494c9);
+    border-radius: 10px;
+    font-size: 20px;
+    cursor: pointer;
+    border-color: white;
+}
+
+.header .head button:hover, .header2 .head2 button:hover{
+    box-shadow: 0px 4px 8px 0px rgba(104, 34, 206, 0.6);
+    font-family: 'railway', sans-serif;
+    padding: 5px 10px;
+    background: linear-gradient(150deg, #3414b4, #6309a0);
+    border-radius: 10px;
+    cursor: pointer;
+    border-color: #8e0ce3;
+}

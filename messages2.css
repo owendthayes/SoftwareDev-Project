@@ -1,0 +1,664 @@
+html{
+    background: #00060b;
+    margin: 0;
+    scroll-behavior: smooth;
+    font-family: 'figtree', sans-serif;
+}
+
+.mainnav{
+    margin: 15px 25px 10px;
+    display: flex;
+    justify-content: normal;
+    align-items: center;
+    border-bottom: 5px solid white ; /*want to remove this from login and signup pages, gotta figure that out somehow*/
+}
+
+.navigation{
+    height: 20%;
+}
+
+.mainnav .navi a{
+
+    color: #fcfcfb;
+    text-decoration: none;
+    margin: 10px;
+    font-size: 18px;
+    letter-spacing: 1px;
+    transition: 0.5 ease-in-out;
+}
+
+.mainnav .navi a:hover{
+    border-bottom: 2px solid #8e0ce3;
+}
+
+.mainnav .navi button{
+    color: #fcfcfb;
+    margin: 10px;
+    box-shadow: 0px 4px 8px 0px rgba(104, 34, 206, 0.6);
+    font-family: 'railway', sans-serif;
+    padding: 5px 10px;
+    text-align: center;
+    text-decoration: none;
+    letter-spacing: 1px;
+    background: linear-gradient(150deg, #451ded, #8e0ce3);
+    border-radius: 10px;
+    cursor: pointer;
+    border-color: #8e0ce3;
+}
+
+.mainnav .imgnav img{
+    width: 125px;
+    height: 125px;
+}
+
+.selectorButtonsDiv
+{
+    margin: auto;
+    width: 80%;
+    height: 10%;
+    text-align:center;
+    margin-top: 1%;
+}
+
+.allUnreadButton
+{
+    width: 45%;
+    height: 50%;
+    margin:20px;
+    font-family: "Franklin Gothic", "sans-serif";
+    border-radius: 5px;
+    font-size: 25px;
+    color: #fcfcfb;
+    box-shadow: 0px 4px 8px 0px rgba(104, 34, 206, 0.6);
+    font-family: 'railway', sans-serif;
+    text-align: center;
+    text-decoration: none;
+    letter-spacing: 1px;
+    background: linear-gradient(150deg, #451ded, #8e0ce3);
+    border-radius: 10px;
+    cursor: pointer;
+    border-color: #8e0ce3;
+}
+
+.messagesDiv
+{
+    background-color: #0a0c1b;
+    width: 80%;
+    height: 100%;
+    margin: auto;
+    margin-top: 15px;
+    padding-top: 20px;
+    border: 5px solid white;
+    border-radius: 10px;
+    overflow-y:scroll;
+}
+
+.messageNotification
+{
+    width: 95%;
+    height: 15%;
+    background-color: white;
+    margin: auto;
+    margin-bottom: 20px;
+    align-content: center;
+    display:flex;
+    align-items:center;
+    border-radius:5px;
+    cursor:pointer;
+    position:relative;
+}
+
+.messagesAvatar
+{
+    width:90px;
+    height:100px;
+    background-color: #0a0c1b;
+    top: 50%;
+    margin-left: 5px;
+}
+
+.messagesUsername
+{
+    font-family:"Franklin Gothic", "sans-serif";
+    position:absolute;
+    margin-left: 120px;
+    margin-bottom: 70px;
+}
+
+.lastMessageContent
+{
+    font-family:"Franklin Gothic", "sans-serif";
+    color: grey;
+    margin-top: 50px;
+    margin-left:150px;
+    position:absolute;
+}
+
+.messageDate
+{
+    font-family:"Franklin Gothic", "sans-serif";
+    position:absolute;
+    margin-left: 1000px;
+    margin-bottom: 70px;
+    color:grey;
+}
+
+.notificationIcon
+{
+    width:40;
+    height:40;
+    position:absolute;
+    float:right;
+    margin-left: 1075px;
+}
+
+.messageWindow
+{
+    width: 80%;
+    height: 90%;
+    margin: auto;
+    background-color: white;
+    position:relative;
+}
+
+.messageContainer
+{
+    width: 60%;
+    float:left;
+    height: 50px;
+    background-color: grey;
+    border: 2px solid black;
+    border-radius: 5px;
+    margin:auto;
+    margin-left: 20px;
+    margin-top: 10px;
+    margin-bottom:10px;
+    position:relative;
+}
+
+.messageContainerUser
+{
+    width: 60%;
+    float:right;
+    height: 50px;
+    background-color: #b483fe;
+    border: 2px solid black;
+    border-radius: 5px;
+    margin:auto;
+    margin-right: 20px;
+    margin-bottom: 10px;
+    margin-top: 10px;
+    position:relative;
+}
+
+.messageHeader
+{
+    background-color: rgb(109, 109, 109);
+    width:100%;
+    margin:auto;
+    height: 130px;
+    margin-bottom: 15px;
+}
+
+.messages
+{
+    width:90%;
+    height: 400px;
+    background-color:rgb(207, 207, 207);
+    overflow-y: scroll;
+    position:relative;
+    margin: auto;
+}
+
+.messageTimeSent
+{
+    float:left;
+    position:relative;
+    margin:auto;
+    margin-left: 30px;
+    margin-top: 20px;
+}
+
+.messageTimeSentUser
+{
+    float:right;
+    position:relative;
+    margin-right: 30px;
+    margin-top: 20px;
+}
+
+.closeMessageButton
+{
+    float:right;
+    margin-right: 10px;
+    margin-top:10px;
+    font-family: "Franklin Gothic", "sans-serif";
+    font-size:25px;
+    position:relative;
+    cursor:pointer;
+}
+
+.msgContainerAvatar
+{
+    height: 80px;
+    width: 75px;
+    background-color: rgb(141, 138, 138);
+    border: 5px solid rgb(141, 138, 138);
+    position:relative;
+    float:left;
+    margin-top: 20px;
+    margin-left: 50px;
+}
+
+.messageHeaderUsername
+{
+    font-family: "Franklin Gothic", "sans-serif";
+    font-size: 40px;
+    color:white;
+    position: relative;
+    text-align:center;
+    top:35%;
+}
+
+.messageContent
+{
+    font-family: "Franklin Gothic", "sans-serif";
+    color:white;
+    margin-left: 10px;
+    margin:top 10px;
+}
+
+.messageInput
+{
+    width: 85%;
+    height: 50px;
+    font-family: "Franklin Gothic", "sans-serif";
+    font-size:20px;
+    margin-left:60px;
+    float:left;
+}
+
+.sendMessageButton
+{
+    width:7%;
+    height:50px;
+    background-color: #b483fe;
+    margin-left: 5px;
+    cursor:pointer;
+    float:left; 
+}
+
+.sendMessageContainer
+{
+    width:90%;
+    height:50px;
+    margin:auto;
+    margin-top:10px;
+}
+
+
+
+.mesSec {
+    display: flex;
+    height: 90vh; /* Adjust as needed */
+    width: 100%;
+    margin-top: -10px;
+}
+
+.sidebar {
+    width: 25%; /* Adjust as needed */
+    background-color: #000;
+    border-right: 1px solid #ddd;
+    padding: 20px 20px;
+}
+
+.search-bar {
+    position: relative;
+    left: 15px;
+    width: 90%;
+    display: flex;
+}
+
+.search-bar input {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 20px;
+    border: 1px solid #000;
+    border-radius: 10px;
+    color:#000;
+    background: #9750e9;
+}
+.search-bar input::placeholder{
+    color: #fbffff;
+}
+.search-bar button i{
+    position: relative;
+}
+.search-bar button {
+    position: absolute;
+    background: transparent;
+    left: 235px;
+    bottom: 28px;
+}
+.user-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+
+    background-color: #0a0c1b;
+    width: 95%;
+    position: relative;
+    right: 10px;
+    height: 65%;
+    margin: auto;
+    margin-top: 15px;
+    padding-top: 10px;
+    padding-left: 10px;
+    padding-right: 10px;
+    border: 5px solid white;
+    border-radius: 10px;
+    overflow-y:scroll;
+}
+
+.user-list .user {
+    width: 95%;
+    color: #000;
+    height: 30%;
+    padding: 10px;
+    background-color: white;
+    margin: auto;
+    margin-bottom: 10px;
+    align-content: center;
+    display:flex;
+    align-items:center;
+    border-radius:5px;
+    cursor:pointer;
+    position:relative;
+}
+.user-list .user:hover{
+    background: #9750e9;
+}
+.user-list .user .up{
+    display: flex;
+    flex-direction: column;
+}
+.user-list .user .up .lastMessageContent
+{
+    right: 130px;
+    bottom: 35px;
+    width: 100px;
+    font-family:"Franklin Gothic", "sans-serif";
+    color: grey;
+    position: relative;
+}
+
+.user-list .user img{
+    width: 70px;
+    height: 70px;
+    object-fit: cover;
+    object-position: 50% 0%;
+    background-color: #0a0c1b;
+    top: 50%;
+    border-radius: 50%;
+}
+.user-list .user .up h4{
+    margin-left: 20px;
+    position: relative;
+    top: 30px;
+}
+
+.chat-area {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    color: #fbffff;
+}
+
+.chat-header {
+    padding: 20px;
+    background-color: #000;
+    /*background-image: linear-gradient(315deg, #9750e9 0%, #000000 60%);*/
+    
+    border-bottom: 1px solid #ddd;
+}
+
+.user-infop{
+    display: flex;
+    margin-bottom: 20px;
+    text-align: center;
+    align-items: center;
+    font-family: 'Beon', sans-serif;
+}
+.user-infop h3{
+    position: relative;
+    top: 10px;
+    left: 20px;
+}
+.user-infop img{
+    position: relative;
+    top: 10px;
+    width: 70px;
+    height: 70px;
+    object-fit: cover;
+    object-position: 50% 50%;
+    border-radius: 50%;
+}
+
+.message-area {
+    flex-grow: 1;
+    padding: 20px;
+    overflow-y: auto;
+    background-color: #000;
+}
+
+.chat-footer {
+    display: flex;
+    padding: 10px;
+   background-color: #000;
+   /*background-image: linear-gradient(315deg, #9750e9 0%, #000000 60%);*/
+    border-top: 1px solid #ddd;
+}
+
+.chat-footer .emoji-btn,
+.chat-footer .attachment-btn,
+.chat-footer .send-btn {
+    padding: 7px 10px;
+    border-radius: 5px;
+    margin-right: 5px;
+    border: none;
+    background-color: #000;
+    cursor: pointer;
+    font-family: 'Beon', sans-serif;
+    color: #fbffff;
+}
+.chat-footer .attachment-btn{
+    margin-left: 10px;
+}
+
+.media-attachment {
+    max-width: 200px; /* or any size you prefer */
+    border-radius: 4px;
+    margin-top: 5px;
+}
+
+.chat-footer .message-input {
+    flex-grow: 1;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.message {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.my-message {
+    justify-content: flex-end;
+}
+
+.their-message {
+    justify-content: flex-start;
+}
+.theirMessage{
+    display: flex;
+}
+.messageDate
+{
+    font-family:"Franklin Gothic", "sans-serif";
+    position:relative;
+    margin-left: 0;
+    margin-bottom: 0;
+    bottom: 5px;
+    left: 10px;
+    background: #000;
+    color:white;
+}
+
+.profile-pic {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    margin-right: 10px;
+    object-fit: cover;
+    object-position: 50% 0%;
+}
+
+.message-content {
+    background: #ddd;
+    padding: 10px;
+    border-radius: 10px;
+    position: relative;
+    bottom: 15px;
+}
+
+/* Add this to your CSS to handle messages sent by the user */
+.my-message .profile-pic {
+    order: 2; /* Puts the profile pic after the message content */
+    margin-left: 10px;
+    margin-right: 0;
+}
+
+.my-message .message-content {
+    font-family: 'Beon', sans-serif;
+    background: #9750e9;
+    color: white;
+}
+
+/* Add this to your CSS to visually separate messages from different people */
+.their-message .message-content {
+    /*font-family: 'Beon', sans-serif;
+    background: #9750e9;*/
+    background-color: grey;
+    /*background: #8FB8CA;*/
+    /*background: #ffae42;*/
+}
+
+
+.helpsec {
+    font-family: 'Beon', sans-serif;
+    margin: 2em;
+    padding: 30px 30px;
+    background: linear-gradient(315deg, #9750e9 0%, #000000 30%);
+    border-radius: 8px;
+    color: #fbffff;
+}
+.conlink{
+    position: relative;
+    top: 50%;
+    left: 34.6%;
+    color: #fbffff;
+}
+.conlink a{
+    color: #fbffff;
+    text-decoration: none;
+}
+.conlink a:hover{
+    color: #9750e9;
+}
+
+.helpsec h2 {
+    text-align: center;
+    margin-bottom: 1em;
+}
+
+.faq-container {
+    display: flex;
+    flex-direction: column;
+    color: #000;
+    margin-top: 20px;
+}
+
+.faq-item {
+    margin-bottom: 1em;
+}
+
+.faq-question {
+    font-family: 'Beon', sans-serif;
+    padding: 0.5em;
+    width: 100%;
+    text-align: left;
+    background-color: #e9ecef;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.faq-question:hover,
+.faq-question[aria-expanded="true"] {
+    background-color: #9750e9;
+}
+
+.faq-answer {
+    font-family: 'Beon', sans-serif;
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease;
+    background-color: #fff;
+    padding: 0 1em;
+    border-radius: 4px;
+}
+
+.faq-answer p {
+    margin: 0.5em 0;
+}
+
+/* Initial state of answers is hidden */
+/* When question is clicked, add a class that shows the answer */
+.faq-answer.show {
+    max-height: 1000px; /* large enough to fit content */
+    padding: 1em;
+}
+
+/* Add this CSS to style the filter buttons */
+.filter-buttons {
+    margin-top: 5px;
+    text-align: center;
+    display: flex;
+    
+}
+
+.filter-buttons button {
+    width: 150px;
+    height: 50%;
+    margin: 15px;
+    font-family: "Franklin Gothic", "sans-serif";
+    border-radius: 5px;
+    font-size: 25px;
+    color: #fcfcfb;
+    box-shadow: 0px 4px 8px 0px rgba(104, 34, 206, 0.6);
+    font-family: 'railway', sans-serif;
+    text-align: center;
+    text-decoration: none;
+    letter-spacing: 1px;
+    background: linear-gradient(150deg, #451ded, #8e0ce3);
+    border-radius: 10px;
+    cursor: pointer;
+    border-color: #8e0ce3;
+}
+
+.filter-buttons button:hover {
+    background-color: #0056b3; /* Change this color to your desired hover color */
+}

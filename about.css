@@ -1,0 +1,382 @@
+html{
+    background: #0a0c1b;
+    margin: 0;
+    scroll-behavior: smooth;
+    font-family: 'railway', sans-serif;
+}
+
+.mainnav{
+    margin: 15px 25px 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.navigation{
+    height: 100%;
+}
+
+.mainnav .navi button{
+    box-shadow: 0px 4px 8px 0px rgba(104, 34, 206, 0.6);
+    font-family: 'railway', sans-serif;
+    padding: 5px 10px;
+    background: linear-gradient(150deg, #451ded, #8e0ce3);
+    border-radius: 10px;
+    cursor: pointer;
+    border-color: #8e0ce3;
+}
+
+.mainnav .navi a{
+    color: #fcfcfb;
+    text-decoration: none;
+    margin: 10px;
+    font-size: 18px;
+    letter-spacing: 1px;
+    transition: 0.5 ease-in-out;
+}
+
+.mainnav .navi a:hover{
+    border-bottom: 2px solid #8e0ce3;
+}
+
+
+.mainnav .imgnav img{
+    width: 125px;
+    height: 125px;
+    transition: transform .5s ease-in-out;
+}
+.mainnav .imgnav img:hover {
+    transform: rotate(360deg);
+    cursor: pointer;
+}
+
+.container p span.cursor {
+    display: inline-block;
+    background-color: #fcfcfb;
+    margin-left: 0.1rem;
+    width: 3px;
+    animation: blink 1s infinite;
+}
+.container p span.cursor.typing {
+    animation: none;
+}
+@keyframes blink {
+    0%  { background-color: #fcfcfb; }
+    49% { background-color: #fcfcfb; }
+    50% { background-color: transparent; }
+    99% { background-color: transparent; }
+    100%  { background-color: #fcfcfb; }
+  }
+
+.heading .introhead{
+    position: relative;
+    text-align: center;
+    font-size: 36px;
+    margin: 100px auto;
+    letter-spacing: 2px;
+    color: #fbffff;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+}
+.heading img{
+    object-fit: contain;
+    object-position: 50% 50%;
+    width: 100%;
+}
+.aboutussec1{
+    color: #fbffff;
+    display: flex;
+    align-items: center;
+    align-content: center;
+    justify-content: center;
+}
+
+.subhead1, .subhead2, .subhead3{
+    text-align: center;
+}
+.ab1 p, .ab2 p, .ab3 p{
+    text-align: center;
+    padding: 10px 10px 10px 10px;
+}
+
+.ab1, .ab2{
+    border-right: 5px solid #fbffff;
+}
+
+.ab1, .ab2, .ab3{
+    height: 250px;
+    transition: 0.5s ease-out;
+}
+
+.ab1:hover, .ab2:hover, .ab3:hover{
+    box-shadow: 0 8px 16px 0 rgba(14, 16, 33, 0.7), /* Inner darker shadow */
+            0 4px 8px 0 rgba(27, 30, 49, 0.5); /* Outer lighter shadow */
+    background: linear-gradient(180deg, #1b1e31, #0e1021);
+    /*background: linear-gradient(315deg, #8a2be2 0%, #000000 60%);*/
+    border-color: #9750e9;
+}
+
+.teamDev{
+    background: linear-gradient(180deg, #1b1e31, #0e1021);
+    margin: 50px auto;
+    padding: 40px 40px;
+    width: 85%;
+    border-radius: 30px;
+    box-shadow: 0 8px 16px 0 rgba(14, 16, 33, 0.7), /* Inner darker shadow */
+                0 4px 8px 0 rgba(27, 30, 49, 0.5); /* Outer lighter shadow */
+    /*display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 50px;*/
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    justify-content: space-around;
+}
+
+.pp:hover {
+    background: #151829;
+    border: 1px solid #8a2be2;
+}
+.pp{
+    text-align: center;
+    color: #fcfcfb;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin: 50px 20px 50px 20px;
+    background: linear-gradient(180deg, #1b1e31, #0e1021);
+    box-shadow: 0 8px 16px 0 rgba(14, 16, 33, 0.7), /* Inner darker shadow */
+                0 4px 8px 0 rgba(27, 30, 49, 0.5); /* Outer lighter shadow */
+    padding: 20px;
+    width: 200px;
+    border-radius: 20px;
+    transition: 0.5 ease;
+}
+.pp p{
+    display: none;
+    opacity: 0;
+    transition: opacity 0.3s ease 0.2s;
+}
+.pp img{
+    border-radius: 50%;
+    width: 150px;
+    height: 150px;
+    object-fit: cover;
+}
+.pp h3{
+    transition: opacity 0.3s ease 0.2s;
+    opacity: 1;
+    font-size: 1rem; /* Adjust font size as needed */
+    white-space: nowrap; /* Prevents the text from wrapping */
+    overflow: hidden; /* Hide overflow */
+    text-overflow: ellipsis; /* Add an ellipsis to text that overflows */
+    max-width: 140px; /* Adjust the max-width as needed */
+}
+.pp:hover h3{
+    opacity: 0;
+    display: none;
+}
+.pp:hover p{
+    opacity: 1;
+    display: block;
+}
+
+
+.header2{
+    display: flex;
+    justify-content: space-between;
+    color: #fcfcfb;
+    margin-top: 100px;
+    flex-wrap: wrap;
+}
+
+.header2 .head2{
+    width: 100%;
+    margin: 15px 25px 10px;
+    margin-left: 50px;
+    color: #fcfcfb;
+    text-align: center;
+}
+
+.header2 .head2 h1{
+    letter-spacing: 1.5px;
+}
+
+.header2 .head2 p{
+    letter-spacing: 1px;
+    line-height: 35px;
+    width: 100%;
+}
+
+.header2 .head2 button{
+    box-shadow: 0px 4px 8px 0px rgba(104, 34, 206, 0.6);
+    font-family: 'railway', sans-serif;
+    padding: 5px 10px;
+    background: linear-gradient(150deg, #451ded, #8e0ce3);
+    border-radius: 10px;
+    cursor: pointer;
+    border-color: #8e0ce3;
+}
+
+.header2 .head2 a{
+    color: #fcfcfb;
+    text-align: center;
+    text-decoration: none;
+    letter-spacing: 1px;
+    font-size: 16px;;
+}
+
+.header2 .headimg2 img{
+    width: 800px;
+    height: 350px;
+    border-radius: 20px;
+    object-fit: cover;
+    object-position: 50% 50%;
+    margin: 15px 25px 10px;
+    margin-right: 35px;
+}
+
+footer {
+    background: linear-gradient(180deg, #1b1e31, #0e1021);
+    color: #fcfcfb;
+    padding: 20px 0;
+    font-family: 'railway', sans-serif;
+    margin-top: 100px;
+}
+
+.footerContainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    padding: 30px;
+    flex-direction: column;
+}
+
+.socialIcons{margin-bottom: 30px;}
+
+.socialIcons a {
+    color: #fcfcfb;
+    margin: 0 15px;
+    font-size: 24px; /* Adjust the size of the icons as needed */
+    transition: color 0.3s ease;
+}
+
+.socialIcons a:hover {
+    color: #8e0ce3; /* Highlight color when hovering over icons */
+}
+
+.footerNav ul {
+    list-style: none;
+    display: flex;
+    margin: 0;
+    padding: 0;
+}
+
+.footerNav ul li {
+    margin: 0 10px;
+}
+
+.footerNav ul li a {
+    color: #fcfcfb;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.footerNav ul li a:hover {
+    color: #8e0ce3; /* Highlight color when hovering over links */
+}
+
+.footerBottom {
+    text-align: center;
+    margin-top: 15px;
+    font-size: 14px;
+}
+
+.designerfooter {
+    color: #8e0ce3;
+    font-weight: bold;
+}
+
+/* Optional: Clearfix for the footer in case of floating elements */
+footer::after {
+    content: "";
+    display: table;
+    clear: both;
+}
+
+.navigation{
+    border-bottom: 2px solid #ffffff;
+}
+.navigation:hover{
+    border-bottom: 2px solid #8e0ce3;
+}
+
+.otherbutton{
+    color: #fcfcfb;
+    margin: 10px;
+    box-shadow: 0px 4px 8px 0px rgba(104, 34, 206, 0.6);
+    font-family: 'railway', sans-serif;
+    padding: 10px 20px;
+    text-align: center;
+    text-decoration: none;
+    letter-spacing: 1px;
+    background: linear-gradient(150deg, #451ded, #8e0ce3);
+    border-radius: 10px;
+    font-size: 20px;
+    cursor: pointer;
+    border-color: #8e0ce3;
+}
+
+.otherbutton:hover{
+    color: #fcfcfb;
+    margin: 10px;
+    box-shadow: 0px 4px 8px 0px rgba(104, 34, 206, 0.6);
+    font-family: 'railway', sans-serif;
+    padding: 10px 20px;
+    text-align: center;
+    text-decoration: none;
+    letter-spacing: 1px;
+    background: linear-gradient(150deg, #3414b4, #6309a0);
+    border-radius: 10px;
+    font-size: 20px;
+    cursor: pointer;
+    border-color: #8e0ce3;
+}
+
+
+.inversebutton{
+    box-shadow: 0px 4px 8px 0px rgba(243, 236, 255, 0.6);
+    font-family: 'railway', sans-serif;
+    margin: 10px;
+    color: #8e0ce3;
+    padding: 10px 20px;
+    background: linear-gradient(150deg, #d8ceff, #e5beff);
+    border-radius: 10px;
+    font-size: 20px;
+    cursor: pointer;
+    border-color: white;
+}
+
+.inversebutton:hover{
+    box-shadow: 0px 4px 8px 0px rgba(194, 189, 204, 0.6);
+    font-family: 'railway', sans-serif;
+    margin: 10px;
+    color: #8e0ce3;
+    padding: 10px 20px;
+    background: linear-gradient(150deg, #b3abd3, #b494c9);
+    border-radius: 10px;
+    font-size: 20px;
+    cursor: pointer;
+    border-color: white;
+}
+
+.header .head button:hover, .header2 .head2 button:hover{
+    box-shadow: 0px 4px 8px 0px rgba(104, 34, 206, 0.6);
+    font-family: 'railway', sans-serif;
+    padding: 5px 10px;
+    background: linear-gradient(150deg, #3414b4, #6309a0);
+    border-radius: 10px;
+    cursor: pointer;
+    border-color: #8e0ce3;
+}

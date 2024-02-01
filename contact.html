@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>CreativSyncComp - Contact</title>
+    <link rel="stylesheet" href="contact.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link href="https://fonts.cdnfonts.com/css/beon-2" rel="stylesheet">
+    <link rel="icon" href="logo.png">
+</head>
+
+<body>
+    <section class="navigation">
+        <nav>
+            <div class="mainnav">
+                <div class="imgnav"><img src="logo.png" onclick="goHome()"></div>
+                <h1 style="color:white; font-size:40px;" align-items="left">CreativSync</h1>
+                <div class="navi">
+                        <a href="home.html">Home</a>
+                        <a href="aboutus.html">About Us</a>
+                        <a href="service.html">Services</a> 
+                       <!--<a href="#">Services</a>
+                        <a href="#">Recources</a>
+                        <a href="#">Company</a>-->
+                        <a href="#">Contact</a>
+                        <!--<button onclick="gotoSignup()" class="otherbutton">Sign-Up</button>
+                        <button onclick="gotoLogin()" class="inversebutton">Login</button>-->
+                        <button><a href="Pages (WEB APP)/signup.php">Get A Demo</a></button>
+                </div>
+            </div>
+        </nav>
+    </section>
+
+    <div class="infocontainer">
+        <div class="contactInfo">
+            <div class="boxinfo">
+                <div class="iconinfo">
+                    <i class="fa fa-map-marker" aria-hidden="true"></i>
+                </div>
+                <div class="textinfo">
+                    <h3>Address</h3>
+                    <p onclick="copy(this.textContent)">Heriot-Watt University,<br> Edinburgh, Scotland, <br>EH14 4AS</p>
+                </div>
+            </div>
+
+            <div class="boxinfo">
+                <div class="iconinfo">
+                    <i class="fa fa-phone"></i>
+                </div>
+                <div class="textinfo">
+                    <h3>Phone</h3>
+                    <p onclick="copy(this.textContent)">0131-449-5111</p>
+                </div>
+            </div>
+
+            <div class="boxinfo">
+                <div class="iconinfo">
+                    <i class="fa fa-envelope-o"></i>
+                </div>
+                <div class="textinfo">
+                    <h3>Email</h3>
+                    <p onclick="copy(this.textContent)">creativsync@Support.com</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <form id="queryform" action="#">
+            <h1>Contact Us Form</h1>
+            <input type="text" id="firstName" placeholder="Full Name" required>
+            <input type="email" id="email" placeholder="Email" required>
+            <input type="text" id="mobile" placeholder="Mobile No." required>
+            <textarea name="#" required placeholder="Type your message here..."></textarea>
+            <input onclick="displaySent()" type="button" name="#" value="Send" id="submitButton">
+            <div id="sentText" style="display: none;">
+                Thank you for your message, we will be in touch as soon as we can.
+            </div>
+            <p style="padding-left:20px;padding-right:20px;">We have customer support working to answer any queries you may have. If you wish to contact us sooner, please email <span style="color:#b449fc;text-decoration: underline;cursor:pointer;" onclick="copy(this.textContent)">creativsync@support.com</span>.</p>
+        </form>
+    </div>
+
+    <!--<footer>
+        <div class="footerContainer">
+            <div class="socialIcons">
+                <a href="#"><i class="socialBrands fa fa-instagram"></i></a>
+                <a href="#"><i class="socialBrands fa fa-snapchat"></i></a>
+                <a href="#"><i class="socialBrands fa fa-twitter"></i></a>
+                <a href="#"><i class="socialBrands fa fa-youtube"></i></a>
+            </div>
+            <div class="footerNav">
+                <ul>
+                    <li><a href="#">About Us</a></li>
+                    <li><a href="#">Platform</a></li> 
+                    <li><a href="#">Services</a></li>
+                    <li><a href="#">Recources</a></li>
+                    <li><a href="#">Company</a></li> 
+                    <li><a href="#">Contact</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footerBottom">
+            <p>Copyright &copy;2023; Designed by <span class="designerfooter">Broy9501</span></p>
+        </div>
+    </footer>-->
+    <script>
+        const submitDelay = 2500;
+
+        function gotoSignup() {
+        window.location.href = 'Pages (WEB APP)/signup.html';
+        }
+        function gotoLogin() {
+        window.location.href = 'Pages (WEB APP)/login.html';
+        }
+        function goHome() {
+        window.location.href = 'home.html';
+        }
+        function copy(copyText) {
+            navigator.clipboard.writeText(copyText);
+            alert("Copied the text:\n\n" + copyText +"\n\nto the clipboard");
+        }
+        function displaySent() {
+         var text = document.getElementById("sentText");
+         text.style.display = "block";
+         setTimeout(submitForm, submitDelay);
+        }
+
+        function submitForm() { // submits form
+            document.getElementById("queryform").submit();
+            location.reload();
+        }
+    </script>
+</body>
+</html>

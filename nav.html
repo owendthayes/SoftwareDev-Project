@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Home</title>
+    <link rel="stylesheet" href="nav.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link href="https://fonts.cdnfonts.com/css/beon-2" rel="stylesheet">
+</head>
+
+<body>
+    <section class="navigation">
+        <nav>
+            <div class="mainnav">
+                <div class="logohead">
+                    <div class="imgnav"><img src="logo.png"></div>
+                    <h1 class="logoname">CreativSync</h1>
+                </div>
+                <div class="navi">
+                        <a href="home.html">Home</a>
+                        <a href="aboutus.html">Messages</a>
+                        <a href="#">Notifications</a>
+                        <a href="#" id="showSearch">Search</a> 
+                        <a href="#">Groups</a>
+                        <a href="contact.html">Contact</a>
+                        <button><a href="#">Login</a></button>
+                        <button><a href="#">Sign Up</a></button>
+                </div>
+            </div>
+
+            <div class="snav">
+                <div class="searchnav">
+                    <input type="text" id="search" placeholder="Type to search...">
+                    <button id="searchBtn"><i class="fa fa-search"></i></button>
+                    <!--<button id="clearBtn"><i class="fa fa-times"></i></button>-->
+                </div>
+            </div>
+        </nav>
+    </section>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const showSearch = document.getElementById('showSearch');
+            const snav = document.querySelector('.snav');
+
+            // Function to show the search nav
+            function showSnav() {
+                snav.style.display = 'block';
+                snav.style.opacity = 1;
+                snav.style.transition = 'opacity 0.5s ease-in-out';
+            }
+
+            // Function to hide the search nav
+            function hideSnav() {
+                snav.style.opacity = 0; // Start fade out animation
+                setTimeout(function() {
+                    snav.style.display = 'none'; // Hide snav after the animation
+                }, 1000); // Delay to match the transition
+            }
+
+            // Event to show snav when hovering over the search button
+            showSearch.addEventListener('mouseenter', function() {
+                showSnav();
+            });
+
+            // Event to hide snav when the mouse leaves the snav area
+            snav.addEventListener('mouseleave', function() {
+                hideSnav();
+            });
+        });
+    </script>
+    
+</body>
+</html>
