@@ -1,0 +1,104 @@
+<html>
+    <head>
+        <link rel="stylesheet" href="style.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    </head>
+    <body>
+        <section class="navigation">
+            <nav>
+                <div class="mainnav">
+                    <div class="imgnav">
+                        <img src="Images/logo.png">
+                        <div class="compname"><h1 style="color:white;">CreativSync</h1></div>
+                    </div>
+                    <div class="navi">
+                            <a href="feed.html">Feed</a>
+                            <a href="notifications.html">Notifications</a>
+                            <a href="search.html" id="showSearch">Search</a> 
+                            <a href="groupFiles.html">Groups</a>
+                            <a href="messages2.php">Messages</a>
+                            <a href="help.html">Help</a>
+                            <button><a href="profile.html">Profile</a></button>
+                    </div>
+                </div>
+
+                <div class="snav">
+                    <div class="searchnav">
+                        <input type="text" id="search" placeholder="Type to search...">
+                        <button id="searchBtn"><i class="fa fa-search"></i></button>
+                        <!--<button id="clearBtn"><i class="fa fa-times"></i></button>-->
+                    </div>
+                </div>
+            </nav>
+        </section>
+        <section class="preGroup">
+            <div class="groupSettings" style="color:white; display:flex; position: relative; left: 70px; top: 70px;">
+                <h1>Create A Group</h4>
+                <button class = "otherButton" style="color:white; font-size:x-large; height: 40px; width: 40px; margin-top: 15px; margin-left: 10px;">+</button>
+            </div>
+        </section>
+        <section class="groups" style="position: relative; bottom: 30px;">
+            <div class="groupbox" style="left:50%; margin-top:100px; padding-bottom:20px; border:5px solid #8e0ce3; background:white; margin-left:60px; border-radius:10px; width:1320px;">
+                <h1 style="margin-left:20px">My Groups</h1>
+                <div class="row1" style="display: inline-flex;">
+                    <div class="group1" style="margin-left:20px; border:5px solid #8e0ce3; border-radius:10px; width:600px;">
+                        <img style="width:600px; border-bottom: 10px solid #8e0ce3;" src="Images/Group1icon.png">
+                        <h1>HWU Compsci</h1>
+                        <h3 style="color:gray">324 members</h3>
+                    </div>
+                    <div class="group2" style="margin-left:20px; border:5px solid #8e0ce3; border-radius:10px; width:600px;">
+                        <img style="width:600px; border-bottom: 10px solid #8e0ce3;" src="Images/Group2icon.png">
+                        <h1>Heriot-Watt E-Sports Society</h1>
+                        <h3 style="color:gray">463 members</h3>
+                    </div>
+                </div>
+                <br><br>
+                <div class="row2" style="display: inline-flex;">
+                    <div class="group3" style="margin-left:20px; border:5px solid #8e0ce3; border-radius:10px; width:600px;">
+                        <img style="width:600px; border-bottom: 10px solid #8e0ce3;" src="Images/Group3icon.png">
+                        <h1>Edinburgh Art and Creativity Association</h1>
+                        <h3 style="color:gray">1037 members</h3>
+                    </div>
+                    <div class="group4" style="margin-left:20px; border:5px solid #8e0ce3; border-radius:10px; width:600px;">
+                        <img style="width:600px; border-bottom: 10px solid #8e0ce3;" src="Images/Group4icon.png">
+                        <h1>The Unofficial Dungeons and Dragons Channel</h1>
+                        <h3 style="color:gray">19274 members</h3>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                const showSearch = document.getElementById('showSearch');
+                const snav = document.querySelector('.snav');
+    
+                // Function to show the search nav
+                function showSnav() {
+                    snav.style.display = 'block';
+                    snav.style.opacity = 1;
+                    snav.style.transition = 'opacity 0.5s ease-in-out';
+                }
+    
+                // Function to hide the search nav
+                function hideSnav() {
+                    snav.style.opacity = 0; // Start fade out animation
+                    setTimeout(function() {
+                        snav.style.display = 'none'; // Hide snav after the animation
+                    }, 3000); // Delay to match the transition
+                }
+    
+                // Event to show snav when hovering over the search button
+                showSearch.addEventListener('mouseenter', function() {
+                    showSnav();
+                });
+    
+                // Event to hide snav when the mouse leaves the snav area
+                snav.addEventListener('mouseleave', function() {
+                    hideSnav();
+                });
+            });
+        </script>
+    </body>
+
+</html>
