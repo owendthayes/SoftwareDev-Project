@@ -1027,111 +1027,134 @@ footer::after {
 .feedItem
 {
     width:90%;
-    height:300px;
+    height:500px;
     border:5px solid white;
     margin:auto;
     margin-top:20px;
     margin-bottom:20px;
     border-radius:10px;
-    cursor:pointer;
+    background:#0a0c1b;
     display:flex;
 }
 
-.feedLeft
+.commentsContainer
 {
-    width:30%;
-    height:100%;
-    border-right:5px solid white;
-    flex: 0 0 auto;
+    width: 250px;
+    height: 100%;
+    border-right: 5px solid white;
+    background:rgba(211, 211, 211, 0.829);
+    flex-shrink: 0;
 }
 
-.feedTop
-{
-    width:100%;
-    height:75px;
-    border-bottom:5px solid white;
-    background-color:#b483fe;
-    float:right;
-    top:0;
-    flex: 0 0 auto;
-}
-
-.groupName
+.commentsHeader
 {
     text-align:center;
+    padding-top: 10px;
     font-family:"Franklin Gothic", "sans-serif";
-    color:white;
-    font-size:20px;
+    font-size: 20px;
+    padding-bottom:5px;
 }
 
-.feedActivity
+.commentsScrollBox
 {
-    width:100%;
-    height:222px;
-    float:right;
-    bottom:0;
-    flex: 0 0 auto;
-    bottom:0;
-    display:flex;
-    background-color:#0a0c1b
+    width: 95%;
+    height: 80%;
+    border-radius:5px;
+    margin-top:20px;
+    background:lightgrey;
+    margin:auto;
+    padding-top: 5px;
+    overflow-y:scroll;
 }
 
-.feedContentContainer
+.comment
 {
-    width:100%;
-    flex:1;
-    display:flex;
-    flex-direction:column;
+    margin:auto;
+    width:95%;
+    height:fit-content;
+    border-radius:5px;
+    background:white;
+    font-size:15px;
 }
 
-.activityAvatar
+.messageInput
 {
-    height:100px;
-    width:80px;
-    margin-top:50px;
-    margin-left:40px;
-    flex: 0 0 auto;
+    height:30px;
+    width: 70%;
+    margin:auto;
+    font-size: 15px;
+    margin-left:5px;
+    border-radius:5px;
+    
 }
 
-.activityUsername
+.sendCommentButton
 {
-    font-family:"Franklin Gothic","sans-serif";
-    color:white;
-    font-size:20px;
-    margin-left:20px;
-    margin-top:100px;
+    height: 30px;
+    width:60px;
+    margin-left:5px;
     font-weight:bold;
-    flex: 0 0 auto;
-    width:200px;
+    border-radius:5px;
+    cursor:pointer;
 }
 
-.activityText
+.messageInputContainer
+{
+    margin-top:10px;
+}
+
+.commentInfo
+{
+    margin-top:10px;
+    display:flex;
+}
+
+.commentAvatar
+{
+    height:20px;
+    width:15px;
+    margin-bottom:5px;
+    margin-left:5px;
+}
+
+.commentUsername
+{
+    font-size: 13px;
+    margin-top:auto;
+    margin-bottom:auto;
+    margin-left:10px;
+    font-weight:bold;
+}
+
+.postContent
+{
+    width:100%;
+    height:80%;
+    border-bottom:5px solid white;
+    border-radius:5px;
+    display:flex;
+}
+
+.postImage
+{
+    border-right:5px solid white;
+}
+
+.postText
 {
     font-family:"Franklin Gothic", "sans-serif";
+    font-size:30px;
     color:white;
-    font-size:20px;
-    margin-left:20px;
-    margin-top:100px;
-    flex:0 0 auto;
-    width:300px;
+    margin:auto;
+    margin-left:15px;
+    margin-right:15px;
 }
 
-.buttonLike
+.posterInfo
 {
-    margin-left: 100px;
-    height:50px;
-    width:50px;
-    margin-top:150px;
-    cursor:pointer;
-    border-radius:10px;
-    border:2px solid white;
-    background-color:transparent;
-    flex: 0 0 auto;
-}
-
-.likeImage
-{
-    width:35px;
-    height:35px;
-    background-color:transparent;
+    flex-direction:column;
+    justify-content:flex-end;
+    background:white;
+    width:100%;
+    height:100%;
 }
