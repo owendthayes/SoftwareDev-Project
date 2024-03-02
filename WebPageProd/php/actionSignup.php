@@ -42,9 +42,14 @@
         // Hash the password before storing it
         $hashed_password = password_hash($password, PASSWORD_DEFAULT);
 
-        $query = "INSERT INTO profile (username, password, email) VALUES (?, ?, ?)";
+
+
+        $query = "INSERT INTO profile (username, password, email, realName) VALUES (?, ?, ?, ?)";
+
         $stmt = mysqli_prepare($connection, $query);
-        mysqli_stmt_bind_param($stmt, "sss", $username, $hashed_password, $email);
+
+        mysqli_stmt_bind_param($stmt, "ssss", $username, $hashed_password, $email, $username);
+
         mysqli_stmt_execute($stmt);
 
         if (mysqli_stmt_affected_rows($stmt) > 0) {

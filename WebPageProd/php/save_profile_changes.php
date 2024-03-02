@@ -25,7 +25,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_SESSION['username'])) {
     if (isset($_FILES['profileImage']) && $_FILES['profileImage']['error'] == 0) {
         $fileName = basename($_FILES['profileImage']['name']);
         $fileTmpName = $_FILES['profileImage']['tmp_name'];
-        $fileDestination = 'C:\xampp\htdocs\CompanyWebsite\Pages (WEB APP)\Images/' . $fileName; // Specify your path to the image folder
+        $fileDestination = '../Images/' . $fileName; // Specify your path to the image folder
         
         // Move the file to the image folder
         if (move_uploaded_file($fileTmpName, $fileDestination)) {
