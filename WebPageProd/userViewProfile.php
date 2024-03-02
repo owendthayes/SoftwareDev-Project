@@ -1,46 +1,38 @@
 <?php
-    include 'php/actionLogin.php';
-    // Add your database connection and query here to retrieve profile information
-    $connection = connect_to_database();
+include 'php/actionLogin.php';
+// Ensure session_start() is called to access $_SESSION
+if(!isset($_SESSION)) { 
+    session_start(); 
+}
 
+$connection = connect_to_database();
 
-    if (isset($_SESSION['username'])) {
-        $username = $_SESSION['username'];
-        
-        // Query the database to retrieve profile information
-        $query = "SELECT realName, about_me, profile_image FROM profile WHERE username = ?";
-        $stmt = mysqli_prepare($connection, $query);
-        
-        if ($stmt) {
-            mysqli_stmt_bind_param($stmt, "s", $username);
-            mysqli_stmt_execute($stmt);
-            mysqli_stmt_bind_result($stmt, $realName, $aboutMe, $profileImage);
-            
-            if (mysqli_stmt_fetch($stmt)) {
-                // Handle empty values and set default values
-                if (empty($realName)) {
-                    $realName = "Name Unknown";
-                }
-                if (empty($aboutMe)) {
-                    $aboutMe = "Add something about yourself!";
-                }
-                if (empty($profileImage)) {
-                    $profileImage = "Images/defaultAvatar.png";
-                }
-            } else {
-                // No profile found for the user
-                // You can handle this case accordingly
-                echo "No profile found for the user";
-            }
-            
-            mysqli_stmt_close($stmt);
+if(isset($_SESSION['username'])) {
+    // Fetch the username from the query parameter instead of the session
+    $username = isset($_GET['user_id']) ? $_GET['user_id'] : '';
+
+    // Query the database to retrieve profile information for the given username
+    $query = "SELECT realName, about_me, profile_image FROM profile WHERE username = ?";
+    $stmt = mysqli_prepare($connection, $query);
+
+    if($stmt) {
+        mysqli_stmt_bind_param($stmt, "s", $username);
+        mysqli_stmt_execute($stmt);
+        mysqli_stmt_bind_result($stmt, $realName, $aboutMe, $profileImage);
+
+        if(mysqli_stmt_fetch($stmt)) {
+            // Process fetched data
+        } else {
+            echo "No profile found for the user.";
         }
-        
-        mysqli_close($connection);
+        mysqli_stmt_close($stmt);
     } else {
-        // User is not logged in, handle this case accordingly
-        echo "user not logged in";
+        echo "Error preparing statement.";
     }
+    mysqli_close($connection);
+} else {
+    echo "User is not logged in.";
+}
 ?>
 <html>
     <head>
@@ -80,7 +72,7 @@
             <div class = "profileContainer">
                 <p class = "profileRealName"><?php echo $realName; ?></p>
                 <!--<p class = "profileUsername">JSmith2024</p>-->
-                <p class = "profileUsername"><?php echo $_SESSION['username']; ?></p>
+                <p class = "profileUsername"><?php echo $username ?></p>
                 <!--<button id="logoutButton" class="logoutButton" onclick ="window.location.href='php/logout.php';">Logout</button>
                 <button id="editProfileButton" class="editProfileButton" onclick="editProfileButton()">Edit Profile</button>-->
                 <p class = "profileAboutMe">About me</p>
