@@ -1129,15 +1129,19 @@ footer::after {
 .postContent
 {
     width:100%;
-    height:80%;
-    border-bottom:5px solid white;
-    border-radius:5px;
+    height:100%;
     display:flex;
+    flex-direction:row;
+    flex-wrap:wrap;
 }
 
 .postImage
 {
-    border-right:5px solid white;
+    object-fit:cover;
+    margin:auto;
+    flex: 1 1 1;
+    order:1;
+    height:75%;
 }
 
 .postText
@@ -1146,15 +1150,91 @@ footer::after {
     font-size:30px;
     color:white;
     margin:auto;
-    margin-left:15px;
-    margin-right:15px;
+    flex: 1 1 1;
+    height:auto;
+    width:100%;
+    order:1;
+    text-align:center;
+}
+
+.postTextContainer
+{
+    height:75%;
+    width:100%;
+    display:flex;
+    align-items:middle;
 }
 
 .posterInfo
 {
-    flex-direction:column;
-    justify-content:flex-end;
-    background:white;
+    border-top: 5px solid white;
+    background:#0a0c1b;
     width:100%;
+    height:24%;
+    order: 2;
+    display:flex;
+    flex-direction:row;
+}
+
+.postInfoUsernameAvatar
+{
+    display:flex;
     height:100%;
+    width:30%;
+}
+
+.posterAvatar
+{
+    height:100px;
+    width: 80px;
+    margin-top: 15px;
+    margin-left: 15px;
+}
+
+.posterUsername
+{
+    color:white;
+    font-size: 25px;
+    margin-left:15px;
+}
+
+.postCaption
+{
+    width:30%;
+    height:100%;
+    margin-left:10%;
+    display:flex;
+    align-items:middle;
+}
+
+.postCaptionText
+{
+    font-size:15px;
+    color:white;
+    text-align:center;
+    margin:auto;
+}
+
+.datelikecontainer
+{
+    background:green;
+    width:30%;
+    height:100%;
+    display:flex;
+    flex-direction:row;
+    flex-wrap:wrap;
+}
+
+.postDate
+{
+    float:right;
+    order:1;
+}
+
+.likeButton
+{
+    height:30px;
+    width:60px;
+    float:right;
+    order:2;
 }
