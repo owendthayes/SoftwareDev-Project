@@ -20,6 +20,49 @@ html{
     display: none;
     opacity: 0;
     transition: opacity 0.5s ease-in-out;
+    position: relative;
+    z-index: 1;
+}
+
+/*#searchResults{
+    margin: 0 auto;
+    position: relative;
+    left: 45%;
+}*/
+
+#searchResults {
+    position: relative;
+    left: 35%;
+    margin: 0 auto;
+    width: 30%; /* Adjust the width as necessary */
+    max-height: 300px; /* Set a maximum height */
+    overflow-y: auto; /* Allow scrolling within the container */
+    position: absolute;
+    z-index: 1000; /* Ensure it's above other content */
+    background: #ffffff; /* Choose a background color that fits the theme */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+    border-radius: 8px; /* Rounded corners for a modern look */
+    font-family: 'Arial', sans-serif; /* Modern, readable font */
+}
+
+#searchResults div {
+    padding: 10px 15px; /* Spacing inside each result */
+    border-bottom: 1px solid #f0f0f0; /* Separator between results */
+    cursor: pointer; /* Indicates the item is clickable */
+    background-color: #8e0ce3;
+}
+
+#searchResults div a{
+    text-decoration: none;
+    color: black;
+}
+
+#searchResults div:last-child {
+    border-bottom: none; /* No border for the last item */
+}
+
+#searchResults div:hover {
+    background-color: #f8f8f8; /* Highlight on hover */
 }
 
 .searchnav {
