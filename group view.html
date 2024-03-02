@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang=>
+<head>
+    <meta charset="UTF-8">
+    <title>chat interface</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        /* * { box-sizing: border-box; } */
+        body { font-family: 'Arial', sans-serif; 
+        /* margin: 1;  */
+        /* padding: 1; */
+         display: flex; 
+         height: 100vh; 
+         align-items: center; 
+         justify-content: center; 
+         overflow: hidden;
+        }
+        /* chat container main interface */
+        .chat-container { width: 90%; 
+            height: 90vh; 
+            display: flex; 
+            box-shadow: 0 0 5cap rgba(210, 3, 120, 0.924);
+         }
+         /* Display the member background screen */
+        .members { 
+            width: 15%;
+             background-color: #f0f0f0;
+              overflow-y: auto; 
+              padding: 10px; 
+            }
+            /* Modifications to specific member entries */
+            
+        .member { 
+            padding: 10px; 
+            margin-bottom: 5px; /* 减少底部边距 */
+            text-align: center; 
+            border-radius: 10px; 
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1); 
+            cursor: pointer; 
+            transition: transform 0.2s; 
+        }
+
+        /* Hover over member */
+        .member:hover { 
+            transform: scale(1.05); 
+        }
+        /* Corresponds to the background of the whole group */
+        .group-info { 
+            width: 80%; 
+            background-color: #e1c3c3; 
+            overflow-y: auto; padding: 20px; 
+        }
+        /* Information corresponding to gourp name */
+        header { 
+            background-color: #eee; 
+            padding: 10px 20px; 
+            text-align: center; 
+        }
+        /* Set the base style of the two buttons */
+        .leave-btn, .whiteboard-btn { 
+            background: none; 
+            border: none; 
+            cursor: pointer; 
+            transition: background-color 0.2s; 
+        }
+        /* Hover over button base style */
+        .leave-btn:hover, .whiteboard-btn:hover 
+        { 
+            background-color: #ddd; 
+        }
+        /* Leave button position control */
+        .leave-btn { 
+            position: absolute; 
+            top: 10px; 
+            left: 20px; 
+        }
+        /* Whiteboard button control */
+        .whiteboard-btn { 
+            position: absolute; 
+            top: 10px; 
+            right: 20px; 
+        }
+        .text-content {
+            flex-basis: 60%; 
+            padding-right: 20px; 
+        }
+        .image-content {
+            flex-basis: 40%; 
+            padding-left: 10px; 
+        }
+        .image-content img {
+            width: 100%; 
+            height: auto; 
+        }
+    .content-container {
+        display: flex;
+        justify-content: space-between;
+    }
+    </style>
+</head>
+
+<body>
+    <div class="chat-container">
+        <aside class="members">
+            <h2 class="h2">member list</h2>
+            <div class="member">member1</div>
+            <div class="member">member1</div>
+            <div class="member">member1</div>
+            <div class="member">member1</div>
+            <div class="member">member1</div>
+            <div class="member">member1</div>
+            <div class="member">member1</div>
+            <div class="member">member1</div>
+            <div class="member">member1</div>
+            <div class="member">member1</div>
+            <div class="member">member1</div>
+            <div class="member">member1</div>
+            <div class="member">member1</div>
+            <div class="member">member1</div>
+            <div class="member">member1</div>
+            <div class="member">member1</div>
+            <div class="member">member1</div>
+            <div class="member">member1</div>
+            <div class="member">member1</div>
+            <div class="member">member1</div>
+            <div class="member">member1</div>
+            <div class="member">member1</div>
+            <div class="member">member1</div>
+            <div class="member">member1</div>
+            
+        </aside>
+        <section class="group-info">
+            <header>
+                <button class="leave-btn">leave</button>
+                <h1>computer science</h1>
+                <button class="whiteboard-btn">whiteboard</button>
+            </header>
+            <div class="content-container">
+            <div class="text-content">
+                <p>A computer is a machine that can be programmed to automatically carry out sequences of arithmetic or logical operations (computation). Modern digital electronic computers can perform generic sets of operations known as programs. These programs enable computers to perform a wide range of tasks. The term computer system may refer to a nominally complete computer that includes the hardware, operating system, software, and peripheral equipment needed and used for full operation; or to a group of computers that are linked and function together, such as a computer network or computer cluster.
+
+                    A broad range of industrial and consumer products use computers as control systems, including simple special-purpose devices like microwave ovens and remote controls, and factory devices like industrial robots. Computers are at the core of general-purpose devices such as personal computers and mobile devices such as smartphones. Computers power the Internet, which links billions of computers and users.
+                    
+                    Early computers were meant to be used only for calculations. Simple manual instruments like the abacus have aided people in doing calculations since ancient times. Early in the Industrial Revolution, some mechanical devices were built to automate long, tedious tasks, such as guiding patterns for looms. More sophisticated electrical machines did specialized analog calculations in the early 20th century. The first digital electronic calculating machines were developed during World War II, both electromechanical and using thermionic valves. The first semiconductor transistors in the late 1940s were followed by the silicon-based MOSFET (MOS transistor) and monolithic integrated circuit chip technologies in the late 1950s, leading to the microprocessor and the microcomputer revolution in the 1970s. The speed, power and versatility of computers have been increasing dramatically ever since then, with transistor counts increasing at a rapid pace (Moore's law noted that counts doubled every two years), leading to the Digital Revolution during the late 20th to early 21st centuries.
+                    
+                    Conventionally, a modern computer consists of at least one processing element, typically a central processing unit (CPU) in the form of a microprocessor, together with some type of computer memory, typically semiconductor memory chips. The processing element carries out arithmetic and logical operations, and a sequencing and control unit can change the order of operations in response to stored information. Peripheral devices include input devices (keyboards, mice, joystick, etc.), output devices (monitor screens, printers, etc.), and input/output devices that perform both functions (e.g., the 2000s-era touchscreen). Peripheral devices allow information to be retrieved from an external source and they enable the result of operations to be saved and retrieved. </p>
+                    (example)
+                <p>computer 
+            </div>
+            
+            <div class="picture-content">
+                <p></p>
+                <img src="" alt="">
+                <p></p>
+            </div>
+        </div>
+        </section>
+        
+        
+    </div>
+
+    <script>
+        function leaveGroup() {
+            alert('unrealized');
+        }
+        function goToWhiteboard() {
+            alert('unrealized');
+        }
+        
+    
+    const button=document.querySelectorAll('.member')
+    for (let i=0;i<button.length;i++)
+    {
+        button[i].addEventListener('click',function(){
+            alert('unrealized')
+        })
+    }
+    const button_leave=document.querySelector('.leave-btn')
+    button_leave.addEventListener('click',function(){
+        alert('unrealized')
+    })
+    const button_whiteboard=document.querySelector('.whiteboard-btn')
+    button_whiteboard.addEventListener('click',function(){
+        alert('unrealized')
+    })
+    
+</script>
+
+</body>
+</html>
