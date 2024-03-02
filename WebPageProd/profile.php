@@ -5,7 +5,7 @@
 
 
     if (isset($_SESSION['username'])) {
-        $username = $_SESSION['username'];
+    $username = (isset($_GET['user_id']) && !empty($_GET['user_id'])) ? $_GET['user_id'] : $_SESSION['username'];
         
         // Query the database to retrieve profile information
         $query = "SELECT realName, about_me, profile_image FROM profile WHERE username = ?";
@@ -48,6 +48,7 @@
         <title> CreativSync - Profile</title>
         <link rel="icon" href="Images/logo.png">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     </head>
     <body>
         <section class="navigation">
@@ -55,7 +56,9 @@
                 <div class="mainnav">
                     <div class="imgnav">
                         <img src="Images/logo.png">
-                        <div class="compname"><h1 style="color:white;">CreativSync</h1></div>
+                        <div class="compname">
+                        	<h1 style="color:white;">CreativSync</h1>
+                        </div>
                     </div>
                     <div class="navi">
                             <a href="feed.html">Feed</a>
@@ -80,9 +83,9 @@
             <div class = "profileContainer">
                 <p class = "profileRealName"><?php echo $realName; ?></p>
                 <!--<p class = "profileUsername">JSmith2024</p>-->
-                <p class = "profileUsername"><?php echo $_SESSION['username']; ?></p>
-                <button id="logoutButton" class="logoutButton" onclick ="window.location.href='php/logout.php';">Logout</button>
-                <button id="editProfileButton" class="editProfileButton" onclick="editProfileButton()">Edit Profile</button>
+            <p class="profileUsername"><?php echo $username; ?></p>
+            <button id="logoutButton" class="logoutButton" onclick="window.location.href='php/logout.php';" hidden>Logout</button>
+            <button id="editProfileButton" class="editProfileButton" onclick="editProfileButton()" hidden>Edit Profile</button>
                 <p class = "profileAboutMe">About me</p>
                 <p class = "profileAboutMeContent"><?php echo $aboutMe; ?></p>
                 <p class = "profileGroupsLabel">Groups</p>
@@ -98,7 +101,7 @@
                     <div class = "profileGroup" style="background-color:darkred"background-color="lightgreen">School Play 2024</div>
                 </div>
                 <image class = "profileAvatar" src = "<?php echo $profileImage; ?>"></image>
-                <div class="profileButtonsContainer">
+            <div class="profileButtonsContainer" style="display: none;">
                     <button class = "profileMessageButton" >Send Message</button>
                     <button class = "profileFollowButton">Follow</button>
                     <button class = "profileCopyEmailButton">Copy Email</button>
@@ -125,6 +128,21 @@
         </section>
 
         <script>
+        $(document).ready(function() {
+            var username = "<?php echo $username; ?>";
+            var user = "<?php echo $_SESSION["username"]; ?>";
+
+            if (user == username) {
+                var profileButton = document.getElementById('editProfileButton');
+                var logoutButton = document.getElementById('logoutButton');
+                profileButton.hidden = false;
+                logoutButton.hidden = false;
+            }
+            else{
+                $(".profileButtonsContainer").show()
+            }
+        })
+
             function editProfileButton() {
                 // Toggle the visibility of the edit profile form
                 var form = document.getElementById('editProfileForm');

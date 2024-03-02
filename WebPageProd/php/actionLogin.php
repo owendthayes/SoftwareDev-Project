@@ -6,12 +6,13 @@
     if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $username = mysqli_real_escape_string($connection, trim($_POST['uname']));
         $password = trim($_POST['pword']);
+        $email = mysqli_real_escape_string($connection, $_POST['email']);
 
         $query = "SELECT username, password FROM profile WHERE username = ? OR email = ?";
         $stmt = mysqli_prepare($connection, $query);
 
         if ($stmt) {
-            mysqli_stmt_bind_param($stmt, "ss", $username, $username);
+            mysqli_stmt_bind_param($stmt, "ss", $username, $email);
             mysqli_stmt_execute($stmt);
             mysqli_stmt_store_result($stmt);
 

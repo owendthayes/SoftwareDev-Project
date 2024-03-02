@@ -22,7 +22,9 @@ session_start();
             <div class="mainnav">
                 <div class="imgnav">
                     <img src="Images/logo.png">
-                    <div class="compname"><h1 style="color:white;">CreativSync</h1></div>
+                    <div class="compname">
+                        <h1 style="color:white;">CreativSync</h1>
+                    </div>
                 </div>
                 <div class="navi">
                     <a href="feed.html">Feed</a>
@@ -30,7 +32,7 @@ session_start();
                     <a href="search.html" id="showSearch">Search</a>
                     <a href="groups.html">Groups</a>
                     <a href="help.html">Help</a>
-                    <button><a href="profile.html">Profile</a></button>
+                    <button><a href="profile.php">Profile</a></button>
                 </div>
             </div>
 
@@ -57,8 +59,9 @@ session_start();
                 <button id="filter-unread">Unread</button>
             </div>
             <ul class="user-list" id="user-list">
-                <!-- List of users will go here -->
-                <li class="user">
+                <!-- List of users will go here 
+                    REMOVED FOR NOW SO THE DEFAULT PEOPLE DONT SHOW UP WHEN RELOADING-->
+                <!-- <li class="user">
                     <img src="Images/defaultAvatar.png" alt="">
                     <div class="up">
                         <h4>Alice</h3>
@@ -71,7 +74,7 @@ session_start();
                         <h4>Bob</h3>
                             <p class="lastMessageContent">You: Yes I'm in, thanks!</p>
                     </div>
-                </li>
+                </li> -->
                 <!-- Add more users as needed -->
             </ul>
         </aside>
@@ -123,14 +126,22 @@ session_start();
                     }
                 }
             });
+            $(".chat-footer").hide();
 
-            var defaultUsers = [{
-                    username: 'Alice'
-                },
-                {
-                    username: 'Bob'
-                }
-            ];
+
+            // Removed so user alice and bob dont get added by default to messages
+            // var defaultUsers = [{
+            //         username: 'Alice'
+            //     },
+            //     {
+            //         username: 'Bob'
+            //     }
+            // ];
+
+            var defaultUsers = [];
+
+            // Global variable to stop events
+            var isPaused = false;
 
             // Global variable to store the loaded user list
             var loadedUsers = [];
@@ -205,9 +216,11 @@ session_start();
 
 
             function searchUsers(searchTerm) {
+                isPaused = true;
                 if (searchTerm.length === 0) {
                     // If the search term is empty, load the default user list
                     loadUserList();
+                    isPaused = false;
                     return; // Exit the function early
                 }
                 $.ajax({
@@ -252,8 +265,25 @@ session_start();
             }
 
             function openConversation(username) {
+                isPaused = false;
+                $(".chat-footer").show();
                 // Update the chat header with the selected username
                 $('.chat-header h3').text(username);
+
+                // Link to profile
+                $('.chat-header h3').click(function() {
+                    window.location.href = 'profile.php?user_id=' + username;
+                });
+                // Show click on hover
+                $('.chat-header h3').hover(
+                    function() {
+                        // Mouse enters the element
+                        $(this).css('cursor', 'pointer');
+                    },
+                    function() {
+                        // Mouse leaves the element
+                        $(this).css('cursor', 'default');
+                    });
 
                 // Clear the message area
                 $('#message-area').empty();
@@ -283,6 +313,11 @@ session_start();
                     searchUsers(searchTerm);
                 }
             });
+            var t = window.setInterval(function() {
+                if (!isPaused) {
+                    loadUserList()
+                }
+            }, 500);
         });
 
 
@@ -369,13 +404,13 @@ session_start();
 
             var messageList;
             $.ajax({
-                url: 'php/get_chat.php', // Update the URL to your PHP script
+                url: './php/get_message.php', // Update the URL to your PHP script
                 type: 'POST',
                 data: {
                     'sentTo': recipient
                 },
                 success: function(response) {
-                    console.log(response); // Handle the response
+                    //console.log(response); // Handle the response
                     messageArea.innerHTML = response;
                 },
                 error: function(xhr, status, error) {
