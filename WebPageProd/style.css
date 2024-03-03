@@ -1217,7 +1217,6 @@ footer::after {
 
 .datelikecontainer
 {
-    background:green;
     width:30%;
     height:100%;
     display:flex;
@@ -1229,6 +1228,9 @@ footer::after {
 {
     float:right;
     order:1;
+    width:100%;
+    margin-left: 60%;
+    color:white;
 }
 
 .likeButton
@@ -1237,4 +1239,14 @@ footer::after {
     width:60px;
     float:right;
     order:2;
+    margin-left:70%;
+
+    box-shadow: 0px 4px 8px 0px rgba(104, 34, 206, 0.6);
+    font-family: 'railway', sans-serif;
+    color: white;
+    padding: 5px 10px;
+    background: linear-gradient(150deg, #451ded, #8e0ce3);
+    border-radius: 10px;
+    cursor: pointer;
+    border-color: #8e0ce3
 }
