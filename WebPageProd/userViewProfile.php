@@ -95,7 +95,11 @@ if(isset($_SESSION['username'])) {
                     <button class = "profileFollowButton">Follow</button>
                     <button class = "profileCopyEmailButton">Copy Email</button>
                     <button class = "profileInviteButton">Invite to Group</button>
-                    <button class = "profileBlockButton">Block</button>
+                    <!-- Inside userViewProfile.php, within the profileButtonsContainer div -->
+                    <form action="php/blockUser.php" method="post">
+                        <input type="hidden" name="blocked" value="<?php echo $username; ?>">
+                        <button type="submit" class="profileBlockButton">Block</button>
+                    </form>
                 </div>
             </div>
 
@@ -115,6 +119,8 @@ if(isset($_SESSION['username'])) {
                 </form>
             </div>-->
         </section>
+
+    
 
         <script>
             function editProfileButton() {
