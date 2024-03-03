@@ -72,10 +72,11 @@
 
                 <div class="snav">
                     <div class="searchnav">
-                        <input type="text" id="search" placeholder="Type to search...">
+                        <input type="text" id="search" placeholder="Type to search..." onkeyup="searchUsers(this.value)">
                         <button id="searchBtn"><i class="fa fa-search"></i></button>
                         <!--<button id="clearBtn"><i class="fa fa-times"></i></button>-->
                     </div>
+                    <div id="searchResults"></div>
                 </div>
             </nav>
         </section>   
@@ -147,8 +148,36 @@
                 // Toggle the visibility of the edit profile form
                 var form = document.getElementById('editProfileForm');
                 form.style.display = form.style.display === 'none' ? 'block' : 'none';
-            }         
+            }
+            
+            function searchUsers(query) {
+                if(query.length > 0) {
+                    $.ajax({
+                        url: 'php/searchUsers.php',
+                        type: 'POST',
+                        data: {searchQuery: query},
+                        success: function(data) {
+                            $('#searchResults').html(data);
+                            // Add click event listener for each search result link
+                            $('#searchResults a').on('click', function(e) {
+                                e.preventDefault(); // Prevent default anchor click behavior
+                                var clickedUsername = $(this).data('username'); // Assuming you add data-username attribute to your <a> tag in searchUsers.php
+                                var currentUser = '<?php echo $_SESSION["username"]; ?>';
+                                if(clickedUsername === currentUser) {
+                                    window.location.href = 'profile.php'; // Redirect to the user's own profile
+                                } else {
+                                    window.location.href = $(this).attr('href'); // Redirect to the clicked user's profile
+                                }
+                            });
+                        }
+                    });
+                } else {
+                    $('#searchResults').html('');
+                }
+            }
         </script>
+
+            
 
         <script>
             document.addEventListener('DOMContentLoaded', function() {
