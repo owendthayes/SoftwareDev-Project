@@ -26,6 +26,39 @@ if(isset($_SESSION['username'])) {
             echo "No profile found for the user.";
         }
         mysqli_stmt_close($stmt);
+        // Check if the logged-in user is following the viewed user
+        if (isset($_SESSION['username'])) {
+            $loggedInUser = $_SESSION['username'];
+            
+            // Query to check if the logged-in user is following the viewed user
+            $checkFollowQuery = "SELECT * FROM follow WHERE follower = ? AND following = ?";
+            $checkFollowStmt = mysqli_prepare($connection, $checkFollowQuery);
+            mysqli_stmt_bind_param($checkFollowStmt, "ss", $loggedInUser, $username);
+            mysqli_stmt_execute($checkFollowStmt);
+            mysqli_stmt_store_result($checkFollowStmt);
+            $isFollowing = mysqli_stmt_num_rows($checkFollowStmt) > 0;
+            mysqli_stmt_close($checkFollowStmt);
+        } else {
+            // User is not logged in, handle this case accordingly
+            $isFollowing = false;
+        }
+        // Query to fetch follower count
+        $followerCountQuery = "SELECT COUNT(*) FROM follow WHERE following = ?";
+        $followerStmt = mysqli_prepare($connection, $followerCountQuery);
+        mysqli_stmt_bind_param($followerStmt, "s", $username);
+        mysqli_stmt_execute($followerStmt);
+        mysqli_stmt_bind_result($followerStmt, $followerCount);
+        mysqli_stmt_fetch($followerStmt);
+        mysqli_stmt_close($followerStmt);
+        
+        // Query to fetch following count
+        $followingCountQuery = "SELECT COUNT(*) FROM follow WHERE follower = ?";
+        $followingStmt = mysqli_prepare($connection, $followingCountQuery);
+        mysqli_stmt_bind_param($followingStmt, "s", $username);
+        mysqli_stmt_execute($followingStmt);
+        mysqli_stmt_bind_result($followingStmt, $followingCount);
+        mysqli_stmt_fetch($followingStmt);
+        mysqli_stmt_close($followingStmt);
     } else {
         echo "Error preparing statement.";
     }
@@ -34,6 +67,7 @@ if(isset($_SESSION['username'])) {
     echo "User is not logged in.";
 }
 ?>
+
 <html>
     <head>
         <link rel="stylesheet" href="style.css">
@@ -75,6 +109,9 @@ if(isset($_SESSION['username'])) {
                 <p class = "profileUsername"><?php echo $username ?></p>
                 <!--<button id="logoutButton" class="logoutButton" onclick ="window.location.href='php/logout.php';">Logout</button>
                 <button id="editProfileButton" class="editProfileButton" onclick="editProfileButton()">Edit Profile</button>-->
+                <div class="followerCount">Followers: <span><?php echo $followerCount; ?></span></div>
+                <div class="followingCount">Following: <span><?php echo $followingCount; ?></span></div>
+
                 <p class = "profileAboutMe">About me</p>
                 <p class = "profileAboutMeContent"><?php echo $aboutMe; ?></p>
                 <p class = "profileGroupsLabel">Groups</p>
@@ -92,10 +129,9 @@ if(isset($_SESSION['username'])) {
                 <image class = "profileAvatar" src = "<?php echo $profileImage; ?>"></image>
                 <div class="profileButtonsContainer">
                     <button class = "profileMessageButton" >Send Message</button>
-                    <button class = "profileFollowButton">Follow</button>
+                    <button id="followButton" onclick="toggleFollow('<?php echo $username; ?>')" class="profileFollowButton"><?php echo $isFollowing ? 'Unfollow' : 'Follow'; ?></button>
                     <button class = "profileCopyEmailButton">Copy Email</button>
                     <button class = "profileInviteButton">Invite to Group</button>
-                    <!-- Inside userViewProfile.php, within the profileButtonsContainer div -->
                     <form action="php/blockUser.php" method="post">
                         <input type="hidden" name="blocked" value="<?php echo $username; ?>">
                         <button type="submit" class="profileBlockButton">Block</button>
@@ -120,7 +156,55 @@ if(isset($_SESSION['username'])) {
             </div>-->
         </section>
 
-    
+        <script>
+            function toggleFollow(username) {
+                var button = document.getElementById('followButton');
+                if (button.innerText === 'Follow') {
+                    followUser(username, function() {
+                        button.innerText = 'Unfollow';
+                    });
+                } else {
+                    unfollowUser(username, function() {
+                        button.innerText = 'Follow';
+                    });
+                }
+            }
+
+            function followUser(username, callback) {
+                var xhr = new XMLHttpRequest();
+                xhr.open('POST', 'php/followUser.php', true);
+                xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+                xhr.onreadystatechange = function() {
+                    if (xhr.readyState == XMLHttpRequest.DONE) {
+                        if (xhr.status == 200) {
+                            callback();
+                        } else {
+                            console.error('Error: ' + xhr.responseText);
+                        }
+                    }
+                };
+                xhr.send('username=' + username);
+            }
+
+            function unfollowUser(username, callback) {
+                var xhr = new XMLHttpRequest();
+                xhr.open('POST', 'php/unfollowUser.php', true);
+                xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+                xhr.onreadystatechange = function() {
+                    if (xhr.readyState == XMLHttpRequest.DONE) {
+                        if (xhr.status == 200) {
+                            callback();
+                        } else {
+                            console.error('Error: ' + xhr.responseText);
+                        }
+                    }
+                };
+                xhr.send('username=' + username);
+            }
+        </script>
+
+
+
 
         <script>
             function editProfileButton() {
