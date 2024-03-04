@@ -1,47 +1,67 @@
 <?php
-    include 'php/actionLogin.php';
-    // Add your database connection and query here to retrieve profile information
-    $connection = connect_to_database();
+include 'php/actionLogin.php';
+// Add your database connection and query here to retrieve profile information
+$connection = connect_to_database();
 
-
-    if (isset($_SESSION['username'])) {
+if (isset($_SESSION['username'])) {
     $username = (isset($_GET['user_id']) && !empty($_GET['user_id'])) ? $_GET['user_id'] : $_SESSION['username'];
+    
+    // Query the database to retrieve profile information
+    $query = "SELECT realName, about_me, profile_image FROM profile WHERE username = ?";
+    $stmt = mysqli_prepare($connection, $query);
+    
+    if ($stmt) {
+        mysqli_stmt_bind_param($stmt, "s", $username);
+        mysqli_stmt_execute($stmt);
+        mysqli_stmt_bind_result($stmt, $realName, $aboutMe, $profileImage);
         
-        // Query the database to retrieve profile information
-        $query = "SELECT realName, about_me, profile_image FROM profile WHERE username = ?";
-        $stmt = mysqli_prepare($connection, $query);
-        
-        if ($stmt) {
-            mysqli_stmt_bind_param($stmt, "s", $username);
-            mysqli_stmt_execute($stmt);
-            mysqli_stmt_bind_result($stmt, $realName, $aboutMe, $profileImage);
-            
-            if (mysqli_stmt_fetch($stmt)) {
-                // Handle empty values and set default values
-                if (empty($realName)) {
-                    $realName = "Name Unknown";
-                }
-                if (empty($aboutMe)) {
-                    $aboutMe = "Add something about yourself!";
-                }
-                if (empty($profileImage)) {
-                    $profileImage = "Images/defaultAvatar.png";
-                }
-            } else {
-                // No profile found for the user
-                // You can handle this case accordingly
-                echo "No profile found for the user";
+        if (mysqli_stmt_fetch($stmt)) {
+            // Handle empty values and set default values
+            if (empty($realName)) {
+                $realName = "Name Unknown";
             }
-            
-            mysqli_stmt_close($stmt);
+            if (empty($aboutMe)) {
+                $aboutMe = "Add something about yourself!";
+            }
+            if (empty($profileImage)) {
+                $profileImage = "Images/defaultAvatar.png";
+            }
+        } else {
+            // No profile found for the user
+            // You can handle this case accordingly
+            echo "No profile found for the user";
         }
         
-        mysqli_close($connection);
-    } else {
-        // User is not logged in, handle this case accordingly
-        echo "user not logged in";
+        mysqli_stmt_close($stmt);
+        
+        // Query to fetch follower count
+        $followerCountQuery = "SELECT COUNT(*) FROM follow WHERE following = ?";
+        $followerStmt = mysqli_prepare($connection, $followerCountQuery);
+        mysqli_stmt_bind_param($followerStmt, "s", $username);
+        mysqli_stmt_execute($followerStmt);
+        mysqli_stmt_bind_result($followerStmt, $followerCount);
+        mysqli_stmt_fetch($followerStmt);
+        mysqli_stmt_close($followerStmt);
+        
+        // Query to fetch following count
+        $followingCountQuery = "SELECT COUNT(*) FROM follow WHERE follower = ?";
+        $followingStmt = mysqli_prepare($connection, $followingCountQuery);
+        mysqli_stmt_bind_param($followingStmt, "s", $username);
+        mysqli_stmt_execute($followingStmt);
+        mysqli_stmt_bind_result($followingStmt, $followingCount);
+        mysqli_stmt_fetch($followingStmt);
+        mysqli_stmt_close($followingStmt);
     }
+    
+    mysqli_close($connection);
+} else {
+    // User is not logged in, handle this case accordingly
+    echo "user not logged in";
+}
 ?>
+
+
+
 <html>
     <head>
         <link rel="stylesheet" href="style.css">
@@ -85,6 +105,9 @@
                 <p class = "profileRealName"><?php echo $realName; ?></p>
                 <!--<p class = "profileUsername">JSmith2024</p>-->
             <p class="profileUsername"><?php echo $username; ?></p>
+            <div class="followerCount">Followers: <span><?php echo $followerCount; ?></span></div>
+            <div class="followingCount">Following: <span><?php echo $followingCount; ?></span></div>
+
             <button id="logoutButton" class="logoutButton" onclick="window.location.href='php/logout.php';" hidden>Logout</button>
             <button id="editProfileButton" class="editProfileButton" onclick="editProfileButton()" hidden>Edit Profile</button>
                 <p class = "profileAboutMe">About me</p>
@@ -128,6 +151,8 @@
             </div>
         </section>
 
+        
+        
         <script>
         $(document).ready(function() {
             var username = "<?php echo $username; ?>";
