@@ -726,6 +726,12 @@ footer::after {
     margin-top:85px;
 }
 
+.followerCount, .followingCount{
+    color: #fff;
+    position: relative;
+    left: 30%;
+}
+
 .profileRealName
 {
     color:white;
