@@ -1282,7 +1282,6 @@ footer::after {
     width:60px;
     float:right;
     order:2;
-<<<<<<< HEAD
     margin-left:70%;
 
     box-shadow: 0px 4px 8px 0px rgba(104, 34, 206, 0.6);
@@ -1294,6 +1293,4 @@ footer::after {
     cursor: pointer;
     border-color: #8e0ce3
 }
-=======
-}
->>>>>>> 89626f10445e436bcf398d37c2d241787db3042c
+
