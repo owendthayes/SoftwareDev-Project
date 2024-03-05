@@ -1070,8 +1070,8 @@ footer::after {
     width: 90%;
     height: 77%;
     border-radius: 10px;
-    margin: auto;
-    overflow-y: scroll;
+    margin:auto;
+    overflow-y:scroll;
 }
 
 .notificationItem
@@ -1079,23 +1079,23 @@ footer::after {
     width:90%;
     height:222px;
     border:5px solid white;
-    margin: auto;
+    margin:auto;
     margin-top:20px;
     margin-bottom:20px;
     border-radius:10px;
-    cursor: pointer;
-    display: flex;
+    cursor:pointer;
+    display:flex;
 }
 
 .notification
 {
     width:100%;
     height:222px;
-    float: right;
+    float:right;
     bottom:0;
     flex: 0 0 auto;
     bottom:0;
-    display: flex;
+    display:flex;
     background-color:#0a0c1b
 }
 
@@ -1103,8 +1103,8 @@ footer::after {
 {
     width:100%;
     flex:1;
-    display: flex;
-    flex-direction: column;
+    display:flex;
+    flex-direction:column;
 }
 
 .notificationAvatar
@@ -1119,19 +1119,19 @@ footer::after {
 .notificationUsername
 {
     font-family:"Franklin Gothic","sans-serif";
-    color: white;
+    color:white;
     font-size:20px;
     margin-left:20px;
     margin-top:100px;
-    font-weight: bold;
+    font-weight:bold;
     flex: 0 0 auto;
     width:200px;
 }
 
 .notificationText
 {
-    font-family: "Franklin Gothic", "sans-serif";
-    color: white;
+    font-family:"Franklin Gothic", "sans-serif";
+    color:white;
     font-size:20px;
     margin-left:20px;
     margin-top:100px;
@@ -1142,7 +1142,7 @@ footer::after {
 .notificationContent
 {
     font-family:"Franklin Gothic", "sans-serif";
-    color: white;
+    color:white;
     font-size:20px;
     margin-left:20px;
     margin-top:100px;
@@ -1150,35 +1150,57 @@ footer::after {
     width:300px;
 }
 
-.buttonNotification
-{
-    margin-left: 100px;
-    height:50px;
-    width:50px;
-    margin-top:90px;
-    cursor: pointer;
-    border-radius:10px;
-    border:2px solid white;
-    background-color: transparent;
-    flex: 0 0 auto;
-}
 
 .notificationImage
 {
     width:35px;
     height:35px;
-    background-color: transparent;
+    background-color:transparent;
 }
 
 .notificationText
 {
-    font-family: "Franklin Gothic", "sans-serif";
-    color: white;
+    font-family:"Franklin Gothic", "sans-serif";
+    color:white;
     font-size:20px;
     margin-left:20px;
     margin-top:100px;
     flex:0 0 auto;
     width:300px;
+}
+
+.clearAllButton
+{
+    font-family:"Franklin Gothic", "sans-serif";
+    margin-left:1500px;
+    height:50px;
+    width:200px;
+    margin-top:10px;
+    cursor:pointer;
+    border-radius:10px;
+    color: white;
+    font-size:32px;
+    border:2px solid white;
+    background-color:transparent;
+    flex: 0 0 auto;
+    box-shadow: 0px 4px 8px 0px rgba(104, 34, 206, 0.6);
+    background: linear-gradient(150deg, #451ded, #8e0ce3);
+    border-color: #8e0ce3;
+    
+    
+}
+
+.clearNotification
+{
+    margin-left: 450px;
+    height:50px;
+    width:50px;
+    margin-top:90px;
+    cursor:pointer;
+    border-radius:10px;
+    border:2px solid white;
+    background-color:transparent;
+    flex: 0 0 auto;
 }
 
 /*CSS FOR FEED.HTML ###################################################################*/
