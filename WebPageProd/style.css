@@ -726,6 +726,12 @@ footer::after {
     margin-top:85px;
 }
 
+.followerCount, .followingCount{
+    color: #fff;
+    position: relative;
+    left: 30%;
+}
+
 .profileRealName
 {
     color:white;
@@ -1057,14 +1063,132 @@ footer::after {
     display: inline-block;
 }
 
+/*CSS FOR NOTIFICATIONS.HTML ###################################################################*/
+
+.notificationContainer
+{
+    width: 90%;
+    height: 77%;
+    border-radius: 10px;
+    margin: auto;
+    overflow-y: scroll;
+}
+
+.notificationItem
+{
+    width:90%;
+    height:222px;
+    border:5px solid white;
+    margin: auto;
+    margin-top:20px;
+    margin-bottom:20px;
+    border-radius:10px;
+    cursor: pointer;
+    display: flex;
+}
+
+.notification
+{
+    width:100%;
+    height:222px;
+    float: right;
+    bottom:0;
+    flex: 0 0 auto;
+    bottom:0;
+    display: flex;
+    background-color:#0a0c1b
+}
+
+.notificationContentContainer
+{
+    width:100%;
+    flex:1;
+    display: flex;
+    flex-direction: column;
+}
+
+.notificationAvatar
+{
+    height:100px;
+    width:80px;
+    margin-top:50px;
+    margin-left:40px;
+    flex: 0 0 auto;
+}
+
+.notificationUsername
+{
+    font-family:"Franklin Gothic","sans-serif";
+    color: white;
+    font-size:20px;
+    margin-left:20px;
+    margin-top:100px;
+    font-weight: bold;
+    flex: 0 0 auto;
+    width:200px;
+}
+
+.notificationText
+{
+    font-family: "Franklin Gothic", "sans-serif";
+    color: white;
+    font-size:20px;
+    margin-left:20px;
+    margin-top:100px;
+    flex:0 0 auto;
+    width:300px;
+}
+
+.notificationContent
+{
+    font-family:"Franklin Gothic", "sans-serif";
+    color: white;
+    font-size:20px;
+    margin-left:20px;
+    margin-top:100px;
+    flex:0 0 auto;
+    width:300px;
+}
+
+.buttonNotification
+{
+    margin-left: 100px;
+    height:50px;
+    width:50px;
+    margin-top:90px;
+    cursor: pointer;
+    border-radius:10px;
+    border:2px solid white;
+    background-color: transparent;
+    flex: 0 0 auto;
+}
+
+.notificationImage
+{
+    width:35px;
+    height:35px;
+    background-color: transparent;
+}
+
+.notificationText
+{
+    font-family: "Franklin Gothic", "sans-serif";
+    color: white;
+    font-size:20px;
+    margin-left:20px;
+    margin-top:100px;
+    flex:0 0 auto;
+    width:300px;
+}
+
 /*CSS FOR FEED.HTML ###################################################################*/
 .feedContainer
 {
     width: 90%;
     height: 77%;
     border-radius: 10px;
-    margin:auto;
-    overflow-y:scroll;
+    margin: auto;
+    overflow-y: scroll;
 }
 
 .feedItem
@@ -1072,12 +1196,12 @@ footer::after {
     width:90%;
     height:500px;
     border:5px solid white;
-    margin:auto;
+    margin: auto;
     margin-top:20px;
     margin-bottom:20px;
     border-radius:10px;
     background:#0a0c1b;
-    display:flex;
+    display: flex;
 }
 
 .commentsContainer
@@ -1091,9 +1215,9 @@ footer::after {
 
 .commentsHeader
 {
-    text-align:center;
+    text-align: center;
     padding-top: 10px;
-    font-family:"Franklin Gothic", "sans-serif";
+    font-family: "Franklin Gothic", "sans-serif";
     font-size: 20px;
     padding-bottom:5px;
 }
@@ -1105,18 +1229,18 @@ footer::after {
     border-radius:5px;
     margin-top:20px;
     background:lightgrey;
-    margin:auto;
+    margin: auto;
     padding-top: 5px;
-    overflow-y:scroll;
+    overflow-y: scroll;
 }
 
 .comment
 {
-    margin:auto;
+    margin: auto;
     width:95%;
     height:fit-content;
     border-radius:5px;
-    background:white;
+    background: white;
     font-size:15px;
 }
 
@@ -1124,7 +1248,7 @@ footer::after {
 {
     height:30px;
     width: 70%;
-    margin:auto;
+    margin: auto;
     font-size: 15px;
     margin-left:5px;
     border-radius:5px;
@@ -1136,9 +1260,9 @@ footer::after {
     height: 30px;
     width:60px;
     margin-left:5px;
-    font-weight:bold;
+    font-weight: bold;
     border-radius:5px;
-    cursor:pointer;
+    cursor: pointer;
 }
 
 .messageInputContainer
@@ -1149,7 +1273,7 @@ footer::after {
 .commentInfo
 {
     margin-top:10px;
-    display:flex;
+    display: flex;
 }
 
 .commentAvatar
@@ -1163,19 +1287,19 @@ footer::after {
 .commentUsername
 {
     font-size: 13px;
-    margin-top:auto;
-    margin-bottom:auto;
+    margin-top: auto;
+    margin-bottom: auto;
     margin-left:10px;
-    font-weight:bold;
+    font-weight: bold;
 }
 
 .postContent
 {
     width:100%;
     height:100%;
-    display:flex;
-    flex-direction:row;
-    flex-wrap:wrap;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
 }
 
 .postImage
