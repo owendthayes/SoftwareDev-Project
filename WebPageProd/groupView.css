@@ -1,0 +1,750 @@
+html{
+    background: #00060b;
+    margin: 0;
+    scroll-behavior: smooth;
+    font-family: 'figtree', sans-serif;
+}
+
+.imgnav{
+    display: flex;
+    align-items: center;
+}
+
+.snav{
+    margin: 0 25px;
+    border-radius: 10px;
+    /*background: #8e0ce3;*/
+    /*background: linear-gradient(0deg, #1a1a1a, #8e0ce3);*/
+    background: linear-gradient(0deg, #451ded, #8e0ce3);
+    padding: 15px 10px;
+    display: none;
+    opacity: 0;
+    transition: opacity 0.5s ease-in-out;
+    position: relative;
+    z-index: 1;
+}
+
+/*#searchResults{
+    margin: 0 auto;
+    position: relative;
+    left: 45%;
+}*/
+
+#searchResults {
+    position: relative;
+    left: 35%;
+    margin: 0 auto;
+    width: 30%; /* Adjust the width as necessary */
+    max-height: 300px; /* Set a maximum height */
+    overflow-y: auto; /* Allow scrolling within the container */
+    position: absolute;
+    z-index: 1000; /* Ensure it's above other content */
+    background: #ffffff; /* Choose a background color that fits the theme */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+    border-radius: 8px; /* Rounded corners for a modern look */
+    font-family: 'Arial', sans-serif; /* Modern, readable font */
+}
+
+#searchResults div {
+    padding: 10px 15px; /* Spacing inside each result */
+    border-bottom: 1px solid #f0f0f0; /* Separator between results */
+    cursor: pointer; /* Indicates the item is clickable */
+    background-color: #8e0ce3;
+}
+
+#searchResults div a{
+    text-decoration: none;
+    color: black;
+}
+
+#searchResults div:last-child {
+    border-bottom: none; /* No border for the last item */
+}
+
+#searchResults div:hover {
+    background-color: #f8f8f8; /* Highlight on hover */
+}
+
+
+.searchnav {
+    position: relative;
+    margin: 10px auto;
+    max-width: 400px;
+    display: flex;
+    border: 1px solid #000;
+    border-radius: 20px;
+    align-items: center;
+}
+
+.searchnav input[type="text"] {
+    width: 100%;
+    padding: 10px;
+    border: none;
+    border-radius: 10px;
+    outline: none;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+    font-family: 'Beon', sans-serif;
+}
+
+.searchnav button {
+    position: absolute;
+    right: 0;
+    border: none;
+    cursor: pointer;
+    outline: none;
+}
+
+#searchBtn {
+    right: 2px;
+    width: 40px;
+    height: 32px;
+    color: #fbffff;
+   /* background: #000;*/
+    background: transparent;
+    border-radius: 50%;
+}
+#searchBtn {
+    color: #8e0ce3;
+}
+
+#clearBtn {
+    right: -50px;
+    background: #fbffff;
+    border: 1px solid #000;
+    border-radius: 5px;
+    width: 40px;
+    height: 30px;
+
+}
+
+#clearBtn i {
+    /*color: #fbffff;*/
+    color: #8e0ce3;
+}
+
+.mainnav{
+    margin: 15px 25px 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 5px solid white ; /*want to remove this from login and signup pages, gotta figure that out somehow*/
+}
+
+.navigation{
+    height: 20%;
+}
+
+.mainnav .navi a{
+
+    color: #fcfcfb;
+    text-decoration: none;
+    margin: 10px;
+    font-size: 18px;
+    letter-spacing: 1px;
+    transition: 0.5 ease-in-out;
+}
+
+.mainnav .navi a:hover{
+    border-bottom: 2px solid #8e0ce3;
+}
+
+.mainnav .navi button{
+    color: #fcfcfb;
+    margin: 10px;
+    box-shadow: 0px 4px 8px 0px rgba(104, 34, 206, 0.6);
+    font-family: 'railway', sans-serif;
+    padding: 5px 10px;
+    text-align: center;
+    text-decoration: none;
+    letter-spacing: 1px;
+    background: linear-gradient(150deg, #451ded, #8e0ce3);
+    border-radius: 10px;
+    cursor: pointer;
+    border-color: #8e0ce3;
+}
+
+.mainnav .imgnav img{
+    width: 125px;
+    height: 125px;
+}
+
+.groupviewDashboard {
+    display: flex;
+    /* justify-content: space-between; */
+    position: relative;
+    left: 30px;
+}
+
+/* .memberContainer {
+    width: 20%;
+    background-color: #fff;
+    margin: 20px;
+    padding: 10px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+} */
+
+.groupViewMain {
+    width: 1000px;
+    margin: 20px;
+    background-color: #0a0c1b;
+    color: #fff;
+    padding: 20px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.filesSection {
+    margin-top: 20px;
+}
+
+.filesSection nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 25px;
+    /* background-color: #eaeaea; */
+    background: linear-gradient(150deg, #451ded, #8e0ce3);
+    margin-bottom: 10px;
+}
+  
+.fileIcon {
+    margin-right: 10px;
+}
+
+.dateChanged{
+    position: relative;
+    right: 10px;
+}
+  
+/* .fileName, .lastChangedby, .dateChanged {
+    flex: 1;
+} */
+  
+  /* File section list */
+.fileSecEach {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+}
+  
+.fileIconEach {
+    margin-right: 10px;
+}
+
+.fileNameEach{
+    width: 80px;
+}
+
+.fileSecEach {
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid #ccc;
+    padding: 10px 15px;
+}
+
+.fileIconEach i {
+    font-size: 24px;
+    color: #ffa500;
+    margin-right: 10px;
+    position: relative;
+    left: 5px;
+}
+
+.groupSections {
+    background-color: transparent;
+    /* border-bottom: 5px solid white; */
+    overflow: hidden;
+    font-family: Arial, sans-serif;
+    width: 1040px;
+    position: relative;
+    left: 20px;
+    /* text-align: center; */
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+}
+
+.groupSections a {
+    float: left; /* Align links side by side */
+    color: white; /* White text color */
+    text-align: center;
+    padding: 14px 16px; /* Padding to adjust the size */
+    text-decoration: none; /* No underline on links */
+    font-size: 17px; /* Font size for links */
+}
+
+.groupSections a:hover {
+    border-bottom: 2px solid #8e0ce3;
+}
+
+.groupSections a.active {
+    background-color: #4CAF50; /* Add a green color for the active/current link */
+    color: white;
+}
+
+.groupSections button {
+    color: #fcfcfb;
+    margin: 10px;
+    box-shadow: 0px 4px 8px 0px rgba(104, 34, 206, 0.6);
+    font-family: 'railway', sans-serif;
+    padding: 5px 10px;
+    text-align: center;
+    text-decoration: none;
+    letter-spacing: 1px;
+    background: linear-gradient(150deg, #451ded, #8e0ce3);
+    border-radius: 10px;
+    cursor: pointer;
+    border-color: #8e0ce3;
+}
+
+.groupSections button:hover {
+    background-color: #9575CD; /* Lighter purple on hover */
+}
+
+.memberContainer {
+    background-color: #0a0c1b; /* Light grey background */
+    border: 1px solid #ccc; /* Light grey border */
+    border-radius: 4px;
+    padding: 20px;
+    width: 300px; /* Fixed width */
+  }
+  
+  .memSearch {
+    display: flex;
+    align-items: center; /* Ensures vertical alignment */
+    position: relative; /* Allows absolute positioning inside */
+    margin-bottom: 20px;
+  }
+  
+  .memSearch input[type="text"] {
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    padding: 10px; /* Adjust padding as necessary */
+    width: 295px; /* Adjust width considering button size */
+    margin-right: -40px; /* Overlap the button over the input */
+  }
+  
+  .memSearch button {
+    background-color: #5d5d5d; /* Adjust to your theme color */
+    border: none; /* Removes border */
+    border-radius: 50%; /* Circle shape */
+    cursor: pointer;
+    color: #fff; /* Icon color */
+    padding: 0px; /* Adjusts padding */
+    position: absolute; /* Positioned absolutely */
+    right: 5px; /* Distance from the right */
+    top: 50%;
+    transform: translateY(-50%); /* Center vertically */
+  }
+  
+  .memSearch button i.fa {
+    position: relative; /* Center icon inside the button */
+  }
+  
+  .memSearch button:focus,
+  .memSearch input[type="text"]:focus {
+    outline: none; /* Removes focus outline */
+  }
+  
+  /* You can add hover effects as needed */
+  .memSearch button:hover {
+    background-color: #777;
+  }
+  
+  
+  .members h2 {
+    color: #fff; /* Dark grey color */
+    margin-bottom: 15px;
+    width: 100%;
+    text-align: center;
+    margin-top: 30px;
+  }
+
+  .members h2:hover{
+    border-bottom: 2px solid #8e0ce3;
+  }
+  
+  .member {
+    background-color: white;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    margin-bottom: 10px;
+    padding: 10px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .member:hover {
+    background-color: #8e0ce3; /* Light grey on hover */
+    color: #fff;
+}
+
+
+.groupViewMain2 {
+    width: 1000px;
+    margin: 20px;
+    background-color: #0a0c1b;
+    color: #fff;
+    padding: 20px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.feedContainer
+{
+    width: 90%;
+    height: 77%;
+    border-radius: 10px;
+    margin:auto;
+    overflow-y:scroll;
+}
+
+.feedItem
+{
+    width:90%;
+    padding: 30px;
+    position: relative;
+    right: 8px;
+    height:500px;
+    border:5px solid white;
+    margin:auto;
+    margin-top:20px;
+    margin-bottom:20px;
+    border-radius:10px;
+    background:#0a0c1b;
+    display:flex;
+}
+
+.commentsContainer
+{
+    width: 250px;
+    height: 100%;
+    border-right: 5px solid white;
+    background:rgba(211, 211, 211, 0.829);
+    flex-shrink: 0;
+}
+
+.commentsHeader
+{
+    text-align:center;
+    padding-top: 10px;
+    font-family:"Franklin Gothic", "sans-serif";
+    font-size: 20px;
+    padding-bottom:5px;
+}
+
+.commentsScrollBox
+{
+    width: 95%;
+    height: 80%;
+    border-radius:5px;
+    margin-top:20px;
+    background:lightgrey;
+    margin:auto;
+    padding-top: 5px;
+    overflow-y:scroll;
+}
+
+.comment
+{
+    margin:auto;
+    width:95%;
+    height:fit-content;
+    border-radius:5px;
+    background:white;
+    font-size:15px;
+}
+
+.messageInput
+{
+    height:30px;
+    width: 70%;
+    margin:auto;
+    font-size: 15px;
+    margin-left:5px;
+    border-radius:5px;
+    
+}
+
+.sendCommentButton
+{
+    height: 30px;
+    width:60px;
+    margin-left:5px;
+    font-weight:bold;
+    border-radius:5px;
+    cursor:pointer;
+}
+
+.messageInputContainer
+{
+    margin-top:10px;
+}
+
+.commentInfo
+{
+    margin-top:10px;
+    display:flex;
+}
+
+.commentAvatar
+{
+    height:20px;
+    width:15px;
+    margin-bottom:5px;
+    margin-left:5px;
+}
+
+.commentUsername
+{
+    font-size: 13px;
+    margin-top:auto;
+    margin-bottom:auto;
+    margin-left:10px;
+    font-weight:bold;
+}
+
+.postContent
+{
+    width:100%;
+    height:100%;
+    display:flex;
+    flex-direction:row;
+    flex-wrap:wrap;
+}
+
+.postImage
+{
+    object-fit:cover;
+    margin:auto;
+    /* flex: 1 1 1;
+    order:1; */
+    height:60%;
+}
+
+.postText
+{
+    font-family:"Franklin Gothic", "sans-serif";
+    font-size:30px;
+    color:white;
+    margin:auto;
+    flex: 1 1 1;
+    height:auto;
+    width:100%;
+    order:1;
+    text-align:center;
+}
+
+.postTextContainer
+{
+    height:75%;
+    width:100%;
+    display:flex;
+    align-items:middle;
+}
+
+.posterInfo {
+    border-top: 5px solid white;
+    background: #0a0c1b;
+    padding: 20px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between; /* Add this to space out children elements */
+}
+
+.postInfoUsernameAvatar {
+    display: flex;
+    align-items: center;
+    /* Control the size and margin as needed, removed fixed height and width */
+}
+
+.posterAvatar {
+    height: 60px; /* Adjust size as needed */
+    object-fit: cover;
+    object-position: 50% 25%;
+    width: 60px;
+    margin-right: 10px; /* Add margin to separate from username */
+    border-radius: 50%; /* To make it round */
+}
+
+.posterUsername {
+    color: white;
+    font-size: 18px; /* Adjust font size as needed */
+}
+
+.postCaption {
+    flex-grow: 1; /* This allows it to grow and shrink as needed */
+    padding: 0 15px; /* Add padding on the sides */
+}
+
+.postCaptionText {
+    font-size: 14px; /* Adjust font size as needed */
+    color: white;
+    text-align: left; /* Align to the left */
+}
+
+.DateLikeContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Aligns items */
+}
+
+.postDate {
+    /* Removed float, used flexbox for positioning */
+    margin-bottom: 5px; /* Add margin between date and button */
+}
+
+.likeButton {
+    padding: 5px 10px; /* Adjust padding as needed */
+    background-color: #4CAF50; /* Adjust to your desired color */
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    /* Add more styles as needed */
+}
+
+
+
+
+.activity-log {
+    background-color: #0a0c1b;
+    border-collapse: collapse;
+    width: 95%;
+    margin-top: 20px;
+    padding: 10px;
+    position: relative;
+    left: 20px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  }
+  .activity-log th, .activity-log td {
+    text-align: left;
+    padding: 20px;
+    border-bottom: 1px solid #ddd;
+  }
+  .activity-log th {
+    /* background-color: #4CAF50; */
+    /* background: linear-gradient(150deg, #451ded, #8e0ce3); */
+    background-color: #8e0ce3;
+    color: white;
+  }
+  /* .activity-log tr:nth-child(even) {
+    background-color: #f2f2f2;
+  } */
+
+.activity-log tr {
+    background-color: #0a0c1b;
+    color: #fff;
+}
+
+.activity-log tr:hover {
+    background-color: #000;
+}
+
+.timestamp {
+    color: #666;
+    font-size: 0.85em;
+}
+.edit-description {
+    font-style: italic;
+}
+
+
+.groupViewMain4 {
+    width: 1000px;
+    margin: 20px;
+    background-color: #0a0c1b;
+    color: #fff;
+    padding: 20px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+
+.modButton {
+    background-color: #451ded;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 20px;
+    margin: 5px;
+    cursor: pointer;
+    text-align: center;
+}
+
+.modButton:hover {
+    background-color: #8e0ce3;
+}
+
+/* Specific to moderation panel */
+.groupViewMain4 .moderation-panel {
+    padding: 20px;
+    background-color: #0a0c1b; /* Dark theme background */
+}
+
+.groupViewMain4 h2, .groupViewMain4 h3 {
+    border-bottom: 1px solid #8e0ce3;
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+}
+
+.groupViewMain4 label {
+    margin-right: 10px;
+}
+
+.groupViewMain4 select, .groupViewMain4 input[type="checkbox"] {
+    margin-bottom: 20px;
+    padding: 5px;
+    background-color: #151a30; /* Slightly lighter background for input fields */
+    color: #fff;
+    border: 1px solid #451ded;
+    border-radius: 5px;
+}
+
+.groupViewMain4 table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+}
+
+.groupViewMain4 table th, 
+.groupViewMain4 table td {
+    padding: 10px;
+    border-bottom: 1px solid #333;
+    text-align: left;
+}
+
+.groupViewMain4 .activity-log .timestamp, 
+.groupViewMain4 .activity-log .edit-description {
+    color: #aaa; /* Lighter text for less important data */
+}
+
+/* For dynamic sections like role management and user removal */
+.groupViewMain4 .moderation-panel > div {
+    margin-bottom: 20px;
+}
+
+.groupViewMain4 .moderation-panel .role-management button,
+.groupViewMain4 .moderation-panel .message-deletion button.delete-message,
+.groupViewMain4 .moderation-panel .user-removal button.remove-user,
+.groupViewMain4 .moderation-panel .block-users button.block-user {
+    margin-top: 10px; /* Spacing above buttons */
+    display: inline-block; /* Align buttons next to each other */
+    background-color: #451ded;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 20px;
+    margin: 5px;
+    cursor: pointer;
+    text-align: center;
+}
+
+.groupViewMain4 .content-filter {
+    display: flex;
+    /* align-items: center; */
+    flex-direction: column;
+}
+
+.groupViewMain4 .content-filter #content-filter-toggle {
+    margin-left: 10px;
+}
