@@ -890,7 +890,7 @@ footer::after {
     margin-top:10px;
 }*/
 
-#editProfileForm {
+#editProfileForm, #createImagePost, #createTextPost {
     background-color:#0a0c1b;
     color: #fff;
     padding: 20px;
@@ -902,7 +902,7 @@ footer::after {
     display: none; /* Hidden by default */
 }
 
-#editProfileForm label {
+#editProfileForm label, #createImagePost label, #createTextPost label {
     display: block;
     margin-bottom: 10px;
     color: #fff;
@@ -910,9 +910,9 @@ footer::after {
     font-weight: 600;
 }
 
-#editProfileForm input[type="file"],
-#editProfileForm input[type="text"],
-#editProfileForm textarea {
+#editProfileForm input[type="file"], #editProfileForm input[type="text"], #editProfileForm textarea, 
+#createImagePost input[type="file"], #createImagePost input[type="text"], #createImagePost textarea,
+#createTextPost input[type="file"], #createTextPost input[type="text"], #createTextPost textarea{
     width: 100%;
     padding: 10px;
     margin-bottom: 20px;
@@ -922,7 +922,7 @@ footer::after {
     color: #000;
 }
 
-#editProfileForm input[type="submit"] {
+#editProfileForm input[type="submit"], #createTextPost input[type="submit"], #createImagePost input[type="submit"] {
     background: linear-gradient(150deg, #451ded, #8e0ce3);
     color: white;
     border: none;
@@ -933,7 +933,7 @@ footer::after {
     margin-top: 10px;
 }
 
-#editProfileForm input[type="submit"]:hover {
+#editProfileForm input[type="submit"]:hover, #createTextPost input[type="submit"]:hover, #createImagePost input[type="submit"]:hover {
     background-color: #3f51b5;
 }
 
