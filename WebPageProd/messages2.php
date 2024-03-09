@@ -224,7 +224,7 @@ session_start();
                     return; // Exit the function early
                 }
                 $.ajax({
-                    url: 'php/search_users.php',
+                    url: 'php/search_mutual_users.php',
                     type: 'GET',
                     data: {
                         'searchTerm': searchTerm

@@ -25,7 +25,7 @@ if (isset($_POST['searchQuery']) && isset($_SESSION['username'])) {
     $result = mysqli_stmt_get_result($stmt);
 
     while ($row = mysqli_fetch_assoc($result)) {
-        echo "<div><a href='userViewProfile.php?user_id=" . htmlspecialchars($row['username']) . "' data-username='" . htmlspecialchars($row['username']) . "'>" . htmlspecialchars($row['username']) . " - " . htmlspecialchars($row['realName']) . "</a></div>";
+        echo "<div><a href='profile.php?user_id=" . htmlspecialchars($row['username']) . "' data-username='" . htmlspecialchars($row['username']) . "'>" . htmlspecialchars($row['username']) . " - " . htmlspecialchars($row['realName']) . "</a></div>";
     }
     mysqli_stmt_close($stmt);
     mysqli_close($connection);
