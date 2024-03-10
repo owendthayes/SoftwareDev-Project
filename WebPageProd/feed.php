@@ -1,19 +1,69 @@
 <?php
 session_start();
 include 'php/server_connection.php';
-$connection = connect_to_database();
 
-// Fetch user's feed posts
-$username = $_SESSION['username'];
-$query = "SELECT * FROM posts WHERE username = '$username'";
-$result = mysqli_query($connection, $query);
+$connection = connect_to_database();
+$username = $_SESSION['username']; 
+
+// Check if the user follows anyone
+$query_follow_check = "SELECT COUNT(*) AS count FROM follow WHERE follower = ?";
+$stmt_follow_check = mysqli_prepare($connection, $query_follow_check);
+mysqli_stmt_bind_param($stmt_follow_check, "s", $username);
+mysqli_stmt_execute($stmt_follow_check);
+$result_follow_check = mysqli_stmt_get_result($stmt_follow_check);
+$row_follow_check = mysqli_fetch_assoc($result_follow_check);
+$count_follow = $row_follow_check['count'];
+mysqli_stmt_close($stmt_follow_check);
+
+if ($count_follow > 0) {
+    // Query to get the user's posts and the posts of users they follow
+    $query = "SELECT p.*, u.profile_image, COUNT(l.postid) as like_count 
+    FROM posts p
+    LEFT JOIN follow f ON p.username = f.following
+    LEFT JOIN profile u ON p.username = u.username
+    LEFT JOIN likes l ON p.postid = l.postid
+    WHERE f.follower = ? OR p.username = ?
+    GROUP BY p.postid
+    ORDER BY p.created_at DESC;
+    ";
+    $stmt = mysqli_prepare($connection, $query);
+    mysqli_stmt_bind_param($stmt, "ss", $username, $username);
+} else {
+    // If the user does not follow anyone, retrieve only their own posts
+    $query = "SELECT p.*, u.profile_image FROM posts p
+    LEFT JOIN profile u ON p.username = u.username
+    WHERE p.username = ?
+    ORDER BY p.created_at DESC;";
+    $stmt = mysqli_prepare($connection, $query);
+    mysqli_stmt_bind_param($stmt, "s", $username);
+}
+
+mysqli_stmt_execute($stmt);
+$result = mysqli_stmt_get_result($stmt);
 
 $feedPosts = array();
-
 while ($row = mysqli_fetch_assoc($result)) {
     $feedPosts[] = $row;
 }
+
+foreach ($feedPosts as $key => $post) {
+    $like_check_query = "SELECT COUNT(*) as like_count FROM likes WHERE username = ? AND postid = ?";
+    $stmt_like_check = mysqli_prepare($connection, $like_check_query);
+    mysqli_stmt_bind_param($stmt_like_check, "si", $username, $post['postid']);
+    mysqli_stmt_execute($stmt_like_check);
+    $result_like_check = mysqli_stmt_get_result($stmt_like_check);
+    $like_data = mysqli_fetch_assoc($result_like_check);
+    $feedPosts[$key]['liked_by_user'] = $like_data['like_count'] > 0;
+    mysqli_stmt_close($stmt_like_check);
+}
+
+
+mysqli_stmt_close($stmt);
+mysqli_close($connection);
 ?>
+
+
+
 
 <html>
     <head>
@@ -82,9 +132,9 @@ while ($row = mysqli_fetch_assoc($result)) {
                     <?php foreach ($feedPosts as $post): ?>
                         <div class="feedItem">
 
-                        <div class="CommentsContainer" >    <!-- COMMENTS SECTION -->
+                        <div class="CommentsContainer" id="commentsContainer<?php echo $post['postid']; ?>">    <!-- COMMENTS SECTION -->
                             <div class="CommentsHeader">Comments</div>
-                            <div class="CommentsScrollBox">
+                            <div class="CommentsScrollBox" id="commentsScrollBox<?php echo $post['postid']; ?>">
 
                                 <div class="CommentInfo"> <!-- CONTAINER FOR A COMMENT AND USER AVATAR + NAME -->
                                     <image class="CommentAvatar" src="Images/defaultavatar.png"></image>
@@ -100,9 +150,10 @@ while ($row = mysqli_fetch_assoc($result)) {
                             </div>
                             
                             <!-- Input for text and the send button for a user to add a comment. -->
-                            <div class = messageInputContainer>
-                                <input class="messageInput">
-                                <button class ="sendCommentButton">Send</button>
+                            <!-- Input for text and the send button for a user to add a comment. -->
+                            <div class="messageInputContainer">
+                                <input class="messageInput" id="commentInput<?php echo $post['postid']; ?>" data-postid="<?php echo $post['postid']; ?>">
+                                <button class="sendCommentButton" onclick="sendComment(<?php echo $post['postid']; ?>)">Send</button>
                             </div>
                         </div>
                             <!-- Display comments section, input, etc. -->
@@ -111,7 +162,8 @@ while ($row = mysqli_fetch_assoc($result)) {
                             <div class="postContent">
                                 <?php if (!empty($post['content_image'])): ?>
                                     <!-- If it's an image post -->
-                                    <img class="postImage" src="<?php echo $post['content_image']; ?>">
+                                    <!-- <img class="postImage" src="<?php echo $post['content_image']; ?>"> -->
+                                    <img class="postImage" src="<?php echo str_replace('../Images/', 'Images/', $post['content_image']); ?>">
                                 <?php else: ?>
                                     <!-- If it's a text post -->
                                     <div class="postTextContainer">
@@ -120,7 +172,7 @@ while ($row = mysqli_fetch_assoc($result)) {
                                 <?php endif; ?>
                                 <div class="posterInfo">
                                     <div class="postInfoUsernameAvatar">
-                                        <img class="posterAvatar" src="Images/defaultAvatar.png">
+                                    <img class="posterAvatar" src="<?php echo !empty($post['profile_image']) ? $post['profile_image'] : 'Images/defaultAvatar.png'; ?>">
                                         <p class="posterUsername"><?php echo $post['username']; ?></p>
                                     </div>
                                     <div class="postCaption">
@@ -128,7 +180,14 @@ while ($row = mysqli_fetch_assoc($result)) {
                                     </div>
                                     <div class="DateLikeContainer">
                                         <p class="postDate"><?php echo date("m/d/Y", strtotime($post['created_at'])); ?></p>
-                                        <button class="likeButton">Like</button>
+                                        <button class="likeButton" 
+                                            onclick="likePost(<?php echo $post['postid']; ?>)"
+                                            data-postid="<?php echo $post['postid']; ?>">
+                                        <?php echo $post['liked_by_user'] ? 'Unlike' : 'Like'; ?>
+                                    </button>
+                                    <span class="likeCount" id="likeCount<?php echo $post['postid']; ?>">
+                                        <?php echo $post['like_count']; ?>
+                                    </span>
                                     </div>
                                 </div>
                             </div>
@@ -138,6 +197,33 @@ while ($row = mysqli_fetch_assoc($result)) {
             </div>
         </section>
 
+
+        <script>
+            function likePost(postId) {
+                var xhr = new XMLHttpRequest();
+                xhr.open("POST", "php/likePost.php", true);
+                xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+                xhr.onreadystatechange = function () {
+                    if (xhr.readyState === XMLHttpRequest.DONE) {
+                        if (xhr.status === 200) {
+                            var response = JSON.parse(xhr.responseText);
+                            // Update the like count display
+                            document.getElementById('likeCount' + postId).textContent = response.likeCount;
+                            // Toggle the button text between Like and Unlike
+                            var likeButton = document.querySelector('.likeButton[data-postid="' + postId + '"]');
+                            if (response.action === 'liked') {
+                                likeButton.textContent = 'Unlike';
+                            } else if (response.action === 'unliked') {
+                                likeButton.textContent = 'Like';
+                            }
+                        } else {
+                            console.error('Error:', xhr.statusText);
+                        }
+                    }
+                };
+                xhr.send("postId=" + postId);
+            }
+        </script>
 
         <script>
             function createImagePostButton() {
@@ -152,5 +238,61 @@ while ($row = mysqli_fetch_assoc($result)) {
                 form.style.display = form.style.display === 'none' ? 'block' : 'none';
             }
         </script>
+
+<script>
+    window.onload = function () {
+        // Load comments for each post
+        <?php foreach ($feedPosts as $post): ?>
+            loadComments(<?php echo $post['postid']; ?>);
+        <?php endforeach; ?>
+    };
+
+    function loadComments(postId) {
+        var xhr = new XMLHttpRequest();
+        xhr.open("GET", "php/getComments.php?postId=" + postId, true);
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState === XMLHttpRequest.DONE) {
+                if (xhr.status === 200) {
+                    // Load comments into the comments scroll box
+                    document.getElementById('commentsScrollBox' + postId).innerHTML = xhr.responseText;
+                } else {
+                    console.error('Error:', xhr.statusText);
+                }
+            }
+        };
+        xhr.send();
+    }
+
+
+
+    function sendComment(postId) {
+        var commentInput = document.getElementById('commentInput' + postId)
+        var commentValue = commentInput.value.trim();
+        if (commentValue === '') {
+            // Handle empty comment
+            return;
+        }
+
+        // AJAX request to insert comment
+        var xhr = new XMLHttpRequest();
+        xhr.open("POST", "php/insertComment.php", true);
+        xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState === XMLHttpRequest.DONE) {
+                if (xhr.status === 200) {
+                    // Handle successful insertion
+                    console.log(xhr.responseText);
+                    commentInput.value = '';
+                } else {
+                    // Handle error
+                    console.error('Error:', xhr.statusText);
+                }
+            }
+        };
+        xhr.send("postId=" + postId + "&comment=" + encodeURIComponent(commentValue));
+    }
+</script>
+
+        
     </body>
 </html>
