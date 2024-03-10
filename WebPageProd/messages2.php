@@ -235,10 +235,10 @@ session_start();
                         userList.empty(); // Clear the current list
                         $.each(users, function(index, user) {
                             // Create HTML structure for each user with default avatar and last message content
-                            var userItem = $('<li class="user"><img src="Images/defaultAvatar.png" alt=""><div class="up"><h4>' + user.following + '</h4><p class="lastMessageContent">   </p></div></li>');
+                            var userItem = $('<li class="user"><img src="Images/defaultAvatar.png" alt=""><div class="up"><h4>' + user + '</h4><p class="lastMessageContent">   </p></div></li>');
                             userItem.click(function() {
-                                addUserToDefaultList(user.username);
-                                openConversation(user.username);
+                                addUserToDefaultList(user);
+                                openConversation(user);
                             });
                             userList.append(userItem);
                         });
@@ -289,7 +289,7 @@ session_start();
                 $('#message-area').empty();
 
                 // Find the chat ID based on the selected user
-                var chatID = loadedUsers.indexOf(username);
+                //var chatID = loadedUsers.indexOf(username);
 
                 // Load previous messages from the database based on the selected user
                 loadMessages();
@@ -344,7 +344,7 @@ session_start();
         function sendMessage(content, isMedia) {
             var messageArea = document.getElementById('message-area');
             var emojiArea = $("#message-input").data("emojioneArea");
-            var chatID = $('#user-list .user:contains("' + recipient + '")').index(); // The chat ID based on user list position
+            //var chatID = $('#user-list .user:contains("' + recipient + '")').index(); // The chat ID based on user list position
             var messageContent = isMedia ? content : emojiArea.getText();
             var recipient = $('.chat-header h3').text(); // The recipient's username
 
@@ -377,7 +377,6 @@ session_start();
                     url: 'php/actionInsertMessage.php', // Update the URL to your PHP script
                     type: 'POST',
                     data: {
-                        'chatID': chatID,
                         'sentTo': recipient,
                         'message': messageContent
                     },

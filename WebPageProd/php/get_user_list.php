@@ -7,26 +7,30 @@ if (isset($_SESSION['loggedin']) && $_SESSION['loggedin'] == true) {
     $username = $_SESSION['username']; // The logged-in user's username
 
     // SQL query to select distinct users who have conversed with the logged-in user
-    $query = "SELECT DISTINCT IF(username = ?, sentTo, username) AS chatPartner, 
-              MAX(sendDate) AS latestDate, MAX(sendTime) AS latestTime,
-              MAX(is_read) AS isRead
-              FROM messages
-              WHERE username = ? OR sentTo = ?
-              GROUP BY chatPartner
-              ORDER BY latestDate DESC, latestTime DESC";
+    $query = "SELECT c.username, MAX(m.timestamp) AS latest_timestamp
+    FROM chat c
+    JOIN messages m ON c.chatid = m.chatid
+        WHERE c.chatid IN (
+            SELECT chatid
+        FROM chat
+        WHERE username = ?
+        )
+    AND c.username <> ?
+    GROUP BY c.username
+    ORDER BY latest_timestamp DESC;
+    ";
 
     $stmt = mysqli_prepare($connection, $query);
 
     if ($stmt) {
-        mysqli_stmt_bind_param($stmt, "sss", $username, $username, $username);
+        mysqli_stmt_bind_param($stmt, "ss", $username, $username);
         mysqli_stmt_execute($stmt);
         $result = mysqli_stmt_get_result($stmt);
         
         $chatPartners = [];
         while ($row = mysqli_fetch_assoc($result)) {
             $chatPartners[] = [
-                'username' => $row['chatPartner'],
-                'is_read' => $row['isRead']
+                'username' => $row['username']
             ];
         }
         

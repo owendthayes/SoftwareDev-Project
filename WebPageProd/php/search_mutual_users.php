@@ -25,7 +25,7 @@ if (isset($_SESSION['username'])) {
 
             $users = array();
             while ($row = mysqli_fetch_assoc($result)) {
-                $users[] = $row;
+                $users[] = $row["following"];
             }
 
             mysqli_stmt_close($stmt);
