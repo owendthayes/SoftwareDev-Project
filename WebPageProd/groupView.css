@@ -216,12 +216,20 @@ html{
     cursor: pointer;
     border-color: #8e0ce3;
     position: relative;
-    right: 20px;
+    right: 30px;
+}
+
+.addFile button a{
+    color: white; /* White text color */
+    text-align: center;
+    padding: 5px 5px; /* Padding to adjust the size */
+    text-decoration: none; /* No underline on links */
+    font-size: 17px; /* Font size for links */
 }
 
 .addFile input, .addFile label{
     position: relative;
-    right: 10px;
+    right: 20px;
 }
 
 .addFile input{
@@ -336,6 +344,32 @@ html{
 
 .groupSections button:hover {
     background-color: #9575CD; /* Lighter purple on hover */
+}
+
+
+.leaveGroupBut{
+    color: #fcfcfb;
+    margin: 10px;
+    box-shadow: 0px 4px 8px 0px rgba(104, 34, 206, 0.6);
+    font-family: 'railway', sans-serif;
+    padding: 10px 10px;
+    text-align: center;
+    text-decoration: none;
+    letter-spacing: 1px;
+    width: 100%;
+    background: linear-gradient(150deg, #FF073A, #FF3131);
+    border-radius: 10px;
+    cursor: pointer;
+    position: relative;
+    right: 10px;
+    border-color: #8e0ce3;
+}
+.leaveGroupBut a{
+    color: white; /* White text color */
+    text-align: center;
+    padding: 5px 5px; /* Padding to adjust the size */
+    text-decoration: none; /* No underline on links */
+    font-size: 17px; /* Font size for links */
 }
 
 .memberContainer {
