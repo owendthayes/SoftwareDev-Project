@@ -65,7 +65,7 @@
                         <a href="#" onclick="showPosts()">Posts</a>
                         <a href="#" onclick="showLog()">Activity Log</a> 
                         <a href="#" onclick="showMorderation()">Moderation</a>
-                        <button><a href="groupMessages.php">Group Chat</a></button>
+                        <button><a href="groupMessages.html">Group Chat</a></button>
                     </div>
                 </nav>
                 
@@ -77,7 +77,13 @@
                             <div class="lastChangedby">Last Changed By</div>
                             <div class="dateChanged">Modified</div>
                         </nav>
-    
+
+                        <div class="addFile">
+                            <label for="profileImageInput">Add File:</label>
+                            <input type="file" id="profileImageInput" name="profileImage" accept="image/*">
+                            <button><a href="groupMessages.html">Submit File</a></button>
+                        </div>
+
                         <div class="fileSec">
                             <div class="fileSecEach">
                                 <div class="fileIconEach"><i class="fa fa-file"></i></div>
@@ -104,132 +110,11 @@
                 </div>
 
                 <div class="groupViewMain2" style="display: none;">
-                    <div class="feedContainer">
-                        <div class="feedItem">
-                            <div class="CommentsContainer" >    <!-- COMMENTS SECTION -->
-                                <div class="CommentsHeader">Comments</div>
-                                <div class="CommentsScrollBox">
-        
-                                    <div class="CommentInfo"> <!-- CONTAINER FOR A COMMENT AND USER AVATAR + NAME -->
-                                        <image class="CommentAvatar" src="Images/defaultavatar.png"></image>
-                                        <p class="commentUsername">LarryDavid1996</p>
-                                    </div>
-                                    <div class="Comment">Hello!</div>
-        
-                                    <div class="CommentInfo">
-                                        <image class="CommentAvatar" src="Images/defaultavatar.png"></image>
-                                        <p class="commentUsername">T.Georgiou420</p>
-                                    </div>
-                                    <div class="Comment">Awesome post!</div>
-        
-                                    <div class="CommentInfo">
-                                        <image class="CommentAvatar" src="Images/defaultavatar.png"></image>
-                                        <p class="commentUsername">SusanCartwright</p>
-                                    </div>
-                                    <div class="Comment">Hey, did you get my message last night about the meeting? Its important!!</div>
-        
-                                    <div class="CommentInfo">
-                                        <image class="CommentAvatar" src="Images/defaultavatar.png"></image>
-                                        <p class="commentUsername">JCenaUCS</p>
-                                    </div>
-                                    <div class="Comment">Howdy!! Awesome photo!</div>
-        
-                                    <div class="CommentInfo">
-                                        <image class="CommentAvatar" src="Images/defaultavatar.png"></image>
-                                        <p class="commentUsername">sampsonJ321</p>
-                                    </div>
-                                    <div class="Comment">This reminds me of the last time I went on holiday, probably around 10 years ago now?</div>
-        
-                                    <div class="CommentInfo">
-                                        <image class="CommentAvatar" src="Images/defaultavatar.png"></image>
-                                        <p class="commentUsername">Konstance1</p>
-                                    </div>
-                                    <div class="Comment">Working hard or hardly working??</div>
-        
-                                    <div class="CommentInfo">
-                                        <image class="CommentAvatar" src="Images/defaultavatar.png"></image>
-                                        <p class="commentUsername">LarryDavid1996</p>
-                                    </div>
-                                    <div class="Comment">Nice :D</div>
-                                </div>
-                                
-                                <!-- Input for text and the send button for a user to add a comment. -->
-                                <div class = messageInputContainer>
-                                    <input class="messageInput">
-                                    <button class ="sendCommentButton">Send</button>
-                                </div>
-                            </div>
-        
-                            <!--Text or image content of a post-->
-                            <div class="postContent">
-                                <Image class="postImage" src="Images/grouplogo4.webp">   
-                                <div class="posterInfo">
-                                    <div class="postInfoUsernameAvatar">
-                                        <image class="posterAvatar" src="Images/defaultAvatar.png"></image>
-                                        <p class="posterUsername">oh2002</p>
-                                    </div>
-                                    <div class="postCaption">
-                                        <p class="postCaptionText">Here's a little painting I made earlier, just thought I'd share!</p>
-                                    </div>
-                                    <div class="DateLikeContainer">
-                                        <p class="postDate">02/03/2024</p>
-                                        <button class="likeButton">Like</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-        
-                        <div class="feedItem">
-                            <div class="CommentsContainer" >    <!-- COMMENTS SECTION -->
-                                <div class="CommentsHeader">Comments</div>
-                                <div class="CommentsScrollBox">
-        
-                                    <div class="CommentInfo"> <!-- CONTAINER FOR A COMMENT AND USER AVATAR + NAME -->
-                                        <image class="CommentAvatar" src="Images/defaultavatar.png"></image>
-                                        <p class="commentUsername">LarryDavid1996</p>
-                                    </div>
-                                    <div class="Comment">Interesting!</div>
-        
-                                    <div class="CommentInfo"> <!-- CONTAINER FOR A COMMENT AND USER AVATAR + NAME -->
-                                        <image class="CommentAvatar" src="Images/defaultavatar.png"></image>
-                                        <p class="commentUsername">PSwift</p>
-                                    </div>
-                                    <div class="Comment">I should make a post about this!</div>
-                                </div>
-                                
-                                <!-- Input for text and the send button for a user to add a comment. -->
-                                <div class = messageInputContainer>
-                                    <input class="messageInput">
-                                    <button class ="sendCommentButton">Send</button>
-                                </div>
-                            </div>
-        
-                            <!--Text or image content of a post-->
-                            <div class="postContent">
-                                <div class="postTextContainer">
-                                    <p class = "postText">Heres is some example text for a text-based post, hopefully everything works okay and the text fits fine. I will scream if it doesnt work properly. blah blah fill out the available space with some perhaps more elongated dialects to see if lengthy words spill over the side.</p>  
-                                </div>
-                                <div class="posterInfo">
-                                    <div class="postInfoUsernameAvatar">
-                                        <image class="posterAvatar" src="Images/defaultAvatar.png"></image>
-                                        <p class="posterUsername">SusanCartwright</p>
-                                    </div>
-                                    <div class="postCaption">
-                                        <p class="postCaptionText">What do you guys think? Am I doing well?</p>
-                                    </div>
-                                    <div class="DateLikeContainer">
-                                        <p class="postDate">02/03/2024</p>
-                                        <button class="likeButton">Like</button>
-                                    </div>
-                                </div> 
-                            </div>
-                        </div>
-                    </div>
+                <!-- maybe feed posts -->
                 </div>
 
                 <div class="groupViewMain3" style="display: none;">
                     <!-- <h2>Activity Log</h2> -->
-
                     <table class="activity-log">
                     <tr>
                         <th>File</th>
@@ -315,6 +200,7 @@
                                 <input type="checkbox" id="content-filter-toggle">
                             </div>
                         </div>
+                        <button class="otherButton" onclick="createTextPostButton()" style="color:white; font-size:25px; height: 80px; width: 150px; margin-top: 20px;">Submit Changes</button>
                     </div>
                 </div>
             </div>
@@ -365,5 +251,20 @@
                 groupViewMain4.style.display = "block";
             }
         </script>
+
+        <script>
+            function createImagePostButton() {
+                // Toggle the visibility of the edit profile form
+                var form = document.getElementById('createImagePost');
+                form.style.display = form.style.display === 'none' ? 'block' : 'none';
+            }
+
+            function createTextPostButton() {
+                // Toggle the visibility of the edit profile form
+                var form = document.getElementById('createTextPost');
+                form.style.display = form.style.display === 'none' ? 'block' : 'none';
+            }
+        </script>
+
     </body>
 </html>
