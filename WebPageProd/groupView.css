@@ -788,6 +788,87 @@ html{
 }
 
 
+
+/* Add to your groupView.css file */
+
+.user-addition-panel {
+    margin-top: 30px;
+    border-radius: 5px;
+}
+
+.user-addition-panel h3 {
+    color: #fff; /* White color for the header */
+    margin-bottom: 10px;
+}
+
+.user-addition-panel input[type="text"] {
+    width: calc(100% - 42px); /* Subtract button width and margin */
+    padding: 10px;
+    margin-right: 0px;
+    border-radius: 5px;
+    border: 1px solid #451ded;
+    background-color: #0a0c1b; /* Dark theme input field */
+    color: #fff; /* White text color */
+}
+
+.user-addition-panel button {
+    padding:10px;
+    height: 38px;
+    width: 35px;
+    background-color: #451ded; /* Purple button color */
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    color: #fff;
+    position: relative;
+}
+
+.user-addition-panel #userSearchResults {
+    margin-top: 10px;
+    background-color: #1c1f2a; /* Slightly different background for contrast */
+    border-radius: 5px;
+    max-height: 150px; /* Set a max height */
+    overflow-y: auto; /* Enable scrolling */
+    padding: 5px;
+}
+
+.user-search-results {
+    display: none; /* Hidden by default */
+}
+
+/* Example user result item */
+.user-search-result {
+    padding: 10px;
+    border-bottom: 1px solid #333;
+    cursor: pointer;
+}
+
+.user-search-result:last-child {
+    border-bottom: none;
+}
+
+.user-search-result:hover {
+    background-color: #292d3e; /* Slightly lighter on hover */
+}
+
+.user-search-result .username {
+    color: #fff; /* White text color */
+}
+
+.user-search-result .add-user-button {
+    padding: 5px 10px;
+    background-color: #4CAF50; /* Green color for add button */
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    float: right; /* Position to the right */
+}
+
+.user-search-result .add-user-button:hover {
+    background-color: #43A047; /* Darker green on hover */
+}
+
+
 .modButton {
     background-color: #451ded;
     color: #fff;
@@ -848,7 +929,7 @@ html{
 
 /* For dynamic sections like role management and user removal */
 .groupViewMain4 .moderation-panel > div {
-    margin-bottom: 20px;
+    margin-bottom: 80px;
 }
 
 .groupViewMain4 .moderation-panel .role-management button,
