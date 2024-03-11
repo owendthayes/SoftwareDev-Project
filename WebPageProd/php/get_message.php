@@ -10,6 +10,20 @@ if (isset($_SESSION['loggedin']) && $_SESSION['loggedin'] == true) {
     $sentTo = $_POST['sentTo'];
     $output = "";
 
+    // Check if the recipient exists in the profile database
+    $query_check_user = "SELECT * FROM profile WHERE username = ?";
+    $stmt_check_user = mysqli_prepare($connection, $query_check_user);
+    mysqli_stmt_bind_param($stmt_check_user, "s", $sentTo);
+    mysqli_stmt_execute($stmt_check_user);
+    mysqli_stmt_store_result($stmt_check_user);
+    $user_exists = mysqli_stmt_num_rows($stmt_check_user) > 0;
+    mysqli_stmt_close($stmt_check_user);
+
+    if (!$user_exists) {
+        echo "Error: Recipient does not exist.";
+        exit; // Stop further execution
+    }
+
     $chatID = getChatId($username, $sentTo, $connection);
 
     $query = "SELECT * FROM messages WHERE chatID = ? ORDER BY timestamp";
