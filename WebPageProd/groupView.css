@@ -426,6 +426,64 @@ html{
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 
+#editProfileForm, #createImagePost, #createTextPost {
+    background-color:#0a0c1b;
+    color: #fff;
+    padding: 20px;
+    margin: 20px auto;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    max-width: 78%;
+    border: 5px solid white;
+    display: none; /* Hidden by default */
+}
+
+#createImagePost label, #createTextPost label {
+    display: block;
+    margin-bottom: 10px;
+    color: #fff;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+#createImagePost input[type="file"], #createImagePost input[type="text"], #createImagePost textarea,
+#createTextPost input[type="file"], #createTextPost input[type="text"], #createTextPost textarea{
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 20px;
+    border-radius: 4px;
+    border: 1px solid #ddd;
+    font-size: 14px;
+    color: #000;
+}
+
+#createTextPost input[type="submit"], #createImagePost input[type="submit"] {
+    background: linear-gradient(150deg, #451ded, #8e0ce3);
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    font-size: 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+#createTextPost input[type="submit"]:hover, #createImagePost input[type="submit"]:hover {
+    background-color: #3f51b5;
+}
+
+.otherbutton{
+    box-shadow: 0px 4px 8px 0px rgba(104, 34, 206, 0.6);
+    font-family: 'railway', sans-serif;
+    color: white;
+    padding: 5px 10px;
+    background: linear-gradient(150deg, #451ded, #8e0ce3);
+    border-radius: 10px;
+    cursor: pointer;
+    border-color: #8e0ce3;
+}
+
+
 .feedContainer
 {
     width: 90%;
