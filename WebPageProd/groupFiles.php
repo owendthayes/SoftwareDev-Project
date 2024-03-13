@@ -4,13 +4,31 @@ include 'php/server_connection.php'; // Adjust the path as necessary
 
 $connection = connect_to_database();
 
-$query = "SELECT * FROM groups"; // Adjust the table name if necessary
+// Ensure the user is logged in
+if (!isset($_SESSION['username'])) {
+    echo "You must be logged in to view your groups.";
+    exit;
+}
+
+$username = mysqli_real_escape_string($connection, $_SESSION['username']);
+
+// Query to select groups where the logged-in user is a participant
+$query = "SELECT g.* FROM groups g
+          INNER JOIN group_participants gp ON g.groupid = gp.groupid
+          WHERE gp.username = '$username'";
+
 $result = mysqli_query($connection, $query);
+
+if (!$result) {
+    echo "Error: " . mysqli_error($connection);
+    exit;
+}
 
 $groups = mysqli_fetch_all($result, MYSQLI_ASSOC);
 
 mysqli_close($connection);
 ?>
+
 
 <html>
     <head>
@@ -73,23 +91,25 @@ mysqli_close($connection);
             </div>
         </section>
 
-        <section class="groups" style="position: relative; bottom: 30px;">
-            <div class="groupbox" style="left:50%; margin-top:50px; padding-bottom:20px; border:5px solid #8e0ce3; background:white; margin-left:60px; border-radius:10px; width:1320px;">
-                <h1 style="margin-left:20px">My Groups</h1>
-                <div class="row" style="display: flex; flex-wrap: wrap; justify-content: space-around;">
-                    <!-- PHP code to loop through the groups and create the HTML for each one -->
-                    <?php foreach ($groups as $group): ?>
-                        <div class="group" style="margin-top: 20px; border: 5px solid #8e0ce3; border-radius: 10px; width: 600px;">
-                            <a href="groupView2.html"><img style="width: 600px; border-bottom: 10px solid #8e0ce3;" src="<?php echo str_replace('../Images/', 'Images/', $group['groupdp']); ?>"></a>
-                            <h1><?php echo $group['groupname']; ?></h1>
+        <section class="groups" style="position: relative;">
+            <div class="groupbox" style="margin-top: 50px; padding-bottom: 20px; border: 5px solid #8e0ce3; background: white; margin: 0 auto; border-radius: 10px; max-width: 1320px; display: flex; flex-wrap: wrap; justify-content: space-evenly;">
+                <h1 style="width: 100%; text-align: center; margin-top: 0; padding-top: 20px;">My Groups</h1>
+                <!-- PHP code to loop through the groups and create the HTML for each one -->
+                <?php foreach ($groups as $group): ?>
+                    <div class="group" style="flex: 0 0 calc(33.333% - 40px); /* Three items per row with spacing */ margin: 20px; border: 5px solid #8e0ce3; border-radius: 10px; display: flex; flex-direction: column; align-items: center; overflow: hidden;">
+                        <a href="groupView2.php?groupid=<?php echo $group['groupid']; ?>" style="width: 100%; display: block;">
+                            <img style="width: 100%; height: 300px; object-fit: cover; object-position: 50% 50%;" src="<?php echo str_replace('../Images/', 'Images/', $group['groupdp']); ?>">
+                        </a>
+                        <div style="padding: 10px; text-align: center;">
+                            <h2 style="margin: 0;"><?php echo $group['groupname']; ?></h2>
                             <p><?php echo $group['groupdesc']; ?></p>
-                            <!-- Display 'Private' or 'Public' based on group status -->
-                            <h3 style="color:gray"><?php echo $group['is_privpub'] === 'private' ? 'Private Group' : 'Public Group'; ?></h3>
+                            <h3 style="color: gray;"><?php echo $group['is_privpub'] === 'private' ? 'Private Group' : 'Public Group'; ?></h3>
                         </div>
-                    <?php endforeach; ?>
-                </div>
+                    </div>
+                <?php endforeach; ?>
             </div>
         </section>
+
 
         <script>
             function createGroup() {
