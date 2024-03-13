@@ -170,10 +170,10 @@ session_start();
                         userList.empty();
                         $.each(loadedUsers, function(index, user) {
                             // Create HTML structure for each user with default avatar and last message content
-                            var userItem = $('<li class="user"><img src="Images/defaultAvatar.png" alt=""><div class="up"><h4>' + user.username + '</h4><p class="lastMessageContent"> You: Yes Im in, thanks!</p></div></li>');
+                            var userItem = $('<li class="user"><img src="Images/defaultAvatar.png" alt=""><div class="up"><h4>' + user + '</h4><p class="lastMessageContent"> You: Yes Im in, thanks!</p></div></li>');
                             userItem.click(function() {
-                                addUserToDefaultList(user.username);
-                                openConversation(user.username);
+                                addUserToDefaultList(user);
+                                openConversation(user);
                             });
                             userList.append(userItem);
                         });

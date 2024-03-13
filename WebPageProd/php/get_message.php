@@ -20,7 +20,7 @@ if (isset($_SESSION['loggedin']) && $_SESSION['loggedin'] == true) {
     mysqli_stmt_close($stmt_check_user);
 
     if (!$user_exists) {
-        echo "Error: Recipient does not exist.";
+        //echo "Error: Recipient does not exist.";
         exit; // Stop further execution
     }
 
