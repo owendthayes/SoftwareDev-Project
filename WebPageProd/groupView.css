@@ -190,10 +190,15 @@ html{
     color: #fff;
     padding: 20px;
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+
+}
+
+.inputfilesec{
+    display: flex;
 }
 
 .addFile{
-    border-bottom: 1px solid #ddd;
+    /* border-bottom: 1px solid #ddd; */
     padding: 20px;
     display: flex;
     flex-direction: column;
@@ -203,12 +208,12 @@ html{
 
 .addFile button{
     color: #fff;
-    margin: 10px;
+    /* margin-top: 10px; */
+    width: 265px;
     box-shadow: 0px 4px 8px 0px rgba(104, 34, 206, 0.6);
     font-family: 'railway', sans-serif;
     padding: 5px 10px;
     text-align: center;
-    margin-top: 20px;
     text-decoration: none;
     letter-spacing: 1px;
     background: linear-gradient(150deg, #451ded, #8e0ce3);
@@ -216,11 +221,12 @@ html{
     cursor: pointer;
     border-color: #8e0ce3;
     position: relative;
-    right: 30px;
+    right: 20px;
+    top: 15px;
 }
 
 .addFile button a{
-    color: white; /* White text color */
+    color: white;
     text-align: center;
     padding: 5px 5px; /* Padding to adjust the size */
     text-decoration: none; /* No underline on links */
@@ -233,11 +239,11 @@ html{
 }
 
 .addFile input{
-    margin-top: 20px;
+    margin-left: 20px;
 }
 
 .filesSection {
-    margin-top: 20px;
+    margin-top: 0px;
 }
 
 .filesSection nav {
@@ -249,7 +255,22 @@ html{
     background: linear-gradient(150deg, #451ded, #8e0ce3);
     margin-bottom: 10px;
 }
-  
+ 
+.fileSecEach .fileNameEach, .fileSecEach .lastChangedbyEach, .fileSecEach .dateChangedEach, .fileSecEach .removeFileEach{
+    position: relative;
+}
+
+.fileSecEach .fileNameEach{
+    right: 20px;
+}
+.fileSecEach .lastChangedbyEach, .fileSecEach .dateChangedEach, .fileSecEach .removeFileEach{
+    right: 60px;
+}
+
+.fileSecEach .removeFileEach{
+    right: 45px;
+}
+
 .fileIcon {
     margin-right: 10px;
 }
@@ -267,8 +288,8 @@ html{
 .fileSecEach {
     display: flex;
     align-items: center;
+    padding: 10px 15px;
     justify-content: space-between;
-    padding: 10px;
     border-bottom: 1px solid #ddd;
 }
   
@@ -278,13 +299,6 @@ html{
 
 .fileNameEach{
     width: 80px;
-}
-
-.fileSecEach {
-    display: flex;
-    align-items: center;
-    border-bottom: 1px solid #ccc;
-    padding: 10px 15px;
 }
 
 .fileIconEach i {
@@ -363,13 +377,14 @@ html{
     position: relative;
     right: 10px;
     border-color: #8e0ce3;
+    margin-bottom: 20px;
 }
 .leaveGroupBut a{
     color: white; /* White text color */
     text-align: center;
     padding: 5px 5px; /* Padding to adjust the size */
     text-decoration: none; /* No underline on links */
-    font-size: 17px; /* Font size for links */
+    font-size: 17px;
 }
 
 .memberContainer {
@@ -377,9 +392,21 @@ html{
     border: 1px solid #ccc; /* Light grey border */
     border-radius: 4px;
     padding: 20px;
-    width: 300px; /* Fixed width */
-  }
-  
+    width: 300px;
+    text-align: center;
+}
+
+.groupTitle h1 {
+    color: white;
+    font-size: 24px; /* Adjust font size as necessary */
+    margin: 0;
+    padding: 10px 0px; /* Add some padding */
+    white-space: nowrap; /* Keeps the text on a single line */
+    overflow: hidden; /* Ensures the overflow is hidden */
+    text-overflow: ellipsis; /* Adds an ellipsis to represent clipped text */
+    width: 100%; /* Makes the h1 take up the full width of its container */
+}
+
   .memSearch {
     display: flex;
     align-items: center; /* Ensures vertical alignment */
@@ -585,28 +612,30 @@ html{
 
 .messageInput
 {
-    height:30px;
-    width: 70%;
-    margin:auto;
-    font-size: 15px;
-    margin-left:5px;
-    border-radius:5px;
-    
+    width: 78%;
+    height: 50px;
+    font-family: "Franklin Gothic", "sans-serif";
+    font-size: 20px;
+    margin-left: 2px;
+    float: left;
 }
 
 .sendCommentButton
 {
-    height: 30px;
-    width:60px;
-    margin-left:5px;
-    font-weight:bold;
-    border-radius:5px;
-    cursor:pointer;
+    height: 48px;
+    width: 50px;
+    margin-left: 0px;
+    font-weight: bold;
+    border-radius: 5px;
+    /* position: relative; */
+    cursor: pointer;
+    /* bottom: 0px; */
+    /* left: 0%; */
 }
 
 .messageInputContainer
 {
-    margin-top:10px;
+    margin-top:7px;
 }
 
 .commentInfo
@@ -900,6 +929,16 @@ html{
     margin-right: 10px;
 }
 
+#searchUserButton{
+    margin-bottom: 20px;
+    padding: 5px;
+    background-color: #151a30; /* Slightly lighter background for input fields */
+    color: #fff;
+    border: 1px solid #451ded;
+    border-radius: 5px;
+    width: 96%;
+}
+
 .groupViewMain4 select, .groupViewMain4 input[type="checkbox"] {
     margin-bottom: 20px;
     padding: 5px;
@@ -1190,7 +1229,7 @@ html{
     height: 50px;
     font-family: "Franklin Gothic", "sans-serif";
     font-size:20px;
-    margin-left:60px;
+    margin-left:5px;
     float:left;
 }
 
