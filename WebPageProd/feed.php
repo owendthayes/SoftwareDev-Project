@@ -3,7 +3,7 @@ session_start();
 include 'php/server_connection.php';
 
 $connection = connect_to_database();
-$username = $_SESSION['username']; 
+$username = $_SESSION['username']; // Assume this is the logged-in user's username
 
 // Check if the user follows anyone
 $query_follow_check = "SELECT COUNT(*) AS count FROM follow WHERE follower = ?";
@@ -16,23 +16,23 @@ $count_follow = $row_follow_check['count'];
 mysqli_stmt_close($stmt_follow_check);
 
 if ($count_follow > 0) {
-    // Query to get the user's posts and the posts of users they follow
+    // Query to get the user's posts and the posts of users they follow, where groupid is NULL
     $query = "SELECT p.*, u.profile_image, COUNT(l.postid) as like_count 
     FROM posts p
     LEFT JOIN follow f ON p.username = f.following
     LEFT JOIN profile u ON p.username = u.username
     LEFT JOIN likes l ON p.postid = l.postid
-    WHERE f.follower = ? OR p.username = ?
+    WHERE (f.follower = ? OR p.username = ?) AND p.groupid IS NULL
     GROUP BY p.postid
     ORDER BY p.created_at DESC;
     ";
     $stmt = mysqli_prepare($connection, $query);
     mysqli_stmt_bind_param($stmt, "ss", $username, $username);
 } else {
-    // If the user does not follow anyone, retrieve only their own posts
+    // If the user does not follow anyone, retrieve only their own posts where groupid is NULL
     $query = "SELECT p.*, u.profile_image FROM posts p
     LEFT JOIN profile u ON p.username = u.username
-    WHERE p.username = ?
+    WHERE p.username = ? AND p.groupid IS NULL
     ORDER BY p.created_at DESC;";
     $stmt = mysqli_prepare($connection, $query);
     mysqli_stmt_bind_param($stmt, "s", $username);
@@ -136,11 +136,11 @@ mysqli_close($connection);
                             <div class="CommentsHeader">Comments</div>
                             <div class="CommentsScrollBox" id="commentsScrollBox<?php echo $post['postid']; ?>">
 
-                                <div class="CommentInfo"> <!-- CONTAINER FOR A COMMENT AND USER AVATAR + NAME -->
+                                <!-- <div class="CommentInfo"> 
                                     <image class="CommentAvatar" src="Images/defaultavatar.png"></image>
                                     <p class="commentUsername">LarryDavid1996</p>
                                 </div>
-                                <div class="Comment">Interesting!</div>
+                                <div class="Comment">Interesting!</div> -->
 
                                 <div class="CommentInfo"> <!-- CONTAINER FOR A COMMENT AND USER AVATAR + NAME -->
                                     <image class="CommentAvatar" src="Images/defaultavatar.png"></image>
@@ -176,7 +176,7 @@ mysqli_close($connection);
                                         <p class="posterUsername"><?php echo $post['username']; ?></p>
                                     </div>
                                     <div class="postCaption">
-                                        <p class="postCaptionText"><?php echo $post['post_bio']; ?></p>
+                                        <p class="postCaptionText"><?php echo $post['caption']; ?></p>
                                     </div>
                                     <div class="DateLikeContainer">
                                         <p class="postDate"><?php echo date("m/d/Y", strtotime($post['created_at'])); ?></p>
