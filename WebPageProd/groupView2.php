@@ -38,6 +38,56 @@ if ($groupid) {
             $userIsAdmin = true;
         }
     }
+    
+
+    // Query to get all posts from a specific group including likes and comments count
+    $query = "SELECT p.*, u.profile_image, COUNT(l.postid) as like_count, 
+              (SELECT COUNT(*) FROM comments c WHERE c.postid = p.postid) as comment_count
+              FROM posts p
+              LEFT JOIN profile u ON p.username = u.username
+              LEFT JOIN likes l ON p.postid = l.postid
+              WHERE p.groupid = ?
+              GROUP BY p.postid
+              ORDER BY p.created_at DESC";
+    $stmt = mysqli_prepare($connection, $query);
+    mysqli_stmt_bind_param($stmt, "i", $groupid);
+    mysqli_stmt_execute($stmt);
+    $result = mysqli_stmt_get_result($stmt);
+
+    $feedPosts = array();
+    while ($row = mysqli_fetch_assoc($result)) {
+        $row['liked_by_user'] = false; // Default value, as we don't know yet if the user liked the post
+        $feedPosts[] = $row;
+    }
+
+    // For each post, check if the user liked it
+    foreach ($feedPosts as $key => $post) {
+        $like_check_query = "SELECT COUNT(*) as like_count FROM likes WHERE username = ? AND postid = ?";
+        $stmt_like_check = mysqli_prepare($connection, $like_check_query);
+        mysqli_stmt_bind_param($stmt_like_check, "si", $_SESSION['username'], $post['postid']);
+        mysqli_stmt_execute($stmt_like_check);
+        $result_like_check = mysqli_stmt_get_result($stmt_like_check);
+        $like_data = mysqli_fetch_assoc($result_like_check);
+        $feedPosts[$key]['liked_by_user'] = $like_data['like_count'] > 0;
+        mysqli_stmt_close($stmt_like_check);
+    }
+    
+    mysqli_stmt_close($stmt);
+
+
+    // Query to get all files for the specific group
+    $fileQuery = "SELECT file_id, file_name, last_changed_by, modified FROM group_files WHERE groupid = ? ORDER BY modified DESC";
+    $fileStmt = mysqli_prepare($connection, $fileQuery);
+    mysqli_stmt_bind_param($fileStmt, "i", $groupid);
+    mysqli_stmt_execute($fileStmt);
+    $fileResult = mysqli_stmt_get_result($fileStmt);
+
+    $files = array();
+    while ($fileRow = mysqli_fetch_assoc($fileResult)) {
+        $files[] = $fileRow;
+    }
+
+    mysqli_stmt_close($fileStmt);
 
     mysqli_free_result($memberResult);
     mysqli_close($connection);
@@ -94,7 +144,11 @@ if (!$groupDetails) {
             <div class="memberContainer">
                 <!-- <h1 style="color: white;">Group Name</h1> -->
                 <div class="groupTitle"><h1><?php echo $groupDetails['groupname']; ?></h1></div>
-                <button class="leaveGroupBut"><a href="#">Leave Group</a></button>
+                <form action="php/leaveGroup.php" method="post">
+                    <input type="hidden" name="groupid" value="<?php echo $groupid; ?>">
+                    <input type="hidden" name="username" value="<?php echo $_SESSION['username']; ?>">
+                    <button type="submit" class="leaveGroupBut">Leave Group</button>
+                </form>
                 <div class="memSearch">
                     <div class="searchDiv">
                         <input type="text" id="search" placeholder="Type to search...">
@@ -132,10 +186,14 @@ if (!$groupDetails) {
                     <div style="display:block;" class="filesSection">
                         <div class="addFile">
                             <div class="inputfilesec">
-                                <label for="profileImageInput">Add File:</label>
-                                <input type="file" id="profileImageInput" name="profileImage" accept="image/*">
+                                <form action="php/submittingFile.php" method="post" enctype="multipart/form-data">
+                                    <input type="hidden" name="groupid" value="<?php echo $groupid; ?>">
+                                    <label for="fileToUpload">Select file to upload:</label>
+                                    <input type="file" name="fileToUpload" id="fileToUpload">
+                                    <input type="submit" value="Submit File">
+                                    <!-- <button type="submit" value="Submit File"><a href="#">Submit File</a></button> -->
+                                </form>
                             </div>
-                            <button><a href="groupMessages.html">Submit File</a></button>
                         </div>
                         
                         <nav>
@@ -144,32 +202,35 @@ if (!$groupDetails) {
                             <div class="lastChangedby">Last Changed By</div>
                             <div class="dateChanged">Modified</div>
                             <div class="removeFile">Remove File</div>
+                            <div class="removeFile">Download File</div>
                         </nav>
 
                         <div class="fileSec">
-                            <div class="fileSecEach">
-                                <div class="fileIconEach"><i class="fa fa-file"></i></div>
-                                <div class="fileNameEach">To Do list</div>
-                                <div class="lastChangedbyEach">Bishal Roy</div>
-                                <div class="dateChangedEach">February 14th</div>
-                                <div class="removeFileEach"><i class="fa fa-trash-o"></i></div>
-                            </div>
 
-                            <div class="fileSecEach">
+                        <?php foreach ($files as $file): ?>
+                        <div class="fileSecEach">
+                            <div class="fileIconEach"><i class="fa fa-file"></i></div>
+                            <div class="fileNameEach"><?php echo htmlspecialchars($file['file_name']); ?></div>
+                            <div class="lastChangedbyEach"><?php echo htmlspecialchars($file['last_changed_by']); ?></div>
+                            <div class="dateChangedEach"><?php echo htmlspecialchars(date("F jS, Y", strtotime($file['modified']))); ?></div>
+                            <div class="removeFileEach" onclick="removeFile(<?php echo $file['file_id']; ?>)"><i class="fa fa-trash-o"></i></div>
+                            <!-- Download Button -->
+                            <div class="downloadFileEach">
+                                <a href="uploads/<?php echo $file['file_name']; ?>" download="<?php echo $file['file_name']; ?>">
+                                    <button type="button"><i class="fa fa-arrow-down"></i></button>
+                                </a>
+                            </div>
+                        </div>
+                        <?php endforeach; ?>
+
+
+                            <!-- <div class="fileSecEach">
                                 <div class="fileIconEach"><i class="fa fa-file"></i></div>
                                 <div class="fileNameEach">To Do list</div>
                                 <div class="lastChangedbyEach">Bishal Roy</div>
                                 <div class="dateChangedEach">February 14th</div>
                                 <div class="removeFileEach"><i class="fa fa-trash-o"></i></div>
-                            </div>
-    
-                            <div class="fileSecEach">
-                                <div class="fileIconEach"><i class="fa fa-file"></i></div>
-                                <div class="fileNameEach">To Do list</div>
-                                <div class="lastChangedbyEach">Bishal Roy</div>
-                                <div class="dateChangedEach">February 14th</div>
-                                <div class="removeFileEach"><i class="fa fa-trash-o"></i></div>
-                            </div>
+                            </div> -->
                         </div>
                     </div>
                 </div>
@@ -186,7 +247,8 @@ if (!$groupDetails) {
                     
                     <!-- Hidden form for profile editing -->
                     <div id="createImagePost" style="display: none;">
-                        <form id="profileForm" enctype="multipart/form-data" action="php/insertPostImage.php" method="post">
+                        <form id="profileForm" enctype="multipart/form-data" action="php/insertPostImageGroup.php" method="post">
+                            <input type="hidden" name="groupid" value="<?php echo $groupid; ?>">
                             <label for="profileImageInput">Image post:</label>
                             <input type="file" id="profileImageInput" name="profileImage" accept="image/*">
                             <!-- <label for="fullNameInput">Full Name:</label>
@@ -199,9 +261,10 @@ if (!$groupDetails) {
                     
                      <!-- Hidden form for profile editing -->
                      <div id="createTextPost" style="display: none;">
-                        <form id="profileForm" enctype="multipart/form-data" action="php/insertPostText.php" method="post">
+                        <form id="profileForm" enctype="multipart/form-data" action="php/insertPostTextGroup.php" method="post">
                             <!-- <label for="profileImageInput">Image post:</label>
                             <input type="file" id="profileImageInput" name="profileImage" accept="image/*"> -->
+                            <input type="hidden" name="groupid" value="<?php echo $groupid; ?>">
                             <label for="aboutMeInput">Write Something!:</label>
                             <textarea id="aboutMeInput" name="aboutMe"></textarea>
                             <label for="fullNameInput">Add a Caption:</label>
@@ -211,125 +274,70 @@ if (!$groupDetails) {
                     </div>
 
                     <div class="feedContainer">
+                    <?php foreach ($feedPosts as $post): ?>
                         <div class="feedItem">
-                            <div class="CommentsContainer" >    <!-- COMMENTS SECTION -->
-                                <div class="CommentsHeader">Comments</div>
-                                <div class="CommentsScrollBox">
-        
-                                    <div class="CommentInfo"> <!-- CONTAINER FOR A COMMENT AND USER AVATAR + NAME -->
-                                        <image class="CommentAvatar" src="Images/defaultavatar.png"></image>
-                                        <p class="commentUsername">LarryDavid1996</p>
-                                    </div>
-                                    <div class="Comment">Hello!</div>
-        
-                                    <div class="CommentInfo">
-                                        <image class="CommentAvatar" src="Images/defaultavatar.png"></image>
-                                        <p class="commentUsername">T.Georgiou420</p>
-                                    </div>
-                                    <div class="Comment">Awesome post!</div>
-        
-                                    <div class="CommentInfo">
-                                        <image class="CommentAvatar" src="Images/defaultavatar.png"></image>
-                                        <p class="commentUsername">SusanCartwright</p>
-                                    </div>
-                                    <div class="Comment">Hey, did you get my message last night about the meeting? Its important!!</div>
-        
-                                    <div class="CommentInfo">
-                                        <image class="CommentAvatar" src="Images/defaultavatar.png"></image>
-                                        <p class="commentUsername">JCenaUCS</p>
-                                    </div>
-                                    <div class="Comment">Howdy!! Awesome photo!</div>
-        
-                                    <div class="CommentInfo">
-                                        <image class="CommentAvatar" src="Images/defaultavatar.png"></image>
-                                        <p class="commentUsername">sampsonJ321</p>
-                                    </div>
-                                    <div class="Comment">This reminds me of the last time I went on holiday, probably around 10 years ago now?</div>
-        
-                                    <div class="CommentInfo">
-                                        <image class="CommentAvatar" src="Images/defaultavatar.png"></image>
-                                        <p class="commentUsername">Konstance1</p>
-                                    </div>
-                                    <div class="Comment">Working hard or hardly working??</div>
-        
-                                    <div class="CommentInfo">
-                                        <image class="CommentAvatar" src="Images/defaultavatar.png"></image>
-                                        <p class="commentUsername">LarryDavid1996</p>
-                                    </div>
-                                    <div class="Comment">Nice :D</div>
+
+                        <div class="CommentsContainer" id="commentsContainer<?php echo $post['postid']; ?>">    <!-- COMMENTS SECTION -->
+                            <div class="CommentsHeader">Comments</div>
+                            <div class="CommentsScrollBox" id="commentsScrollBox<?php echo $post['postid']; ?>">
+
+                                <!-- <div class="CommentInfo"> 
+                                    <image class="CommentAvatar" src="Images/defaultavatar.png"></image>
+                                    <p class="commentUsername">LarryDavid1996</p>
                                 </div>
-                                
-                                <!-- Input for text and the send button for a user to add a comment. -->
-                                <div class = messageInputContainer>
-                                    <input class="messageInput">
-                                    <button class ="sendCommentButton">Send</button>
+                                <div class="Comment">Interesting!</div> -->
+
+                                <div class="CommentInfo"> <!-- CONTAINER FOR A COMMENT AND USER AVATAR + NAME -->
+                                    <image class="CommentAvatar" src="Images/defaultavatar.png"></image>
+                                    <p class="commentUsername">PSwift</p>
                                 </div>
+                                <div class="Comment">I should make a post about this!</div>
                             </div>
-        
-                            <!--Text or image content of a post-->
+                            
+                            <!-- Input for text and the send button for a user to add a comment. -->
+                            <!-- Input for text and the send button for a user to add a comment. -->
+                            <div class="messageInputContainer">
+                                <input class="messageInput" id="commentInput<?php echo $post['postid']; ?>" data-postid="<?php echo $post['postid']; ?>">
+                                <button class="sendCommentButton" onclick="sendComment(<?php echo $post['postid']; ?>)">Send</button>
+                            </div>
+                        </div>
+                            <!-- Display comments section, input, etc. -->
+                            <!-- Your existing HTML code for comments section -->
+
                             <div class="postContent">
-                                <Image class="postImage" src="Images/grouplogo4.webp">   
+                                <?php if (!empty($post['content_image'])): ?>
+                                    <!-- If it's an image post -->
+                                    <!-- <img class="postImage" src="<?php echo $post['content_image']; ?>"> -->
+                                    <img class="postImage" src="<?php echo str_replace('../Images/', 'Images/', $post['content_image']); ?>">
+                                <?php else: ?>
+                                    <!-- If it's a text post -->
+                                    <div class="postTextContainer">
+                                        <p class="postText"><?php echo $post['content_text']; ?></p>
+                                    </div>
+                                <?php endif; ?>
                                 <div class="posterInfo">
                                     <div class="postInfoUsernameAvatar">
-                                        <image class="posterAvatar" src="Images/defaultAvatar.png"></image>
-                                        <p class="posterUsername">oh2002</p>
+                                    <img class="posterAvatar" src="<?php echo !empty($post['profile_image']) ? $post['profile_image'] : 'Images/defaultAvatar.png'; ?>">
+                                        <p class="posterUsername"><?php echo $post['username']; ?></p>
                                     </div>
                                     <div class="postCaption">
-                                        <p class="postCaptionText">Here's a little painting I made earlier, just thought I'd share!</p>
+                                        <p class="postCaptionText"><?php echo $post['caption']; ?></p>
                                     </div>
                                     <div class="DateLikeContainer">
-                                        <p class="postDate">02/03/2024</p>
-                                        <button class="likeButton">Like</button>
+                                        <p class="postDate"><?php echo date("m/d/Y", strtotime($post['created_at'])); ?></p>
+                                        <button class="likeButton" 
+                                            onclick="likePost(<?php echo $post['postid']; ?>)"
+                                            data-postid="<?php echo $post['postid']; ?>">
+                                        <?php echo $post['liked_by_user'] ? 'Unlike' : 'Like'; ?>
+                                    </button>
+                                    <span class="likeCount" id="likeCount<?php echo $post['postid']; ?>">
+                                        <?php echo $post['like_count']; ?>
+                                    </span>
                                     </div>
                                 </div>
                             </div>
                         </div>
-        
-                        <div class="feedItem">
-                            <div class="CommentsContainer" >    <!-- COMMENTS SECTION -->
-                                <div class="CommentsHeader">Comments</div>
-                                <div class="CommentsScrollBox">
-        
-                                    <div class="CommentInfo"> <!-- CONTAINER FOR A COMMENT AND USER AVATAR + NAME -->
-                                        <image class="CommentAvatar" src="Images/defaultavatar.png"></image>
-                                        <p class="commentUsername">LarryDavid1996</p>
-                                    </div>
-                                    <div class="Comment">Interesting!</div>
-        
-                                    <div class="CommentInfo"> <!-- CONTAINER FOR A COMMENT AND USER AVATAR + NAME -->
-                                        <image class="CommentAvatar" src="Images/defaultavatar.png"></image>
-                                        <p class="commentUsername">PSwift</p>
-                                    </div>
-                                    <div class="Comment">I should make a post about this!</div>
-                                </div>
-                                
-                                <!-- Input for text and the send button for a user to add a comment. -->
-                                <div class = messageInputContainer>
-                                    <input class="messageInput">
-                                    <button class ="sendCommentButton">Send</button>
-                                </div>
-                            </div>
-        
-                            <!--Text or image content of a post-->
-                            <div class="postContent">
-                                <div class="postTextContainer">
-                                    <p class = "postText">Heres is some example text for a text-based post, hopefully everything works okay and the text fits fine. I will scream if it doesnt work properly. blah blah fill out the available space with some perhaps more elongated dialects to see if lengthy words spill over the side.</p>  
-                                </div>
-                                <div class="posterInfo">
-                                    <div class="postInfoUsernameAvatar">
-                                        <image class="posterAvatar" src="Images/defaultAvatar.png"></image>
-                                        <p class="posterUsername">SusanCartwright</p>
-                                    </div>
-                                    <div class="postCaption">
-                                        <p class="postCaptionText">What do you guys think? Am I doing well?</p>
-                                    </div>
-                                    <div class="DateLikeContainer">
-                                        <p class="postDate">02/03/2024</p>
-                                        <button class="likeButton">Like</button>
-                                    </div>
-                                </div> 
-                            </div>
-                        </div>
+                    <?php endforeach; ?>
                     </div>
                 </div>
 
@@ -452,7 +460,7 @@ if (!$groupDetails) {
                              Example user with a block button
                             <div class="user">
                                 <p>Username</p>
-                                <button class="block-user" class="modButton">Block User</button>
+                                <button type="submit" class="leaveGroupBut">Leave Group</button>
                             </div>
                         </div> -->
                 
@@ -466,11 +474,143 @@ if (!$groupDetails) {
                         </div>
                         <button class="otherButton" onclick="createTextPostButton()" style="color:white; font-size:25px; height: 80px; width: 150px; margin-top: 20px;">Submit Changes</button>
                     </div>
+
+                    <div class="block-users">
+                        <h3>Delete Group</h3>
+                        <div class="user">
+                            <form action="php/deleteGroup.php" method="post">
+                                <input type="hidden" name="groupid" value="<?php echo $groupid; ?>">
+                                <button type="submit" class="deleteGroupBut">Delete Group</button>
+                            </form>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
 
         
+        <script>
+            function removeFile(fileId) {
+                if (confirm('Are you sure you want to delete this file?')) {
+                    var xhr = new XMLHttpRequest();
+                    xhr.open('POST', 'php/deleteFile.php', true);
+                    xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+                    xhr.onload = function () {
+                        if (xhr.status === 200) {
+                            var response = JSON.parse(xhr.responseText);
+                            if (response.success) {
+                                // Reload the page after a short delay to see the changes
+                                setTimeout(function(){
+                                    window.location.reload();
+                                }, 500); // Delay of 500 milliseconds
+                            } else {
+                                alert('Could not delete the file.');
+                            }
+                        } else {
+                            alert('An error occurred while deleting the file.');
+                        }
+                    };
+                    xhr.send('fileId=' + fileId);
+                }
+            }
+        </script>
+        
+        <script>
+            function likePost(postId) {
+                var xhr = new XMLHttpRequest();
+                xhr.open("POST", "php/likePost.php", true);
+                xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+                xhr.onreadystatechange = function () {
+                    if (xhr.readyState === XMLHttpRequest.DONE) {
+                        if (xhr.status === 200) {
+                            var response = JSON.parse(xhr.responseText);
+                            // Update the like count display
+                            document.getElementById('likeCount' + postId).textContent = response.likeCount;
+                            // Toggle the button text between Like and Unlike
+                            var likeButton = document.querySelector('.likeButton[data-postid="' + postId + '"]');
+                            if (response.action === 'liked') {
+                                likeButton.textContent = 'Unlike';
+                            } else if (response.action === 'unliked') {
+                                likeButton.textContent = 'Like';
+                            }
+                        } else {
+                            console.error('Error:', xhr.statusText);
+                        }
+                    }
+                };
+                xhr.send("postId=" + postId);
+            }
+        </script>
+
+        <script>
+            window.onload = function () {
+                // Load comments for each post
+                <?php foreach ($feedPosts as $post): ?>
+                    loadComments(<?php echo $post['postid']; ?>);
+                <?php endforeach; ?>
+            };
+
+            function loadComments(postId) {
+                var xhr = new XMLHttpRequest();
+                xhr.open("GET", "php/getComments.php?postId=" + postId, true);
+                xhr.onreadystatechange = function () {
+                    if (xhr.readyState === XMLHttpRequest.DONE) {
+                        if (xhr.status === 200) {
+                            // Load comments into the comments scroll box
+                            document.getElementById('commentsScrollBox' + postId).innerHTML = xhr.responseText;
+                        } else {
+                            console.error('Error:', xhr.statusText);
+                        }
+                    }
+                };
+                xhr.send();
+            }
+
+
+
+            function sendComment(postId) {
+                var commentInput = document.getElementById('commentInput' + postId)
+                var commentValue = commentInput.value.trim();
+                if (commentValue === '') {
+                    // Handle empty comment
+                    return;
+                }
+
+                // AJAX request to insert comment
+                var xhr = new XMLHttpRequest();
+                xhr.open("POST", "php/insertComment.php", true);
+                xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+                xhr.onreadystatechange = function () {
+                    if (xhr.readyState === XMLHttpRequest.DONE) {
+                        if (xhr.status === 200) {
+                            // Handle successful insertion
+                            console.log(xhr.responseText);
+                            commentInput.value = '';
+                        } else {
+                            // Handle error
+                            console.error('Error:', xhr.statusText);
+                        }
+                    }
+                };
+                xhr.send("postId=" + postId + "&comment=" + encodeURIComponent(commentValue));
+            }
+
+            function loadComments(postId) {
+                var xhr = new XMLHttpRequest();
+                xhr.open("GET", "php/getComments.php?postId=" + postId, true);
+                xhr.onreadystatechange = function () {
+                    if (xhr.readyState === XMLHttpRequest.DONE) {
+                        if (xhr.status === 200) {
+                            // Load comments into the comments scroll box
+                            document.getElementById('commentsScrollBox' + postId).innerHTML = xhr.responseText;
+                        } else {
+                            console.error('Error:', xhr.statusText);
+                        }
+                    }
+                };
+                xhr.send();
+            }
+        </script>
         
         <script>
            function showFiles() {
