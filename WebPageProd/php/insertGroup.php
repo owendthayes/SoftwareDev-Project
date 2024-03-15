@@ -1,78 +1,70 @@
 <?php
 session_start();
-include 'server_connection.php';
+include 'server_connection.php'; // Adjust the path to your actual server connection script
 
-// Function to save the uploaded image and return the path
+// Function to save the uploaded image and return the filename
 function saveUploadedImage($fileKey, $uploadDir = '../Images/') {
     if (isset($_FILES[$fileKey]) && $_FILES[$fileKey]['error'] === UPLOAD_ERR_OK) {
         $tmpName = $_FILES[$fileKey]['tmp_name'];
-        $fileName = time() . '_' . basename($_FILES[$fileKey]['name']); // Prefix the file name with the current timestamp to avoid overwriting files
+        $fileName = time() . '_' . basename($_FILES[$fileKey]['name']);
         $path = $uploadDir . $fileName;
         if (move_uploaded_file($tmpName, $path)) {
-            return $fileName; // Return just the file name as the path is fixed
+            return $fileName;
         }
     }
     return null;
 }
 
-// Check if the user is logged in
+// Ensure a user is logged in
 if (!isset($_SESSION['username'])) {
     die("You must be logged in to create a group.");
 }
 
-$username = $_SESSION['username']; // The logged-in user's username
-
-// Function to save the uploaded image and return the path...
-// Assume this function exists as per your previous code
-
+$username = $_SESSION['username'];
 $connection = connect_to_database();
 
+// Handle the form submission
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     // Collect post data
-    $groupName = $_POST['groupname'] ?? '';
-    $groupDesc = $_POST['groupdesc'] ?? '';
+    $groupName = $_POST['groupname'] ?? null;
+    $groupDesc = $_POST['groupdesc'] ?? null;
     $isPrivPub = isset($_POST['is_privpub']) && $_POST['is_privpub'] === 'private' ? 'private' : 'public';
     $groupImageName = saveUploadedImage('groupdp');
 
+    // Check required fields
+    if (!$groupName || !$groupDesc) {
+        echo "Group name and description are required.";
+        exit;
+    }
+
     if ($groupImageName !== null) {
-        $groupImagePath = "../Images/" . $groupImageName;
+        $groupImagePath = "Images/" . $groupImageName; // Assuming the Images/ directory is in the root
 
-        // Start transaction
-        mysqli_begin_transaction($connection);
-
-        // Insert the group into the groups table
+        // Insert the group into the database
         $insertGroupQuery = "INSERT INTO groups (groupname, groupdp, groupdesc, is_privpub, host) VALUES (?, ?, ?, ?, ?)";
-        $groupStmt = mysqli_prepare($connection, $insertGroupQuery);
-        mysqli_stmt_bind_param($groupStmt, "sssss", $groupName, $groupImagePath, $groupDesc, $isPrivPub, $username);
-        $groupExecuted = mysqli_stmt_execute($groupStmt);
-        $groupId = mysqli_stmt_insert_id($groupStmt); // Retrieve the last inserted group id
-        mysqli_stmt_close($groupStmt);
+        if ($stmt = mysqli_prepare($connection, $insertGroupQuery)) {
+            mysqli_stmt_bind_param($stmt, "sssss", $groupName, $groupImagePath, $groupDesc, $isPrivPub, $username);
+            mysqli_stmt_execute($stmt);
+            $groupId = mysqli_insert_id($connection);
+            mysqli_stmt_close($stmt);
 
-        if ($groupExecuted && $groupId) {
-            // Insert the user as a participant with admin and editor permissions
+            // Add the logged-in user as an admin and editor in the group_participants table
             $insertParticipantQuery = "INSERT INTO group_participants (groupid, username, gpermissions, fpermissions) VALUES (?, ?, 'admin', 'editor')";
-            $participantStmt = mysqli_prepare($connection, $insertParticipantQuery);
-            mysqli_stmt_bind_param($participantStmt, "is", $groupId, $username);
-            $participantExecuted = mysqli_stmt_execute($participantStmt);
-            mysqli_stmt_close($participantStmt);
+            if ($stmt = mysqli_prepare($connection, $insertParticipantQuery)) {
+                mysqli_stmt_bind_param($stmt, "is", $groupId, $username);
+                mysqli_stmt_execute($stmt);
+                mysqli_stmt_close($stmt);
 
-            if ($participantExecuted) {
-                // Commit the transaction if both queries are successful
-                mysqli_commit($connection);
-                echo "Group created successfully, and the creator has been added as an admin and editor.";
-                // Redirect or perform other success actions
+                echo "Group created successfully!";
+                header("Location: ../groupFiles.php");
             } else {
-                // Rollback the transaction if inserting the participant failed
-                mysqli_rollback($connection);
-                echo "Error adding creator as a participant: " . mysqli_error($connection);
+                echo "Error: " . mysqli_error($connection);
             }
         } else {
-            // Rollback the transaction if inserting the group failed
-            mysqli_rollback($connection);
-            echo "Error creating group: " . mysqli_error($connection);
+            echo "Error: " . mysqli_error($connection);
         }
     } else {
-        echo "Error: Invalid file upload.";
+        echo "Error: File upload failed.";
     }
 }
 
