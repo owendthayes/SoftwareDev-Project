@@ -65,7 +65,10 @@
                                 <p class="notificationUsername"><?php echo htmlspecialchars($notification['sender_username']); ?></p>
                                 <p class="notificationText"><?php echo htmlspecialchars($notification['activity_type']); ?></p>
                                 <p class="notificationContent"><?php echo htmlspecialchars($notification['content']); ?></p>
-                                <button class="clearNotification"><image src="Images/clearBin.png" class="notificationImage"></image></button>                    
+                                <form method="POST" action="php/deleteNotifications.php">
+                                    <input type="hidden" name="notificationId" value="<?php echo $notification['id']; ?>">
+                                    <button class="clearNotification" type="submit" name="deleteNotification"><image src="Images/clearBin.png" class="notificationImage"></image></button>
+                                </form>                    
                             </div>
                         </div>
                     </div>
