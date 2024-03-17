@@ -5,6 +5,7 @@ include 'php/server_connection.php'; // Adjust the path as necessary
 // Get groupid from URL
 $groupid = isset($_GET['groupid']) ? $_GET['groupid'] : null;
 
+$userIsMember = false; // Initialize user member status
 $groupDetails = null;
 $groupMembers = [];
 $userIsAdmin = false; // Initialize user admin status
@@ -42,6 +43,11 @@ if ($groupid) {
         // Check if logged-in user is editor
         if ($row['username'] == $_SESSION['username'] && $row['fpermissions'] == 'editor') {
             $userIsEditor = true;
+        }
+
+        // Check if the logged-in user is a member
+        if ($row['username'] == $_SESSION['username']) {
+            $userIsMember = true;
         }
     }
     
@@ -165,10 +171,18 @@ if (!$groupDetails) {
             <div class="memberContainer">
                 <!-- <h1 style="color: white;">Group Name</h1> -->
                 <div class="groupTitle"><h1><?php echo $groupDetails['groupname']; ?></h1></div>
+                <form action="php/joinGroup.php" method="post">
+                        <input type="hidden" name="groupid" value="<?php echo $groupid; ?>">
+                        <input type="hidden" name="username" value="<?php echo $_SESSION['username']; ?>">
+                        <?php if (!$userIsMember): ?>
+                            <button type="submit" name="action" value="join" class="joinGroupBut">Join Group</button>
+                        <?php else: ?>
+                    </form>
                 <form action="php/leaveGroup.php" method="post">
                     <input type="hidden" name="groupid" value="<?php echo $groupid; ?>">
                     <input type="hidden" name="username" value="<?php echo $_SESSION['username']; ?>">
-                    <button type="submit" class="leaveGroupBut">Leave Group</button>
+                        <button type="submit" name="action" value="leave" class="leaveGroupBut">Leave Group</button>
+                    <?php endif; ?>
                 </form>
                 <div class="memSearch">
                     <div class="searchDiv">
@@ -203,7 +217,7 @@ if (!$groupDetails) {
                         <?php if ($userIsEditor): ?>
                             <a href="#" onclick="showfileEdit()">New File</a>
                         <?php endif; ?>                      
-                        <button><a href="groupMessages.html">Group Chat</a></button>
+                        <button><a href="groupMessages.php?groupid=<?php echo $groupid; ?>">Group Chat</a></button>
                     </div>
                 </nav>
                 
