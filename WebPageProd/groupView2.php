@@ -178,7 +178,7 @@ if (!$groupDetails) {
                         <?php endif; ?>
                         <a href="#">Canvas</a>
                         <a href="#">New File</a>                        
-                        <button><a href="groupMessages.html">Group Chat</a></button>
+                        <button><a href="groupMessages.php?groupid=<?php echo $groupid; ?>">Group Chat</a></button>
                     </div>
                 </nav>
                 

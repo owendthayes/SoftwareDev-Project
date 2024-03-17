@@ -28,7 +28,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     // Collect post data
     $groupName = $_POST['groupname'] ?? null;
     $groupDesc = $_POST['groupdesc'] ?? null;
-    $isPrivPub = isset($_POST['is_privpub']) && $_POST['is_privpub'] === 'private' ? 'private' : 'public';
+    $isPrivPub = isset($_POST['type']) && $_POST['type'] === 'private' ? 'private' : 'public';
     $groupImageName = saveUploadedImage('groupdp');
 
     // Check required fields
@@ -41,7 +41,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $groupImagePath = "Images/" . $groupImageName; // Assuming the Images/ directory is in the root
 
         // Insert the group into the database
-        $insertGroupQuery = "INSERT INTO groups (groupname, groupdp, groupdesc, is_privpub, host) VALUES (?, ?, ?, ?, ?)";
+        $insertGroupQuery = "INSERT INTO groups (groupname, groupdp, groupdesc, type, host) VALUES (?, ?, ?, ?, ?)";
         if ($stmt = mysqli_prepare($connection, $insertGroupQuery)) {
             mysqli_stmt_bind_param($stmt, "sssss", $groupName, $groupImagePath, $groupDesc, $isPrivPub, $username);
             mysqli_stmt_execute($stmt);
