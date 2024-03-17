@@ -206,7 +206,7 @@ html{
     margin-bottom: 10px;
 }
 
-.addFile button{
+.inputfilesec input[type="submit"]{
     color: #fff;
     /* margin-top: 10px; */
     width: 265px;
@@ -221,8 +221,7 @@ html{
     cursor: pointer;
     border-color: #8e0ce3;
     position: relative;
-    right: 20px;
-    top: 15px;
+    right: 60px;
 }
 
 .addFile button a{
@@ -255,7 +254,7 @@ html{
     background: linear-gradient(150deg, #451ded, #8e0ce3);
     margin-bottom: 10px;
 }
- 
+
 .fileSecEach .fileNameEach, .fileSecEach .lastChangedbyEach, .fileSecEach .dateChangedEach, .fileSecEach .removeFileEach{
     position: relative;
 }
@@ -263,12 +262,16 @@ html{
 .fileSecEach .fileNameEach{
     right: 20px;
 }
-.fileSecEach .lastChangedbyEach, .fileSecEach .dateChangedEach, .fileSecEach .removeFileEach{
-    right: 60px;
+.fileSecEach .dateChangedEach, .fileSecEach .removeFileEach{
+    right: 80px;
+}
+.fileSecEach .lastChangedbyEach{
+    position: relative;
+    right: 90px;
 }
 
 .fileSecEach .removeFileEach{
-    right: 45px;
+    right: 50px;
 }
 
 .fileIcon {
@@ -277,7 +280,15 @@ html{
 
 .dateChanged{
     position: relative;
-    right: 10px;
+    left: 25px;
+}
+.removeFile{
+    position: relative;
+    left: 15px;
+}
+.lastChangedby{
+    position: relative;
+    left: 30px;
 }
   
 /* .fileName, .lastChangedby, .dateChanged {
@@ -288,7 +299,7 @@ html{
 .fileSecEach {
     display: flex;
     align-items: center;
-    padding: 10px 15px;
+    padding: 10px 35px;
     justify-content: space-between;
     border-bottom: 1px solid #ddd;
 }
@@ -298,7 +309,7 @@ html{
 }
 
 .fileNameEach{
-    width: 80px;
+    width: 200px;
 }
 
 .fileIconEach i {
@@ -362,6 +373,14 @@ html{
 
 
 .leaveGroupBut{
+    width: 100%;
+}
+
+.deleteGroupBut{
+    width: 30%;
+}
+
+.leaveGroupBut, .deleteGroupBut{
     color: #fcfcfb;
     margin: 10px;
     box-shadow: 0px 4px 8px 0px rgba(104, 34, 206, 0.6);
@@ -370,7 +389,7 @@ html{
     text-align: center;
     text-decoration: none;
     letter-spacing: 1px;
-    width: 100%;
+    /* width: 100%; */
     background: linear-gradient(150deg, #FF073A, #FF3131);
     border-radius: 10px;
     cursor: pointer;
@@ -379,7 +398,7 @@ html{
     border-color: #8e0ce3;
     margin-bottom: 20px;
 }
-.leaveGroupBut a{
+.leaveGroupBut a, .deleteGroupBut a{
     color: white; /* White text color */
     text-align: center;
     padding: 5px 5px; /* Padding to adjust the size */
@@ -487,7 +506,7 @@ html{
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 
-#editProfileForm, #createImagePost, #createTextPost {
+#editProfileForm, #createImagePost, #createTextPost, #createAClog {
     background-color:#0a0c1b;
     color: #fff;
     padding: 20px;
@@ -499,7 +518,7 @@ html{
     display: none; /* Hidden by default */
 }
 
-#createImagePost label, #createTextPost label {
+#createImagePost label, #createTextPost label, #createAClog #label {
     display: block;
     margin-bottom: 10px;
     color: #fff;
@@ -508,7 +527,8 @@ html{
 }
 
 #createImagePost input[type="file"], #createImagePost input[type="text"], #createImagePost textarea,
-#createTextPost input[type="file"], #createTextPost input[type="text"], #createTextPost textarea{
+#createTextPost input[type="file"], #createTextPost input[type="text"], #createTextPost textarea,
+#createAClog input[type="file"], #createAClog input[type="text"], #createAClog textarea{
     width: 100%;
     padding: 10px;
     margin-bottom: 20px;
@@ -518,7 +538,7 @@ html{
     color: #000;
 }
 
-#createTextPost input[type="submit"], #createImagePost input[type="submit"] {
+#createTextPost input[type="submit"], #createImagePost input[type="submit"], #createAClog input[type="submit"] {
     background: linear-gradient(150deg, #451ded, #8e0ce3);
     color: white;
     border: none;
@@ -529,7 +549,7 @@ html{
     margin-top: 10px;
 }
 
-#createTextPost input[type="submit"]:hover, #createImagePost input[type="submit"]:hover {
+#createTextPost input[type="submit"]:hover, #createImagePost input[type="submit"]:hover, #createAClog input[type="submit"]:hover {
     background-color: #3f51b5;
 }
 
@@ -556,10 +576,7 @@ html{
 
 .feedItem
 {
-    width:90%;
-    padding: 30px;
-    position: relative;
-    right: 8px;
+    width:100%;
     height:500px;
     border:5px solid white;
     margin:auto;
@@ -602,6 +619,7 @@ html{
 
 .comment
 {
+    color: #000;
     margin:auto;
     width:95%;
     height:fit-content;
@@ -612,30 +630,28 @@ html{
 
 .messageInput
 {
-    width: 78%;
-    height: 50px;
-    font-family: "Franklin Gothic", "sans-serif";
-    font-size: 20px;
-    margin-left: 2px;
-    float: left;
+    height:30px;
+    width: 70%;
+    margin:auto;
+    font-size: 15px;
+    margin-left:5px;
+    border-radius:5px;
+    
 }
 
 .sendCommentButton
 {
-    height: 48px;
-    width: 50px;
-    margin-left: 0px;
-    font-weight: bold;
-    border-radius: 5px;
-    /* position: relative; */
-    cursor: pointer;
-    /* bottom: 0px; */
-    /* left: 0%; */
+    height: 30px;
+    width:60px;
+    margin-left:5px;
+    font-weight:bold;
+    border-radius:5px;
+    cursor:pointer;
 }
 
 .messageInputContainer
 {
-    margin-top:7px;
+    margin-top:10px;
 }
 
 .commentInfo
@@ -701,18 +717,21 @@ html{
 }
 
 .posterInfo {
+    color: #fff;
     border-top: 5px solid white;
     background: #0a0c1b;
     padding: 20px;
+    width: 100%;
     display: flex;
     flex-direction: row;
     align-items: center;
-    justify-content: space-between; /* Add this to space out children elements */
+    justify-content: space-evenly; /* Add this to space out children elements */
 }
 
 .postInfoUsernameAvatar {
     display: flex;
     align-items: center;
+    width: 20%;
     /* Control the size and margin as needed, removed fixed height and width */
 }
 
@@ -733,6 +752,9 @@ html{
 .postCaption {
     flex-grow: 1; /* This allows it to grow and shrink as needed */
     padding: 0 15px; /* Add padding on the sides */
+    position: relative;
+    left: 10%;
+    width: 20%;
 }
 
 .postCaptionText {
@@ -745,6 +767,9 @@ html{
     display: flex;
     flex-direction: column;
     align-items: center; /* Aligns items */
+    width: 12%;
+    position: relative;
+    bottom: 20px;
 }
 
 .postDate {
@@ -763,7 +788,6 @@ html{
 
 
 
-
 .activity-log {
     background-color: #0a0c1b;
     border-collapse: collapse;
@@ -775,7 +799,7 @@ html{
     box-shadow: 0 2px 5px rgba(0,0,0,0.1);
   }
   .activity-log th, .activity-log td {
-    text-align: left;
+    text-align: center;
     padding: 20px;
     border-bottom: 1px solid #ddd;
   }
@@ -996,6 +1020,16 @@ html{
 .groupViewMain4 .content-filter #content-filter-toggle {
     margin-left: 10px;
 }
+
+
+canvas {
+    border: 1px solid black;
+    margin-top: 10px;
+    margin-left: 20px;
+  }
+  .controls {
+    margin-bottom: 10px;
+  }
 
 
 .memTitle{
@@ -1225,8 +1259,8 @@ html{
 
 .messageInput
 {
-    width: 85%;
-    height: 50px;
+    width: 70%;
+    height: 30px;
     font-family: "Franklin Gothic", "sans-serif";
     font-size:20px;
     margin-left:5px;
@@ -1618,4 +1652,58 @@ html{
 
 .filter-buttons button:hover {
     background-color: #0056b3; /* Change this color to your desired hover color */
+}
+
+
+.textContainer{
+    width: 1000px;
+    margin: 20px;
+    background-color: #0a0c1b;
+    color: #fff;
+    padding: 20px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.textOptions{
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 28px;
+}
+
+.textOptions select{
+    padding: 7px;
+    border: 1px solid #020929;
+    border-radius: 3px;
+}
+
+/* .textOptions label, .textOptions select{
+    font-family: "Poppins", sans-serif;
+} */
+
+.clInput{
+    display: flex;
+    align-items: center;
+    gap: 8px; 
+}
+
+.clInput input[type="color"] {
+    width: 40px;
+    height: 30px;
+    border: none;
+    cursor: pointer;
+    border-radius: 15px;
+    box-shadow: 0 0 0 2px #ffffff, 0 0 0 3px #020929;
+}
+
+#inputText{
+    margin-top: 30px;
+    border: 1px solid #dddddd;
+    padding: 20px;
+    height: 100%;
+}
+
+.active{
+    background-color: #e0e9ff;
 }
