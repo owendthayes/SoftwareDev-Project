@@ -106,26 +106,23 @@ if ($groupid) {
                 <ul class="user-list" id="user-list">
                     <!-- List of users will go here 
                         REMOVED FOR NOW SO THE DEFAULT PEOPLE DONT SHOW UP WHEN RELOADING-->
-                    <li class="user">
-                        <img src="Images/defaultAvatar.png" alt="">
-                        <div class="up">
-                            <h4>Alice</h4>
-                        </div>
-                    </li>
-                    <li class="user">
-                        <img src="Images/defaultAvatar.png" alt="">
-                        <div class="up">
-                            <h4>Bob</h4>
-                        </div>
-                    </li>
-                    <!-- Add more users as needed -->
+                    
+                    <?php foreach ($groupMembers as $member): ?>
+                        <li class="user">
+                            <img src="Images/defaultAvatar.png" alt="Avatar">
+                            <div class="up">
+                                <h4><?php echo htmlspecialchars($member['username']); ?></h4>
+                                <p><?php echo htmlspecialchars($member['gpermissions']) . ' - ' . htmlspecialchars($member['fpermissions']); ?></p>
+                            </div>
+                        </li>
+                    <?php endforeach; ?>
                 </ul>
             </aside>
             <div class="chat-area">
                 <header class="chat-header">
                     <div class="user-infop">
-                        <img src="Images/defaultAvatar.png" alt="">
-                        <h3>Group Name</h3>
+                        <!-- <img src="Images/defaultAvatar.png" alt=""> -->
+                        <h3><?php echo htmlspecialchars($groupDetails['groupname']); ?> Group Chat</h3>
                     </div>
                 </header>
                 <div class="message-area" id="message-area">
