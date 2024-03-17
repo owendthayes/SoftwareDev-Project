@@ -8,6 +8,7 @@ $groupid = isset($_GET['groupid']) ? $_GET['groupid'] : null;
 $groupDetails = null;
 $groupMembers = [];
 $userIsAdmin = false; // Initialize user admin status
+$userIsEditor = false; // Initialize user editor status
 
 if ($groupid) {
     $connection = connect_to_database();
@@ -36,6 +37,11 @@ if ($groupid) {
         // Check if logged-in user is admin
         if ($row['username'] == $_SESSION['username'] && $row['gpermissions'] == 'admin') {
             $userIsAdmin = true;
+        }
+
+        // Check if logged-in user is editor
+        if ($row['username'] == $_SESSION['username'] && $row['fpermissions'] == 'editor') {
+            $userIsEditor = true;
         }
     }
     
@@ -89,6 +95,20 @@ if ($groupid) {
 
     mysqli_stmt_close($fileStmt);
 
+    // Query to get activity logs for the specific group
+    $activityLogQuery = "SELECT * FROM activity_log WHERE groupid = ? ORDER BY timestamp DESC";
+    $activityLogStmt = mysqli_prepare($connection, $activityLogQuery);
+    mysqli_stmt_bind_param($activityLogStmt, "i", $groupid);
+    mysqli_stmt_execute($activityLogStmt);
+    $activityLogResult = mysqli_stmt_get_result($activityLogStmt);
+
+    $activityLogs = array();
+    while ($logRow = mysqli_fetch_assoc($activityLogResult)) {
+        $activityLogs[] = $logRow;
+    }
+
+    mysqli_stmt_close($activityLogStmt);
+
     mysqli_free_result($memberResult);
     mysqli_close($connection);
 }
@@ -101,13 +121,14 @@ if (!$groupDetails) {
 
 <html>
     <head>
-        <link rel="stylesheet" href="groupView.css">
+        <link rel="stylesheet" href="groupView.css?version=51">
         <title> CreativSync - Profile</title>
         <link rel="icon" href="Images/logo.png">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+        <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet"/>
     </head>
     <body>
         <section class="navigation">
@@ -151,19 +172,19 @@ if (!$groupDetails) {
                 </form>
                 <div class="memSearch">
                     <div class="searchDiv">
-                        <input type="text" id="search" placeholder="Type to search...">
+                        <input type="text" id="memberSearch" placeholder="Type to search members..." onkeyup="searchGroupMembers(this.value, <?php echo $groupid; ?>)">
                         <button id="searchBtn"><i class="fa fa-search"></i></button>
-                        <!--<button id="clearBtn"><i class="fa fa-times"></i></button>-->
                     </div>
-                    <div id="searchResults"></div>
                 </div>
-                <aside class="members">
+                <aside class="members" id="members">
                     <h2 class="h2">Members</h2>
-                    <?php foreach ($groupMembers as $member): ?>
-                        <div class="member">
-                            <?php echo $member['username']; ?> - <?php echo $member['gpermissions']; ?> - <?php echo $member['fpermissions']; ?>
-                        </div>
-                    <?php endforeach; ?>
+                    <div id="memberList"> <!-- This is where the original member list is displayed -->
+                        <?php foreach ($groupMembers as $member): ?>
+                            <div class="member">
+                                <?php echo $member['username']; ?> - <?php echo $member['gpermissions']; ?> - <?php echo $member['fpermissions']; ?>
+                            </div>
+                        <?php endforeach; ?>
+                    </div>
                 </aside>
             </div>
     
@@ -176,25 +197,31 @@ if (!$groupDetails) {
                         <?php if ($userIsAdmin): ?>
                             <a href="#" onclick="showMorderation()">Moderation</a>
                         <?php endif; ?>
-                        <a href="#">Canvas</a>
-                        <a href="#">New File</a>                        
-                        <button><a href="groupMessages.php?groupid=<?php echo $groupid; ?>">Group Chat</a></button>
+                        <?php if ($userIsEditor): ?>
+                            <a href="#" onclick="showCanvas()">Canvas</a>
+                        <?php endif; ?>
+                        <?php if ($userIsEditor): ?>
+                            <a href="#" onclick="showfileEdit()">New File</a>
+                        <?php endif; ?>                      
+                        <button><a href="groupMessages.html">Group Chat</a></button>
                     </div>
                 </nav>
                 
                 <div class="groupViewMain" style="display: block;">
                     <div style="display:block;" class="filesSection">
-                        <div class="addFile">
-                            <div class="inputfilesec">
-                                <form action="php/submittingFile.php" method="post" enctype="multipart/form-data">
-                                    <input type="hidden" name="groupid" value="<?php echo $groupid; ?>">
-                                    <label for="fileToUpload">Select file to upload:</label>
-                                    <input type="file" name="fileToUpload" id="fileToUpload">
-                                    <input type="submit" value="Submit File">
-                                    <!-- <button type="submit" value="Submit File"><a href="#">Submit File</a></button> -->
-                                </form>
+                        <?php if ($userIsEditor): ?>
+                            <div class="addFile">
+                                <div class="inputfilesec">
+                                    <form action="php/submittingFile.php" method="post" enctype="multipart/form-data">
+                                        <input type="hidden" name="groupid" value="<?php echo $groupid; ?>">
+                                        <label for="fileToUpload">Select file to upload:</label>
+                                        <input type="file" name="fileToUpload" id="fileToUpload">
+                                        <input type="submit" value="Submit File">
+                                        <!-- <button type="submit" value="Submit File"><a href="#">Submit File</a></button> -->
+                                    </form>
+                                </div>
                             </div>
-                        </div>
+                        <?php endif; ?>
                         
                         <nav>
                             <div class="fileIcon"><i class="fa fa-files-o"></i></div>
@@ -237,7 +264,7 @@ if (!$groupDetails) {
 
                 <div class="groupViewMain2" style="display: none;">
                 <!-- maybe feed posts -->
-                <div class="feedHead">
+                    <div class="feedHead">
                         <div class="groupSettings" style="color:white; display:flex; position: relative; left: 130px;">
                             <h1>Post Something!</h4>
                             <button class = "otherButton" onclick="createImagePostButton()" style="color:white; font-size:x-large; height: 40px; width: 150px; margin-top: 20px; margin-left: 10px;">Post Image</button>
@@ -286,12 +313,6 @@ if (!$groupDetails) {
                                     <p class="commentUsername">LarryDavid1996</p>
                                 </div>
                                 <div class="Comment">Interesting!</div> -->
-
-                                <div class="CommentInfo"> <!-- CONTAINER FOR A COMMENT AND USER AVATAR + NAME -->
-                                    <image class="CommentAvatar" src="Images/defaultavatar.png"></image>
-                                    <p class="commentUsername">PSwift</p>
-                                </div>
-                                <div class="Comment">I should make a post about this!</div>
                             </div>
                             
                             <!-- Input for text and the send button for a user to add a comment. -->
@@ -343,26 +364,53 @@ if (!$groupDetails) {
 
                 <div class="groupViewMain3" style="display: none;">
                     <!-- <h2>Activity Log</h2> -->
+                    <?php if ($userIsEditor): ?>
+                        <div class="feedHead">
+                            <div class="groupSettings" style="color:white; display:flex; position: relative; left: 130px;">
+                                <h1>Create A New Activity Log:</h4>
+                                <button class = "otherButton" onclick="createALOGButton()" style="color:white; font-size:x-large; height: 40px; width: 200px; margin-top: 20px; margin-left: 10px;">Create New Log</button>
+                            </div>
+                        </div>
+                        
+                        <!-- Hidden form -->
+                        <div id="createAClog" style="display: none;">
+                            <form id="profileForm" enctype="multipart/form-data" action="php/insertActivityLog.php" method="post">
+                                <input type="hidden" name="groupid" value="<?php echo $groupid; ?>">
+                                <label for="file_name">File Name:</label>
+                                <input type="text" id="file_name" name="file_name"><br><br>
+
+                                <label for="timestamp">Timestamp:</label>
+                                <input type="datetime-local" id="timestamp" name="timestamp" value="<?php echo date('Y-m-d\TH:i'); ?>"><br><br>
+
+                                <label for="edit_description">Edit Description:</label>
+                                <textarea id="edit_description" name="edit_description"></textarea><br><br>
+
+                                <input type="submit" value="Submit">
+                            </form>
+                        </div>
+                    <?php endif; ?>
+                    
                     <table class="activity-log">
-                    <tr>
-                        <th>File</th>
-                        <th>Edited By</th>
-                        <th>Timestamp</th>
-                        <th>Edit Description</th>
-                    </tr>
-                    <tr>
-                        <td>Project_Plan.docx</td>
-                        <td>John Doe</td>
-                        <td class="timestamp">2024-03-02 14:35</td>
-                        <td class="edit-description">Updated project objectives section.</td>
-                    </tr>
-                    <tr>
-                        <td>Meeting_Notes.txt</td>
-                        <td>Jane Smith</td>
-                        <td class="timestamp">2024-03-02 09:20</td>
-                        <td class="edit-description">Added minutes from March 1st meeting.</td>
-                    </tr>
-                    <!-- Add more log entries here -->
+                        <tr>
+                            <th>File</th>
+                            <th>Edited By</th>
+                            <th>Timestamp</th>
+                            <th>Edit Description</th>
+                            <?php if ($userIsAdmin): ?>
+                            <th>Delete Log</th>
+                            <?php endif; ?>
+                        </tr>
+                        <?php foreach ($activityLogs as $log): ?>
+                        <tr>
+                            <td><?php echo htmlspecialchars($log['file_name']); ?></td>
+                            <td><?php echo htmlspecialchars($log['edited_by']); ?></td>
+                            <td class="timestamp"><?php echo htmlspecialchars($log['timestamp']); ?></td>
+                            <td class="edit-description"><?php echo htmlspecialchars($log['edit_description']); ?></td>
+                            <?php if ($userIsAdmin): ?>
+                            <td class="removeLog" onclick="deleteLog(<?php echo $log['id']; ?>)"><i class="fa fa-trash-o"></i></td>
+                            <?php endif; ?>
+                        </tr>
+                        <?php endforeach; ?>
                     </table>
                 </div>
 
@@ -485,10 +533,122 @@ if (!$groupDetails) {
                         </div>
                     </div>
                 </div>
+
+                <div class="groupViewMain5" style="display: none;">
+                    <div class="textContainer">
+                        <div class="textOptions">
+                            <!-- Save/Download -->
+                            <button id="save" onclick="saveTextFile()" class="optionButton format"><i class="fa fa-arrow-down"></i></button>
+                            
+                            <!-- Text Fromat -->
+                            <button id="bold" class="optionButton format"><i class="fa fa-bold"></i></button>
+                            <button id="italic" class="optionButton format"><i class="fa fa-italic"></i></button>
+                            <button id="underline" class="optionButton format"><i class="fa fa-underline"></i></button>
+                            <button id="strikeThrough" class="optionButton format"><i class="fa fa-strikethrough"></i></button>
+                            <button id="indent" class="optionButton"><i class="fa fa-indent"></i></button>
+                            <button id="subscript" class="optionButton script"><i class="fa fa-subscript"></i></button>
+                            <button id="superscript" class="optionButton script"><i class="fa fa-superscript"></i></button>
+
+
+                            <!-- List -->
+                            <button id="insertOrderedList" class="optionButton"><i class="fa fa-list-ol"></i></button>
+                            <button id="insertUnorderedList" class="optionButton"><i class="fa fa-list"></i></button>
+
+                            <!-- Undo/Redo -->
+                            <button id="undo" class="optionButton"><i class="fa fa-rotate-left"></i></button>
+                            <button id="redo" class="optionButton"><i class="fa fa-rotate-right"></i></button>
+
+                            <!-- Link -->
+                            <button id="createLink" class="optionButton-cl"><i class="fa fa-link"></i></button>
+                            <button id="unlink" class="optionButton"><i class="fa fa-unlink"></i></button>
+                            
+
+                            <!-- Alignment -->
+                            <button id="justifyLeft" class="optionButton align"><i class="fa fa-align-left"></i></button>
+                            <button id="justifyCenter" class="optionButton align"><i class="fa fa-align-center"></i></button>
+                            <button id="justifyRight" class="optionButton align"><i class="fa fa-align-right"></i></button>
+                            <button id="justifyFull" class="optionButton align"><i class="fa fa-align-justify"></i></button>
+                            
+                            <!-- Headings -->
+                            <select id="formatBlock" class="optionButton-cl">
+                                <option value="H1">H1</option>
+                                <option value="H2">H2</option>
+                                <option value="H3">H3</option>
+                                <option value="H4">H4</option>
+                                <option value="H5">H5</option>
+                                <option value="H6">H6</option>
+                            </select>
+
+                            <!-- Font -->
+                            <select id="fontName" class="optionButton-cl"></select>
+                            <select id="fontSize" class="optionButton-cl"></select>
+
+                            <!-- Colour -->
+                            <div class="clInput">
+                                <input type="color" id="foreColour" class="optionButton-cl">
+                                <label for="foreColor">Front Colour</label>
+                            </div>
+                            <div class="clInput">
+                                <input type="color" id="backColour" class="optionButton-cl">
+                                <label for="backColor">Highlight Colour</label>
+                            </div>
+                        </div>
+                        <div id="inputText" contenteditable="true"></div>
+                    </div>
+                </div>
+
+                <div class="groupViewMain6" style="display: none;">
+                    <div class="controls">
+                        <label for="brushSize">Brush Size: </label>
+                        <input type="range" id="brushSize" min="1" max="50" value="5">
+                        <label for="brushColor">Brush Color: </label>
+                        <input type="color" id="brushColor" value="#000000">
+                        <button id="useBrush">Brush</button>
+                        <button id="useEraser">Eraser</button>
+                        <button id="drawCircle">Circle</button>
+                        <button id="drawSquare">Square</button>
+                        <button id="drawRectangle">Rectangle</button>
+                        <button id="drawTriangle">Triangle</button>
+                        <button id="clearCanvas">Clear Canvas</button>
+                        <button id="changeBackground" style="display: none;">Change Background</button>
+                        <input style="display: none;" type="color" id="backgroundColor" value="#ffffff">
+                        <button id="saveCanvas">Save as Image</button>
+                    </div>
+                    <canvas id="drawingCanvas" width="1000" height="600"></canvas>
+                </div>
             </div>
         </div>
 
-        
+        <script>
+            // Store the original member list
+            let originalMemberList = document.getElementById('members').innerHTML;
+
+            function searchGroupMembers(query, groupId) {
+                if (query.length < 3) { // Start searching after at least 3 characters
+                    // Revert to the original member list if the search query is cleared
+                    document.getElementById('members').innerHTML = originalMemberList;
+                    return;
+                }
+
+                var xhr = new XMLHttpRequest();
+                xhr.open('GET', 'php/searchGroupMembers.php?query=' + encodeURIComponent(query) + '&groupId=' + groupId, true);
+                xhr.onload = function () {
+                    if (xhr.status === 200) {
+                        // Replace the member list with the search results
+                        document.getElementById('members').innerHTML = xhr.responseText;
+                    } else {
+                        console.error('Error fetching search results:', xhr.statusText);
+                    }
+                };
+                xhr.send();
+            }
+
+            // Set the original member list on page load
+            window.onload = function () {
+                originalMemberList = document.getElementById('members').innerHTML;
+            };
+        </script>
+
         <script>
             function removeFile(fileId) {
                 if (confirm('Are you sure you want to delete this file?')) {
@@ -499,10 +659,12 @@ if (!$groupDetails) {
                         if (xhr.status === 200) {
                             var response = JSON.parse(xhr.responseText);
                             if (response.success) {
+                                alert('File deleted successfully');
+                                window.location.reload();
                                 // Reload the page after a short delay to see the changes
-                                setTimeout(function(){
-                                    window.location.reload();
-                                }, 500); // Delay of 500 milliseconds
+                                // setTimeout(function(){
+                                //     window.location.reload();
+                                // }, 500); 
                             } else {
                                 alert('Could not delete the file.');
                             }
@@ -511,6 +673,28 @@ if (!$groupDetails) {
                         }
                     };
                     xhr.send('fileId=' + fileId);
+                }
+            }
+
+            function deleteLog(logId) {
+                if (confirm('Are you sure you want to delete this activity log?')) {
+                    var xhr = new XMLHttpRequest();
+                    xhr.open('POST', 'php/deleteActivityLog.php', true);
+                    xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+                    xhr.onload = function () {
+                        if (xhr.status === 200) {
+                            var response = JSON.parse(xhr.responseText);
+                            if (response.success) {
+                                alert('Log deleted successfully');
+                                window.location.reload();
+                            } else {
+                                alert('Error deleting log: ' + response.message);
+                            }
+                        } else {
+                            alert('An error occurred while attempting to delete the log.');
+                        }
+                    };
+                    xhr.send('logId=' + logId); // This must match the POST variable in PHP
                 }
             }
         </script>
@@ -542,13 +726,16 @@ if (!$groupDetails) {
             }
         </script>
 
+
         <script>
-            window.onload = function () {
-                // Load comments for each post
-                <?php foreach ($feedPosts as $post): ?>
-                    loadComments(<?php echo $post['postid']; ?>);
-                <?php endforeach; ?>
-            };
+
+        document.addEventListener('DOMContentLoaded', function () {
+            // Load comments for each post
+            <?php foreach ($feedPosts as $post): ?>
+                loadComments(<?php echo $post['postid']; ?>);
+            <?php endforeach; ?>
+        });
+
 
             function loadComments(postId) {
                 var xhr = new XMLHttpRequest();
@@ -565,8 +752,6 @@ if (!$groupDetails) {
                 };
                 xhr.send();
             }
-
-
 
             function sendComment(postId) {
                 var commentInput = document.getElementById('commentInput' + postId)
@@ -594,22 +779,6 @@ if (!$groupDetails) {
                 };
                 xhr.send("postId=" + postId + "&comment=" + encodeURIComponent(commentValue));
             }
-
-            function loadComments(postId) {
-                var xhr = new XMLHttpRequest();
-                xhr.open("GET", "php/getComments.php?postId=" + postId, true);
-                xhr.onreadystatechange = function () {
-                    if (xhr.readyState === XMLHttpRequest.DONE) {
-                        if (xhr.status === 200) {
-                            // Load comments into the comments scroll box
-                            document.getElementById('commentsScrollBox' + postId).innerHTML = xhr.responseText;
-                        } else {
-                            console.error('Error:', xhr.statusText);
-                        }
-                    }
-                };
-                xhr.send();
-            }
         </script>
         
         <script>
@@ -618,10 +787,12 @@ if (!$groupDetails) {
                 var groupViewMain2 = document.getElementsByClassName('groupViewMain2')[0];
                 var groupViewMain3 = document.getElementsByClassName('groupViewMain3')[0];
                 var groupViewMain4 = document.getElementsByClassName('groupViewMain4')[0];
+                var groupViewMain5 = document.getElementsByClassName('groupViewMain5')
                 groupViewMain.style.display = "block";
                 groupViewMain2.style.display = "none";
                 groupViewMain3.style.display = "none";
                 groupViewMain4.style.display = "none";
+                groupViewMain5.style.display = "none";
             }
 
             function showPosts() {
@@ -629,10 +800,12 @@ if (!$groupDetails) {
                 var groupViewMain2 = document.getElementsByClassName('groupViewMain2')[0];
                 var groupViewMain3 = document.getElementsByClassName('groupViewMain3')[0];
                 var groupViewMain4 = document.getElementsByClassName('groupViewMain4')[0];
+                var groupViewMain5 = document.getElementsByClassName('groupViewMain5')
                 groupViewMain.style.display = "none";
                 groupViewMain2.style.display = "block";
                 groupViewMain3.style.display = "none";
                 groupViewMain4.style.display = "none";
+                groupViewMain5.style.display = "none";
             }
 
             function showLog() {
@@ -640,10 +813,12 @@ if (!$groupDetails) {
                 var groupViewMain2 = document.getElementsByClassName('groupViewMain2')[0];
                 var groupViewMain3 = document.getElementsByClassName('groupViewMain3')[0];
                 var groupViewMain4 = document.getElementsByClassName('groupViewMain4')[0];
+                var groupViewMain5 = document.getElementsByClassName('groupViewMain5')[0];
                 groupViewMain.style.display = "none";
                 groupViewMain2.style.display = "none";
                 groupViewMain3.style.display = "block";
                 groupViewMain4.style.display = "none";
+                groupViewMain5.style.display = "none";
             }
 
             function showMorderation() {
@@ -651,26 +826,323 @@ if (!$groupDetails) {
                 var groupViewMain2 = document.getElementsByClassName('groupViewMain2')[0];
                 var groupViewMain3 = document.getElementsByClassName('groupViewMain3')[0];
                 var groupViewMain4 = document.getElementsByClassName('groupViewMain4')[0];
+                var groupViewMain5 = document.getElementsByClassName('groupViewMain5')[0];
                 groupViewMain.style.display = "none";
                 groupViewMain2.style.display = "none";
                 groupViewMain3.style.display = "none";
                 groupViewMain4.style.display = "block";
+                groupViewMain5.style.display = "none";
+            }
+
+            function showfileEdit(){
+                var groupViewMain = document.getElementsByClassName('groupViewMain')[0];
+                var groupViewMain2 = document.getElementsByClassName('groupViewMain2')[0];
+                var groupViewMain3 = document.getElementsByClassName('groupViewMain3')[0];
+                var groupViewMain4 = document.getElementsByClassName('groupViewMain4')[0];
+                var groupViewMain5 = document.getElementsByClassName('groupViewMain5')[0];
+                groupViewMain.style.display = "none";
+                groupViewMain2.style.display = "none";
+                groupViewMain3.style.display = "none";
+                groupViewMain4.style.display = "none";
+                groupViewMain5.style.display = "block";
+            }
+
+            function showCanvas(){
+                var groupViewMain = document.getElementsByClassName('groupViewMain')[0];
+                var groupViewMain2 = document.getElementsByClassName('groupViewMain2')[0];
+                var groupViewMain3 = document.getElementsByClassName('groupViewMain3')[0];
+                var groupViewMain4 = document.getElementsByClassName('groupViewMain4')[0];
+                var groupViewMain5 = document.getElementsByClassName('groupViewMain5')[0];
+                var groupViewMain6 = document.getElementsByClassName('groupViewMain6')[0];
+                groupViewMain.style.display = "none";
+                groupViewMain2.style.display = "none";
+                groupViewMain3.style.display = "none";
+                groupViewMain4.style.display = "none";
+                groupViewMain5.style.display = "none";
+                groupViewMain6.style.display = "block";
             }
         </script>
-
-
         
+        <script>
+            let optionsButtons = document.querySelectorAll(".optionButton");
+            let advancedOptionButton = document.querySelectorAll(".optionButton-cl");
+            let fontName = document.getElementById("fontName");
+            let fontSizeRef = document.getElementById("fontSize");
+            let writingArea = document.getElementById("inputText");
+            let linkButton = document.getElementById("createLink");
+            let alignButtons = document.querySelectorAll(".align");
+            let spacingButtons = document.querySelectorAll(".spacing");
+            let formatButtons = document.querySelectorAll(".format");
+            let scriptButtons = document.querySelectorAll(".script");
+
+            function saveTextFile() {
+                var textToWrite = document.getElementById('inputText').innerHTML;
+                var textFileAsBlob = new Blob([textToWrite], { type: 'text/html' });
+
+                // Create an invisible a element
+                var downloadLink = document.createElement("a");
+                downloadLink.style.display = "none";
+                document.body.appendChild(downloadLink);
+
+                // Set the file name and start the download
+                downloadLink.download = "MyDocument.txt";
+                downloadLink.href = window.URL.createObjectURL(textFileAsBlob);
+                downloadLink.click();
+            }
+
+            document.getElementById('indent').addEventListener('click', function() {
+                // `indent` increases the indent level of a block element
+                document.execCommand('indent', false, null);
+            });
+
+            document.getElementById('foreColour').addEventListener('change', function() {
+                document.execCommand('foreColor', false, this.value);
+            });
+
+            document.getElementById('backColour').addEventListener('change', function() {
+                // Use 'hiliteColor' for the background color (highlight color)
+                document.execCommand('hiliteColor', false, this.value);
+            });
+
+
+            //List of fontlist
+            let fontList = [
+                "Arial",
+                "Verdana",
+                "Times New Roman",
+                "Garamond",
+                "Georgia",
+                "Courier New",
+                "cursive",
+            ];
+
+            //Initial Settings
+            const initializer = () => {
+            //function calls for highlighting buttons
+            //No highlights for link, unlink,lists, undo,redo since they are one time operations
+            highlighter(alignButtons, true);
+            highlighter(spacingButtons, true);
+            highlighter(formatButtons, false);
+            highlighter(scriptButtons, true);
+
+            //create options for font names
+            fontList.map((value) => {
+                let option = document.createElement("option");
+                option.value = value;
+                option.innerHTML = value;
+                fontName.appendChild(option);
+            });
+
+            //fontSize allows only till 7
+            for (let i = 1; i <= 7; i++) {
+                let option = document.createElement("option");
+                option.value = i;
+                option.innerHTML = i;
+                fontSizeRef.appendChild(option);
+            }
+
+            //default size
+            fontSizeRef.value = 3;
+            };
+
+            //main logic
+            const modifyText = (command, defaultUi, value) => {
+            //execCommand executes command on selected text
+            document.execCommand(command, defaultUi, value);
+            };
+
+            //For basic operations which don't need value parameter
+            optionsButtons.forEach((button) => {
+            button.addEventListener("click", () => {
+                modifyText(button.id, false, null);
+            });
+            });
+
+            //options that require value parameter (e.g colors, fonts)
+            advancedOptionButton.forEach((button) => {
+                button.addEventListener("change", () => {
+                    modifyText(button.id, false, button.value);
+                });
+            });
+
+            //link
+            linkButton.addEventListener("click", () => {
+            let userLink = prompt("Enter a URL");
+            //if link has http then pass directly else add https
+            if (/http/i.test(userLink)) {
+                modifyText(linkButton.id, false, userLink);
+            } else {
+                userLink = "http://" + userLink;
+                modifyText(linkButton.id, false, userLink);
+            }
+            });
+
+            //Highlight clicked button
+            const highlighter = (className, needsRemoval) => {
+            className.forEach((button) => {
+                button.addEventListener("click", () => {
+                //needsRemoval = true means only one button should be highlight and other would be normal
+                if (needsRemoval) {
+                    let alreadyActive = false;
+
+                    //If currently clicked button is already active
+                    if (button.classList.contains("active")) {
+                    alreadyActive = true;
+                    }
+
+                    //Remove highlight from other buttons
+                    highlighterRemover(className);
+                    if (!alreadyActive) {
+                    //highlight clicked button
+                    button.classList.add("active");
+                    }
+                } else {
+                    //if other buttons can be highlighted
+                    button.classList.toggle("active");
+                }
+                });
+            });
+            };
+
+            const highlighterRemover = (className) => {
+            className.forEach((button) => {
+                button.classList.remove("active");
+            });
+            };
+
+            window.onload = initializer();
+        </script>
+
+        <script>
+        const canvas = document.getElementById('drawingCanvas');
+        const ctx = canvas.getContext('2d');
+        const brushSize = document.getElementById('brushSize');
+        const brushColor = document.getElementById('brushColor');
+        const useBrushButton = document.getElementById('useBrush');
+        const useEraserButton = document.getElementById('useEraser');
+        const drawCircleButton = document.getElementById('drawCircle');
+        const drawSquareButton = document.getElementById('drawSquare');
+        const drawRectangleButton = document.getElementById('drawRectangle');
+        const drawTriangleButton = document.getElementById('drawTriangle');
+        const backgroundColorInput = document.getElementById('backgroundColor');
+        const clearCanvasButton = document.getElementById('clearCanvas');
+        let drawing = false;
+        let currentMode = 'brush';
+
+        // Set initial background color to white
+        canvas.style.backgroundColor = "#ffffff";
+        backgroundColorInput.value = "#ffffff";
+
+        // Draw initial white background
+        ctx.fillStyle = "#ffffff";
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+        canvas.addEventListener('mousedown', (e) => {
+            drawing = true;
+            if (currentMode === 'brush' || currentMode === 'eraser') {
+            ctx.beginPath();
+            ctx.moveTo(e.offsetX, e.offsetY); // Use offsetX and offsetY
+            } else {
+            drawShape(e);
+            }
+        });
+
+        canvas.addEventListener('mousemove', (e) => {
+            if ((currentMode === 'brush' || currentMode === 'eraser') && drawing) {
+            ctx.lineTo(e.offsetX, e.offsetY); // Use offsetX and offsetY
+            ctx.strokeStyle = currentMode === 'eraser' ? backgroundColorInput.value : brushColor.value;
+            ctx.lineWidth = brushSize.value;
+            ctx.stroke();
+            }
+        });
+
+        canvas.addEventListener('mouseup', () => drawing = false);
+        canvas.addEventListener('mouseleave', () => drawing = false);
+
+        function drawShape(e) {
+            if (currentMode !== 'brush' && currentMode !== 'eraser') {
+            const size = parseInt(brushSize.value, 10);
+            const x = e.offsetX;
+            const y = e.offsetY;
+
+            ctx.fillStyle = brushColor.value;
+            ctx.beginPath();
+            switch(currentMode) {
+                case 'circle':
+                ctx.arc(x, y, size, 0, Math.PI * 2);
+                ctx.fill();
+                break;
+                case 'square':
+                ctx.rect(x - size / 2, y - size / 2, size, size);
+                ctx.fill();
+                break;
+                case 'rectangle':
+                ctx.rect(x - size, y - size / 2, size * 2, size);
+                ctx.fill();
+                break;
+                case 'triangle':
+                ctx.moveTo(x, y - size);
+                ctx.lineTo(x - size, y + size);
+                ctx.lineTo(x + size, y + size);
+                ctx.closePath();
+                ctx.fill();
+                break;
+            }
+            }
+        }
+
+        // Change Background Color
+        document.getElementById("changeBackground").addEventListener("click", function() {
+            let color = backgroundColorInput.value;
+            canvas.style.backgroundColor = color;
+
+            // If you want to make the background color part of the image when saving
+            ctx.globalCompositeOperation = "destination-over"; // Ensure the background is drawn behind existing drawing
+            ctx.fillStyle = color;
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            ctx.globalCompositeOperation = "source-over"; // Reset composition mode
+        });
+
+        // Save Canvas as Image
+        document.getElementById("saveCanvas").addEventListener("click", function() {
+            let image = canvas.toDataURL("image/png").replace("image/png", "image/octet-stream");
+            let link = document.createElement('a');
+            link.download = "my-canvas.png";
+            link.href = image;
+            link.click();
+        });
+
+        // Clear Canvas
+        clearCanvasButton.addEventListener('click', () => {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.fillStyle = backgroundColorInput.value;
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+        });
+
+        useBrushButton.addEventListener('click', () => currentMode = 'brush');
+        useEraserButton.addEventListener('click', () => currentMode = 'eraser');
+        drawCircleButton.addEventListener('click', () => currentMode = 'circle');
+        drawSquareButton.addEventListener('click', () => currentMode = 'square');
+        drawRectangleButton.addEventListener('click', () => currentMode = 'rectangle');
+        drawTriangleButton.addEventListener('click', () => currentMode = 'triangle');
+        </script>
 
         <script>
             function createImagePostButton() {
-                // Toggle the visibility of the edit profile form
+                // Toggle the visibility of the form
                 var form = document.getElementById('createImagePost');
                 form.style.display = form.style.display === 'none' ? 'block' : 'none';
             }
 
             function createTextPostButton() {
-                // Toggle the visibility of the edit profile form
+                // Toggle the visibility of the form
                 var form = document.getElementById('createTextPost');
+                form.style.display = form.style.display === 'none' ? 'block' : 'none';
+            }
+
+            function createALOGButton(){
+                // Toggle the visibility of the form
+                var form = document.getElementById('createAClog');
                 form.style.display = form.style.display === 'none' ? 'block' : 'none';
             }
         </script>
