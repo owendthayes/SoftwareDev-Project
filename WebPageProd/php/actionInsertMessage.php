@@ -6,7 +6,7 @@ session_start();
 
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_SESSION['loggedin']) && $_SESSION['loggedin'] == true) {
     $username = $_SESSION['username']; // The logged-in user's username
-    $sentTo = $_POST['sentTo']; // The user to whom the message is sent
+    $sentTo = $_POST['sentTo']; // The user to who the message is sent
     $message = mysqli_real_escape_string($connection, $_POST['message']);
     $messageID = hexdec(uniqid());
 
@@ -20,18 +20,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_SESSION['loggedin']) && $_SE
     mysqli_stmt_close($stmt_check_user);
 
     if (!$user_exists) {
-        //echo "Error: Recipient does not exist.";
-        exit; // Stop further execution
+        exit; // Stop further execution if recipient does not exist
     }
 
     $chatID = getChatId($username, $sentTo, $connection);
-
-    // Add the current time and date
-    $sendTime = date('H:i:s');
-    $sendDate = date('Y-m-d');
-
-    // Set the initial value of is_read to 0 for unread messages
-    $isRead = 0;
 
     $query = "INSERT INTO messages (messageid, sender, chatid, content_text) VALUES (?, ?, ?, ?)";
     $stmt = mysqli_prepare($connection, $query);
@@ -41,6 +33,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_SESSION['loggedin']) && $_SE
         mysqli_stmt_execute($stmt);
 
         if (mysqli_stmt_affected_rows($stmt) == 1) {
+            // Insert notification for receiving a message
+            $notif_query = "INSERT INTO notifications (recipient_username, sender_username, activity_type, object_type, object_id, content) VALUES (?, ?, 'message', 'message', ?, ?)";
+            $notif_stmt = mysqli_prepare($connection, $notif_query);
+            if ($notif_stmt) {
+                mysqli_stmt_bind_param($notif_stmt, "ssis", $sentTo, $username, $messageID, $message);
+                mysqli_stmt_execute($notif_stmt);
+                mysqli_stmt_close($notif_stmt);
+            }
+
             echo "Message sent successfully.";
         } else {
             echo "Error sending message.";
