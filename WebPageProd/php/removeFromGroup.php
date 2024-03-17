@@ -5,14 +5,16 @@ include 'server_connection.php'; // Make sure you have the correct path to your 
 // Function to check if there is only one admin in the group
 function isSoleAdmin($groupid, $username) {
     $connection = connect_to_database();
-    $stmt = mysqli_prepare($connection, "SELECT COUNT(*) as admin_count FROM group_participants WHERE groupid = ? AND gpermissions = 'admin'");
-    mysqli_stmt_bind_param($stmt, 'i', $groupid);
+    // Check the number of admins other than the user being removed
+    $stmt = mysqli_prepare($connection, "SELECT COUNT(*) as admin_count FROM group_participants WHERE groupid = ? AND gpermissions = 'admin' AND username != ?");
+    mysqli_stmt_bind_param($stmt, 'is', $groupid, $username);
     mysqli_stmt_execute($stmt);
     $result = mysqli_stmt_get_result($stmt);
     $data = mysqli_fetch_assoc($result);
     mysqli_stmt_close($stmt);
     mysqli_close($connection);
-    return $data['admin_count'] == 1;
+    // If there are no other admins, then this user is the sole admin
+    return $data['admin_count'] == 0;
 }
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
