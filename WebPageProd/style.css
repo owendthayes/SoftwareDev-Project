@@ -65,6 +65,7 @@ html{
     background-color: #f8f8f8; /* Highlight on hover */
 }
 
+
 .searchnav {
     position: relative;
     margin: 10px auto;
@@ -990,7 +991,7 @@ footer::after {
     margin-left:500px;
 }
 
-#editProfileForm {
+#editProfileForm, #createImagePost, #createTextPost {
     background-color:#0a0c1b;
     color: #fff;
     padding: 20px;
@@ -1002,7 +1003,7 @@ footer::after {
     display: none; /* Hidden by default */
 }
 
-#editProfileForm label {
+#editProfileForm label, #createImagePost label, #createTextPost label {
     display: block;
     margin-bottom: 10px;
     color: #fff;
@@ -1010,9 +1011,9 @@ footer::after {
     font-weight: 600;
 }
 
-#editProfileForm input[type="file"],
-#editProfileForm input[type="text"],
-#editProfileForm textarea {
+#editProfileForm input[type="file"], #editProfileForm input[type="text"], #editProfileForm textarea, 
+#createImagePost input[type="file"], #createImagePost input[type="text"], #createImagePost textarea,
+#createTextPost input[type="file"], #createTextPost input[type="text"], #createTextPost textarea{
     width: 100%;
     padding: 10px;
     margin-bottom: 20px;
@@ -1022,7 +1023,7 @@ footer::after {
     color: #000;
 }
 
-#editProfileForm input[type="submit"] {
+#editProfileForm input[type="submit"], #createTextPost input[type="submit"], #createImagePost input[type="submit"] {
     background: linear-gradient(150deg, #451ded, #8e0ce3);
     color: white;
     border: none;
@@ -1033,7 +1034,7 @@ footer::after {
     margin-top: 10px;
 }
 
-#editProfileForm input[type="submit"]:hover {
+#editProfileForm input[type="submit"]:hover, #createTextPost input[type="submit"]:hover, #createImagePost input[type="submit"]:hover {
     background-color: #3f51b5;
 }
 
@@ -1061,6 +1062,227 @@ footer::after {
     border-radius: 4px;
     margin-bottom: 20px;
     display: inline-block;
+}
+
+/*CSS FOR FEED.HTML ###################################################################*/
+.feedContainer
+{
+    width: 90%;
+    height: 77%;
+    border-radius: 10px;
+    margin:auto;
+    overflow-y:scroll;
+}
+
+.feedItem
+{
+    width:90%;
+    height:500px;
+    border:5px solid white;
+    margin:auto;
+    margin-top:20px;
+    margin-bottom:20px;
+    border-radius:10px;
+    background:#0a0c1b;
+    display:flex;
+}
+
+.commentsContainer
+{
+    width: 250px;
+    height: 100%;
+    border-right: 5px solid white;
+    background:rgba(211, 211, 211, 0.829);
+    flex-shrink: 0;
+}
+
+.commentsHeader
+{
+    text-align:center;
+    padding-top: 10px;
+    font-family:"Franklin Gothic", "sans-serif";
+    font-size: 20px;
+    padding-bottom:5px;
+}
+
+.commentsScrollBox
+{
+    width: 95%;
+    height: 80%;
+    border-radius:5px;
+    margin-top:20px;
+    background:lightgrey;
+    margin:auto;
+    padding-top: 5px;
+    overflow-y:scroll;
+}
+
+.comment
+{
+    margin:auto;
+    width:95%;
+    height:fit-content;
+    border-radius:5px;
+    background:white;
+    font-size:15px;
+}
+
+.messageInput
+{
+    height:30px;
+    width: 70%;
+    margin:auto;
+    font-size: 15px;
+    margin-left:5px;
+    border-radius:5px;
+    
+}
+
+.sendCommentButton
+{
+    height: 30px;
+    width:60px;
+    margin-left:5px;
+    font-weight:bold;
+    border-radius:5px;
+    cursor:pointer;
+}
+
+.messageInputContainer
+{
+    margin-top:10px;
+}
+
+.commentInfo
+{
+    margin-top:10px;
+    display:flex;
+}
+
+.commentAvatar
+{
+    height:20px;
+    width:15px;
+    margin-bottom:5px;
+    margin-left:5px;
+}
+
+.commentUsername
+{
+    font-size: 13px;
+    margin-top:auto;
+    margin-bottom:auto;
+    margin-left:10px;
+    font-weight:bold;
+}
+
+.postContent
+{
+    width:100%;
+    height:100%;
+    display:flex;
+    flex-direction:row;
+    flex-wrap:wrap;
+}
+
+.postImage
+{
+    object-fit:cover;
+    margin:auto;
+    /* flex: 1 1 1;
+    order:1; */
+    height:75%;
+}
+
+.postText
+{
+    font-family:"Franklin Gothic", "sans-serif";
+    font-size:30px;
+    color:white;
+    margin:auto;
+    flex: 1 1 1;
+    height:auto;
+    width:100%;
+    order:1;
+    text-align:center;
+}
+
+.postTextContainer
+{
+    height:75%;
+    width:100%;
+    display:flex;
+    align-items:middle;
+}
+
+.posterInfo {
+    color: #fff;
+    border-top: 5px solid white;
+    background: #0a0c1b;
+    padding: 20px;
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-evenly; /* Add this to space out children elements */
+}
+
+.postInfoUsernameAvatar {
+    display: flex;
+    align-items: center;
+    width: 20%;
+    /* Control the size and margin as needed, removed fixed height and width */
+}
+
+.posterAvatar {
+    height: 60px; /* Adjust size as needed */
+    object-fit: cover;
+    object-position: 50% 25%;
+    width: 60px;
+    margin-right: 10px; /* Add margin to separate from username */
+    border-radius: 50%; /* To make it round */
+}
+
+.posterUsername {
+    color: white;
+    font-size: 18px; /* Adjust font size as needed */
+}
+
+.postCaption {
+    flex-grow: 1; /* This allows it to grow and shrink as needed */
+    padding: 0 15px; /* Add padding on the sides */
+    position: relative;
+    left: 10%;
+    width: 20%;
+}
+
+.postCaptionText {
+    font-size: 14px; /* Adjust font size as needed */
+    color: white;
+    text-align: left; /* Align to the left */
+}
+
+.DateLikeContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Aligns items */
+    width: 12%;
+    position: relative;
+    bottom: 20px;
+}
+
+.postDate {
+    /* Removed float, used flexbox for positioning */
+    margin-bottom: 5px; /* Add margin between date and button */
+}
+
+.likeButton {
+    padding: 5px 10px; /* Adjust padding as needed */
+    background-color: #4CAF50; /* Adjust to your desired color */
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    /* Add more styles as needed */
 }
 
 /*CSS FOR NOTIFICATIONS.HTML ###################################################################*/
@@ -1172,7 +1394,7 @@ footer::after {
 .clearAllButton
 {
     font-family:"Franklin Gothic", "sans-serif";
-    margin-left:1500px;
+    margin-left:620px;
     height:50px;
     width:200px;
     margin-top:10px;
@@ -1192,7 +1414,7 @@ footer::after {
 
 .clearNotification
 {
-    margin-left: 450px;
+    margin-left: 50px;
     height:50px;
     width:50px;
     margin-top:90px;
@@ -1202,241 +1424,3 @@ footer::after {
     background-color:transparent;
     flex: 0 0 auto;
 }
-
-/*CSS FOR FEED.HTML ###################################################################*/
-.feedContainer
-{
-    width: 90%;
-    height: 77%;
-    border-radius: 10px;
-    margin: auto;
-    overflow-y: scroll;
-}
-
-.feedItem
-{
-    width:90%;
-    height:500px;
-    border:5px solid white;
-    margin: auto;
-    margin-top:20px;
-    margin-bottom:20px;
-    border-radius:10px;
-    background:#0a0c1b;
-    display: flex;
-}
-
-.commentsContainer
-{
-    width: 250px;
-    height: 100%;
-    border-right: 5px solid white;
-    background:rgba(211, 211, 211, 0.829);
-    flex-shrink: 0;
-}
-
-.commentsHeader
-{
-    text-align: center;
-    padding-top: 10px;
-    font-family: "Franklin Gothic", "sans-serif";
-    font-size: 20px;
-    padding-bottom:5px;
-}
-
-.commentsScrollBox
-{
-    width: 95%;
-    height: 80%;
-    border-radius:5px;
-    margin-top:20px;
-    background:lightgrey;
-    margin: auto;
-    padding-top: 5px;
-    overflow-y: scroll;
-}
-
-.comment
-{
-    margin: auto;
-    width:95%;
-    height:fit-content;
-    border-radius:5px;
-    background: white;
-    font-size:15px;
-}
-
-.messageInput
-{
-    height:30px;
-    width: 70%;
-    margin: auto;
-    font-size: 15px;
-    margin-left:5px;
-    border-radius:5px;
-    
-}
-
-.sendCommentButton
-{
-    height: 30px;
-    width:60px;
-    margin-left:5px;
-    font-weight: bold;
-    border-radius:5px;
-    cursor: pointer;
-}
-
-.messageInputContainer
-{
-    margin-top:10px;
-}
-
-.commentInfo
-{
-    margin-top:10px;
-    display: flex;
-}
-
-.commentAvatar
-{
-    height:20px;
-    width:15px;
-    margin-bottom:5px;
-    margin-left:5px;
-}
-
-.commentUsername
-{
-    font-size: 13px;
-    margin-top: auto;
-    margin-bottom: auto;
-    margin-left:10px;
-    font-weight: bold;
-}
-
-.postContent
-{
-    width:100%;
-    height:100%;
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-}
-
-.postImage
-{
-    object-fit:cover;
-    margin:auto;
-    flex: 1 1 1;
-    order:1;
-    height:75%;
-}
-
-.postText
-{
-    font-family:"Franklin Gothic", "sans-serif";
-    font-size:30px;
-    color:white;
-    margin:auto;
-    flex: 1 1 1;
-    height:auto;
-    width:100%;
-    order:1;
-    text-align:center;
-}
-
-.postTextContainer
-{
-    height:75%;
-    width:100%;
-    display:flex;
-    align-items:middle;
-}
-
-.posterInfo
-{
-    border-top: 5px solid white;
-    background:#0a0c1b;
-    width:100%;
-    height:24%;
-    order: 2;
-    display:flex;
-    flex-direction:row;
-}
-
-.postInfoUsernameAvatar
-{
-    display:flex;
-    height:100%;
-    width:30%;
-}
-
-.posterAvatar
-{
-    height:100px;
-    width: 80px;
-    margin-top: 15px;
-    margin-left: 15px;
-}
-
-.posterUsername
-{
-    color:white;
-    font-size: 25px;
-    margin-left:15px;
-}
-
-.postCaption
-{
-    width:30%;
-    height:100%;
-    margin-left:10%;
-    display:flex;
-    align-items:middle;
-}
-
-.postCaptionText
-{
-    font-size:15px;
-    color:white;
-    text-align:center;
-    margin:auto;
-}
-
-.datelikecontainer
-{
-    width:30%;
-    height:100%;
-    display:flex;
-    flex-direction:row;
-    flex-wrap:wrap;
-}
-
-.postDate
-{
-    float:right;
-    order:1;
-    width:100%;
-    margin-left: 60%;
-    color:white;
-}
-
-.likeButton
-{
-    height:30px;
-    width:60px;
-    float:right;
-    order:2;
-    margin-left:70%;
-
-    box-shadow: 0px 4px 8px 0px rgba(104, 34, 206, 0.6);
-    font-family: 'railway', sans-serif;
-    color: white;
-    padding: 5px 10px;
-    background: linear-gradient(150deg, #451ded, #8e0ce3);
-    border-radius: 10px;
-    cursor: pointer;
-    border-color: #8e0ce3
-}
-
