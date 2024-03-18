@@ -6,7 +6,7 @@ if ($_SERVER["REQUEST_METHOD"] === "GET" && isset($_GET['postId'])) {
 
     // Query to retrieve comments for the specific post
     $connection = connect_to_database();
-    $query = "SELECT * FROM comments WHERE postid = ?";
+    $query = "SELECT * FROM comments WHERE postid = ? ORDER BY timestamp DESC";
     $stmt = mysqli_prepare($connection, $query);
     mysqli_stmt_bind_param($stmt, "i", $postId);
     mysqli_stmt_execute($stmt);
