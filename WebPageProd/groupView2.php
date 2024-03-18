@@ -141,16 +141,16 @@ if (!$groupDetails) {
             <nav>
                 <div class="mainnav">
                     <div class="imgnav">
-                        <img src="Images/logo.png">
+                        <a href="../home.html"><img src="Images/logo.png"></a>
                         <div class="compname">
                         	<h1 style="color:white;">CreativSync</h1>
                         </div>
                     </div>
                     <div class="navi">
-                            <a href="feed.html">Feed</a>
-                            <a href="notifications.html">Notifications</a>
-                            <a href="search.html" id="showSearch">Search</a> 
-                            <a href="groups.html">Groups</a>
+                            <a href="feed.php">Feed</a>
+                            <a href="notifications.php">Notifications</a>
+                            <a href="#" id="showSearch">Search</a> 
+                            <a href="groupFiles.php">Groups</a>
                             <a href="messages2.php">Messages</a>
                             <button><a href="profile.php">Profile</a></button>
                     </div>
