@@ -5,9 +5,14 @@
     if (isset($_SESSION['username'])) {
         $loggedInUser = $_SESSION['username'];
         $connection = connect_to_database();
-
-        // Prepare the SQL query to select notifications for the logged-in user
-        $query = "SELECT * FROM notifications WHERE recipient_username = ? ORDER BY time_sent DESC";
+    
+        // Modify the SQL query to join the profile table and select the profile image as well
+        $query = "SELECT n.*, p.profile_image 
+                  FROM notifications n
+                  LEFT JOIN profile p ON n.sender_username = p.username
+                  WHERE n.recipient_username = ? 
+                  ORDER BY n.time_sent DESC";
+    
         $stmt = mysqli_prepare($connection, $query);
         mysqli_stmt_bind_param($stmt, "s", $loggedInUser);
         mysqli_stmt_execute($stmt);
@@ -33,16 +38,15 @@
             <nav>
                 <div class="mainnav">
                     <div class="imgnav">
-                        <img src="Images/logo.png">
+                        <a href="../home.html"><img src="Images/logo.png"></a>
                         <div class="compname"><h1 style="color:white;">CreativSync</h1></div>
                     </div>
                     <div class="navi">
-                            <a href="feed.html">Feed</a>
-                            <a href="notifications.html">Notifications</a>
-                            <a href="search.html">Search</a> 
-                            <a href="groupFiles.html">Groups</a>
+                            <a href="feed.php">Feed</a>
+                            <a href="notifications.php">Notifications</a>
+                            <a href="#">Search</a> 
+                            <a href="groupFiles.php">Groups</a>
                             <a href="messages2.php">Messages</a>
-                            <a href="help.html">Help</a>
                             <button><a href="profile.php">Profile</a></button>
                     </div>
                 </div>
@@ -61,7 +65,7 @@
                     <div class="notificationItem">
                         <div class="notificationContentContainer">
                             <div class="notification">
-                                <image class="notificationAvatar" src="Images/defaultAvatar.png"></image>
+                                <image class="notificationAvatar" src="<?php echo (!empty($notification['profile_image']) ? htmlspecialchars($notification['profile_image']) : 'Images/defaultAvatar.png'); ?>"></image>
                                 <p class="notificationUsername"><?php echo htmlspecialchars($notification['sender_username']); ?></p>
                                 <p class="notificationText"><?php echo htmlspecialchars($notification['activity_type']); ?></p>
                                 <p class="notificationContent"><?php echo htmlspecialchars($notification['content']); ?></p>
