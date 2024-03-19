@@ -796,78 +796,60 @@ if (!$groupDetails) {
         </script>
         
         <script>
-           function showFiles() {
-                var groupViewMain = document.getElementsByClassName('groupViewMain')[0];
-                var groupViewMain2 = document.getElementsByClassName('groupViewMain2')[0];
-                var groupViewMain3 = document.getElementsByClassName('groupViewMain3')[0];
-                var groupViewMain4 = document.getElementsByClassName('groupViewMain4')[0];
-                var groupViewMain5 = document.getElementsByClassName('groupViewMain5')
-                groupViewMain.style.display = "block";
-                groupViewMain2.style.display = "none";
-                groupViewMain3.style.display = "none";
-                groupViewMain4.style.display = "none";
-                groupViewMain5.style.display = "none";
-            }
 
-            function showPosts() {
-                var groupViewMain = document.getElementsByClassName('groupViewMain')[0];
-                var groupViewMain2 = document.getElementsByClassName('groupViewMain2')[0];
-                var groupViewMain3 = document.getElementsByClassName('groupViewMain3')[0];
-                var groupViewMain4 = document.getElementsByClassName('groupViewMain4')[0];
-                var groupViewMain5 = document.getElementsByClassName('groupViewMain5')
-                groupViewMain.style.display = "none";
-                groupViewMain2.style.display = "block";
-                groupViewMain3.style.display = "none";
-                groupViewMain4.style.display = "none";
-                groupViewMain5.style.display = "none";
-            }
-
-            function showLog() {
-                var groupViewMain = document.getElementsByClassName('groupViewMain')[0];
-                var groupViewMain2 = document.getElementsByClassName('groupViewMain2')[0];
-                var groupViewMain3 = document.getElementsByClassName('groupViewMain3')[0];
-                var groupViewMain4 = document.getElementsByClassName('groupViewMain4')[0];
-                var groupViewMain5 = document.getElementsByClassName('groupViewMain5')[0];
-                groupViewMain.style.display = "none";
-                groupViewMain2.style.display = "none";
-                groupViewMain3.style.display = "block";
-                groupViewMain4.style.display = "none";
-                groupViewMain5.style.display = "none";
-            }
-
-            function showMorderation() {
-                var groupViewMain = document.getElementsByClassName('groupViewMain')[0];
-                var groupViewMain2 = document.getElementsByClassName('groupViewMain2')[0];
-                var groupViewMain3 = document.getElementsByClassName('groupViewMain3')[0];
-                var groupViewMain4 = document.getElementsByClassName('groupViewMain4')[0];
-                var groupViewMain5 = document.getElementsByClassName('groupViewMain5')[0];
-                groupViewMain.style.display = "none";
-                groupViewMain2.style.display = "none";
-                groupViewMain3.style.display = "none";
-                groupViewMain4.style.display = "block";
-                groupViewMain5.style.display = "none";
-            }
-
-            function showfileEdit(){
-                var groupViewMain = document.getElementsByClassName('groupViewMain')[0];
-                var groupViewMain2 = document.getElementsByClassName('groupViewMain2')[0];
-                var groupViewMain3 = document.getElementsByClassName('groupViewMain3')[0];
-                var groupViewMain4 = document.getElementsByClassName('groupViewMain4')[0];
-                var groupViewMain5 = document.getElementsByClassName('groupViewMain5')[0];
-                groupViewMain.style.display = "none";
-                groupViewMain2.style.display = "none";
-                groupViewMain3.style.display = "none";
-                groupViewMain4.style.display = "none";
-                groupViewMain5.style.display = "block";
-            }
-
-            function showCanvas(){
                 var groupViewMain = document.getElementsByClassName('groupViewMain')[0];
                 var groupViewMain2 = document.getElementsByClassName('groupViewMain2')[0];
                 var groupViewMain3 = document.getElementsByClassName('groupViewMain3')[0];
                 var groupViewMain4 = document.getElementsByClassName('groupViewMain4')[0];
                 var groupViewMain5 = document.getElementsByClassName('groupViewMain5')[0];
                 var groupViewMain6 = document.getElementsByClassName('groupViewMain6')[0];
+                
+           function showFiles() {
+                groupViewMain.style.display = "block";
+                groupViewMain2.style.display = "none";
+                groupViewMain3.style.display = "none";
+                groupViewMain4.style.display = "none";
+                groupViewMain5.style.display = "none";
+                groupViewMain6.style.display = "none";
+            }
+
+            function showPosts() {
+                groupViewMain.style.display = "none";
+                groupViewMain2.style.display = "block";
+                groupViewMain3.style.display = "none";
+                groupViewMain4.style.display = "none";
+                groupViewMain5.style.display = "none";
+                groupViewMain6.style.display = "none";
+            }
+
+            function showLog() {
+                groupViewMain.style.display = "none";
+                groupViewMain2.style.display = "none";
+                groupViewMain3.style.display = "block";
+                groupViewMain4.style.display = "none";
+                groupViewMain5.style.display = "none";
+                groupViewMain6.style.display = "none";
+            }
+
+            function showMorderation() {
+                groupViewMain.style.display = "none";
+                groupViewMain2.style.display = "none";
+                groupViewMain3.style.display = "none";
+                groupViewMain4.style.display = "block";
+                groupViewMain5.style.display = "none";
+                groupViewMain6.style.display = "none";
+            }
+
+            function showfileEdit(){
+                groupViewMain.style.display = "none";
+                groupViewMain2.style.display = "none";
+                groupViewMain3.style.display = "none";
+                groupViewMain4.style.display = "none";
+                groupViewMain5.style.display = "block";
+                groupViewMain6.style.display = "none";
+            }
+
+            function showCanvas(){
                 groupViewMain.style.display = "none";
                 groupViewMain2.style.display = "none";
                 groupViewMain3.style.display = "none";
