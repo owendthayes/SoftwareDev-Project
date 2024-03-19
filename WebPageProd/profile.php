@@ -138,9 +138,10 @@ if (isset($_SESSION['username'])) {
                 <div class="profileButtonsContainer">
                     <button class="profileMessageButton">Send Message</button>
                     <button class="profileFollowButton">Follow</button>
-                    <button class="profileCopyEmailButton">Copy Email</button>
-                    <button class="profileInviteButton">Invite to Group</button>
-                    <button class="profileBlockButton">Block</button>
+                    <form action="php/blockUser.php" method="post">
+                        <input type="hidden" name="blocked" value="<?php echo $username; ?>">
+                        <button type="submit" class="profileBlockButton">Block</button>
+                    </form>
                 </div>
             </div>
 
