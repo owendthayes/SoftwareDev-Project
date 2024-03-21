@@ -52,11 +52,11 @@ session_start();
                     <i class='fa fa-search'></i>
                 </button>
             </div>
-            <div class="filter-buttons">
+            <!-- <div class="filter-buttons">
                 <button id="filter-all">All</button>
                 <button id="filter-read">Read</button>
                 <button id="filter-unread">Unread</button>
-            </div>
+            </div> -->
             <ul class="user-list" id="user-list">
                 <!-- List of users will go here 
                     REMOVED FOR NOW SO THE DEFAULT PEOPLE DONT SHOW UP WHEN RELOADING-->
@@ -89,7 +89,7 @@ session_start();
                     <!--<img src="../pp2.jpg" alt="User Profile" class="profile-pic">-->
                     <div class="theirMessage">
                         <img src="Images/defaultAvatar.png" alt="User Profile" class="profile-pic">
-                        <p class="message-content">Hi there! How are you?</p>
+                        <!-- <p class="message-content">Hi there! How are you?</p> -->
                         <p class="messageDate">24/01/24</p>
                     </div>
                 </div>
