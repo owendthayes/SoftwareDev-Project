@@ -811,7 +811,7 @@ footer::after {
     width:50%;
     float:right;
     margin-right: 17%;
-    height: 110px;
+    height: 125px;
     overflow-x:scroll;
     display:flex;
     flex-shrink:0;
@@ -831,6 +831,22 @@ footer::after {
     flex-shrink:0;
     text-align:center;
     border:1px solid white;
+}
+
+.profileGroup img{
+    width: 80px;
+    height: 80px;
+    object-fit: cover;
+    object-position: 50% 50%;
+}
+
+.profileGroup span{
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 100%;
+    display: inline-block;
+    vertical-align: top;
 }
 
 .editProfileButton
