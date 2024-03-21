@@ -60,6 +60,18 @@ if (isset($_SESSION['username'])) {
         mysqli_stmt_bind_result($followingBoolStmt, $following);
         mysqli_stmt_fetch($followingBoolStmt);
         mysqli_stmt_close($followingBoolStmt);
+
+        $groupQuery = "SELECT g.groupid, g.groupname, g.groupdp 
+               FROM groups g 
+               INNER JOIN group_participants gp ON g.groupid = gp.groupid 
+               WHERE gp.username = ?";
+        $groupStmt = mysqli_prepare($connection, $groupQuery);
+        mysqli_stmt_bind_param($groupStmt, "s", $username);
+        mysqli_stmt_execute($groupStmt);
+        $result = mysqli_stmt_get_result($groupStmt);
+        $groups = mysqli_fetch_all($result, MYSQLI_ASSOC);
+        mysqli_free_result($result);
+        mysqli_stmt_close($groupStmt);
     }
 
     mysqli_close($connection);
@@ -73,7 +85,7 @@ if (isset($_SESSION['username'])) {
 
 <html>
     <head>
-        <link rel="stylesheet" href="style.css">
+        <link rel="stylesheet" href="style.css?version=51">
         <title> CreativSync - Profile</title>
         <link rel="icon" href="Images/logo.png">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
@@ -124,16 +136,13 @@ if (isset($_SESSION['username'])) {
                 <p class="profileAboutMeContent"><?php echo $aboutMe; ?></p>
                 <p class="profileGroupsLabel">Groups</p>
                 <div class="profileGroupsContainer">
-                    <div class="profileGroup" style="background-color:red">Alfie's Artists</div>
-                    <div class="profileGroup" style="background-color:green" background-color="blue">Birthday Planning</div>
-                    <div class="profileGroup" style="background-color:blue" background-color="green">UNI-GRP11</div>
-                    <div class="profileGroup" style="background-color:orange" background-color="orange">Class 15</div>
-                    <div class="profileGroup" style="background-color:darkgreen" background-color="yellow">Class 9</div>
-                    <div class="profileGroup" style="background-color:purple" background-color="purple">Teachers 2024</div>
-                    <div class="profileGroup" style="background-color:darkcyan" background-color="lightblue">CreativSync Team</div>
-                    <div class="profileGroup" style="background-color:darkorange" background-color="pink">Sports Day 2024</div>
-                    <div class="profileGroup" style="background-color:darkred" background-color="lightgreen">School Play 2024</div>
-                </div>
+                <?php foreach ($groups as $group): ?>
+                    <div class="profileGroup">
+                        <img src="<?php echo str_replace('../Images/', 'Images/', $group['groupdp']); ?>" alt="Group Image" class="groupImage">
+                        <span><?php echo htmlspecialchars($group['groupname']); ?></span>
+                    </div>
+                <?php endforeach; ?>
+            </div>
                 <image class="profileAvatar" src="<?php echo $profileImage; ?>"></image>
                 <div class="profileButtonsContainer">
                     <button class="profileMessageButton">Send Message</button>
