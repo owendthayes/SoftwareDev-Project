@@ -923,6 +923,11 @@ footer::after {
     margin-right:10px;
 }
 
+.profileMessageButton, .profileFollowButton{
+    position: relative;
+    right: 112px;
+}
+
 .profileFollowButton
 {
     margin:2.5px;
