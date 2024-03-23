@@ -317,16 +317,25 @@ mysqli_close($connection);
         <?php endforeach; ?>
     };
 
+    setInterval(periodicallyLoadComments, 10000);
+
+    window.onload = function () {
+        periodicallyLoadComments(); // Start loading comments immediately
+    };
+
+
     function loadComments(postId) {
         var xhr = new XMLHttpRequest();
         xhr.open("GET", "php/getComments.php?postId=" + postId, true);
         xhr.onreadystatechange = function () {
-            if (xhr.readyState === XMLHttpRequest.DONE) {
-                if (xhr.status === 200) {
-                    // Load comments into the comments scroll box
-                    document.getElementById('commentsScrollBox' + postId).innerHTML = xhr.responseText;
-                } else {
-                    console.error('Error:', xhr.statusText);
+            if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
+                var commentsBox = document.getElementById('commentsScrollBox' + postId);
+                var currentCommentsHTML = commentsBox.innerHTML;
+                var newCommentsHTML = xhr.responseText;
+
+                // Update only if there's a change to reduce DOM manipulation
+                if (currentCommentsHTML !== newCommentsHTML) {
+                    commentsBox.innerHTML = newCommentsHTML;
                 }
             }
         };
@@ -335,32 +344,26 @@ mysqli_close($connection);
 
 
 
+
     function sendComment(postId) {
-        var commentInput = document.getElementById('commentInput' + postId)
+        var commentInput = document.getElementById('commentInput' + postId);
         var commentValue = commentInput.value.trim();
         if (commentValue === '') {
-            // Handle empty comment
-            return;
+            return; // Handle empty comment
         }
 
-        // AJAX request to insert comment
         var xhr = new XMLHttpRequest();
         xhr.open("POST", "php/insertComment.php", true);
         xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
         xhr.onreadystatechange = function () {
-            if (xhr.readyState === XMLHttpRequest.DONE) {
-                if (xhr.status === 200) {
-                    // Handle successful insertion
-                    console.log(xhr.responseText);
-                    commentInput.value = '';
-                } else {
-                    // Handle error
-                    console.error('Error:', xhr.statusText);
-                }
+            if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
+                commentInput.value = '';
+                loadComments(postId); // Reload comments for this post
             }
         };
         xhr.send("postId=" + postId + "&comment=" + encodeURIComponent(commentValue));
     }
+
 </script>
 
     </body>
