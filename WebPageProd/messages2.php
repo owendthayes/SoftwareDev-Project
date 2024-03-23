@@ -6,7 +6,7 @@ session_start();
 
 <head>
     <title>Real-Time Chat</title>
-    <link rel="stylesheet" type="text/css" href="messages2.css">
+    <link rel="stylesheet" type="text/css" href="messages2.css?version=51">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link href="https://fonts.cdnfonts.com/css/beon-2" rel="stylesheet">
@@ -36,11 +36,12 @@ session_start();
             </div>
 
             <div class="snav">
-                <div class="searchnav">
-                    <input type="text" id="search" placeholder="Type to search...">
-                    <button id="searchBtn"><i class="fa fa-search"></i></button>
-                    <!--<button id="clearBtn"><i class="fa fa-times"></i></button>-->
-                </div>
+                    <div class="searchnav">
+                        <input type="text" autocomplete="off" id="search" placeholder="Type to search..." onkeyup="searchUsers(this.value)">
+                        <button id="searchBtn"><i class="fa fa-search"></i></button>
+                        <!--<button id="clearBtn"><i class="fa fa-times"></i></button>-->
+                    </div>
+                    <div id="searchResults"></div>
             </div>
         </nav>
     </section>
@@ -422,37 +423,68 @@ session_start();
         setInterval(loadMessages,500)
     </script>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const showSearch = document.getElementById('showSearch');
-            const snav = document.querySelector('.snav');
-
-            // Function to show the search nav
-            function showSnav() {
-                snav.style.display = 'block';
-                snav.style.opacity = 1;
-                snav.style.transition = 'opacity 0.5s ease-in-out';
+<script>
+            function searchUsers(query) {
+                if (query.length > 0) {
+                    $.ajax({
+                        url: 'php/searchUsers.php',
+                        type: 'POST',
+                        data: {
+                            searchQuery: query
+                        },
+                        success: function(data) {
+                            $('#searchResults').html(data);
+                            // Add click event listener for each search result link
+                            $('#searchResults a').on('click', function(e) {
+                                e.preventDefault(); // Prevent default anchor click behavior
+                                var clickedUsername = $(this).data('username'); 
+                                var currentUser = '<?php echo $_SESSION["username"]; ?>';
+                                if (clickedUsername === currentUser) {
+                                    window.location.href = 'profile.php'; // Redirect to the user's own profile
+                                } else {
+                                    window.location.href = $(this).attr('href'); // Redirect to the clicked user's profile
+                                }
+                            });
+                        }
+                    });
+                } else {
+                    $('#searchResults').html('');
+                }
             }
+        </script>
 
-            // Function to hide the search nav
-            function hideSnav() {
-                snav.style.opacity = 0; // Start fade out animation
-                setTimeout(function() {
-                    snav.style.display = 'none'; // Hide snav after the animation
-                }, 1000); // Delay to match the transition
-            }
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                const showSearch = document.getElementById('showSearch');
+                const snav = document.querySelector('.snav');
 
-            // Event to show snav when hovering over the search button
-            showSearch.addEventListener('mouseenter', function() {
-                showSnav();
+                // Function to show the search nav
+                function showSnav() {
+                    snav.style.display = 'block';
+                    snav.style.opacity = 1;
+                    snav.style.transition = 'opacity 0.5s ease-in-out';
+                }
+
+                // Function to hide the search nav
+                function hideSnav() {
+                    snav.style.opacity = 0; // Start fade out animation
+                    setTimeout(function() {
+                        snav.style.display = 'none'; // Hide snav after the animation
+                    }, 1000); // Delay to match the transition
+                }
+
+                // Event to show snav when hovering over the search button
+                showSearch.addEventListener('mouseenter', function() {
+                    showSnav();
+                });
+
+                // Event to hide snav when the mouse leaves the snav area
+                snav.addEventListener('mouseleave', function() {
+                    hideSnav();
+                });
             });
+        </script>
 
-            // Event to hide snav when the mouse leaves the snav area
-            snav.addEventListener('mouseleave', function() {
-                hideSnav();
-            });
-        });
-    </script>
 </body>
 
 </html>
