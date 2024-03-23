@@ -32,6 +32,7 @@
         <title> CreativSync - Notifications</title>
         <link rel="icon" href="Images/logo.png">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     </head>
     <body>
         <section class="navigation">
@@ -44,11 +45,20 @@
                     <div class="navi">
                             <a href="feed.php">Feed</a>
                             <a href="notifications.php">Notifications</a>
-                            <a href="#">Search</a> 
+                            <a href="#" id="showSearch">Search</a> 
                             <a href="groupFiles.php">Groups</a>
                             <a href="messages2.php">Messages</a>
                             <button><a href="profile.php">Profile</a></button>
                     </div>
+                </div>
+
+                <div class="snav">
+                    <div class="searchnav">
+                        <input type="text" autocomplete="off" id="search" placeholder="Type to search..." onkeyup="searchUsers(this.value)">
+                        <button id="searchBtn"><i class="fa fa-search"></i></button>
+                        <!--<button id="clearBtn"><i class="fa fa-times"></i></button>-->
+                    </div>
+                    <div id="searchResults"></div>
                 </div>
             </nav>
         </section>
@@ -79,6 +89,70 @@
                 <?php endforeach; ?>
             </div>
         </section>
+
+
+        <script>
+            function searchUsers(query) {
+                if (query.length > 0) {
+                    $.ajax({
+                        url: 'php/searchUsers.php',
+                        type: 'POST',
+                        data: {
+                            searchQuery: query
+                        },
+                        success: function(data) {
+                            $('#searchResults').html(data);
+                            // Add click event listener for each search result link
+                            $('#searchResults a').on('click', function(e) {
+                                e.preventDefault(); // Prevent default anchor click behavior
+                                var clickedUsername = $(this).data('username'); 
+                                var currentUser = '<?php echo $_SESSION["username"]; ?>';
+                                if (clickedUsername === currentUser) {
+                                    window.location.href = 'profile.php'; // Redirect to the user's own profile
+                                } else {
+                                    window.location.href = $(this).attr('href'); // Redirect to the clicked user's profile
+                                }
+                            });
+                        }
+                    });
+                } else {
+                    $('#searchResults').html('');
+                }
+            }
+        </script>
+
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                const showSearch = document.getElementById('showSearch');
+                const snav = document.querySelector('.snav');
+
+                // Function to show the search nav
+                function showSnav() {
+                    snav.style.display = 'block';
+                    snav.style.opacity = 1;
+                    snav.style.transition = 'opacity 0.5s ease-in-out';
+                }
+
+                // Function to hide the search nav
+                function hideSnav() {
+                    snav.style.opacity = 0; // Start fade out animation
+                    setTimeout(function() {
+                        snav.style.display = 'none'; // Hide snav after the animation
+                    }, 1000); // Delay to match the transition
+                }
+
+                // Event to show snav when hovering over the search button
+                showSearch.addEventListener('mouseenter', function() {
+                    showSnav();
+                });
+
+                // Event to hide snav when the mouse leaves the snav area
+                snav.addEventListener('mouseleave', function() {
+                    hideSnav();
+                });
+            });
+        </script>
+
 
     </body>
 </html>
