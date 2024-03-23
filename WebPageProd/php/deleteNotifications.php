@@ -19,6 +19,7 @@
         
         if ($success) {
             echo "Notification deleted successfully.";
+            header("Location: " . $_SERVER['HTTP_REFERER']);
         } else {
             echo "Error deleting notification.";
         }
