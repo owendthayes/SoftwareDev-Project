@@ -83,7 +83,7 @@ mysqli_close($connection);
                 
                     <div>
                         <label for="isPrivPub">Private Group:</label>
-                        <input type="checkbox" id="isPrivPub" name="is_privpub" value="private">
+                        <input type="checkbox" id="isPrivPub" name="type" value="private">
                         <span>Check this box if the group is private. Leave unchecked for public groups.</span>
                     </div>
                 
@@ -103,8 +103,8 @@ mysqli_close($connection);
                         </a>
                         <div style="padding: 10px; text-align: center;">
                             <h2 style="margin: 0;"><?php echo $group['groupname']; ?></h2>
-                            <p><?php echo $group['groupdesc']; ?></p>
-                            <h3 style="color: gray;"><?php echo $group['is_privpub'] === 'private' ? 'Private Group' : 'Public Group'; ?></h3>
+                            <p><?php echo $group['groupdesc']; ?></p>   
+                            <h3 style="color: gray;"><?php echo $group['type'] === 'private' ? 'Private Group' : 'Public Group'; ?></h3>
                         </div>
                     </div>
                 <?php endforeach; ?>
@@ -113,6 +113,13 @@ mysqli_close($connection);
 
 
         <script>
+	function createGroup() {
+                // Toggle the visibility of the edit profile form
+                var form = document.getElementById('createImagePost');
+                form.style.display = form.style.display === 'none' ? 'block' : 'none';
+            }
+
+
             function searchUsers(query) {
                 if (query.length > 0) {
                     $.ajax({

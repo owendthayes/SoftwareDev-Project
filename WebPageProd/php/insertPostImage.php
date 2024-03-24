@@ -23,7 +23,7 @@ function saveUploadedImage($fileKey, $uploadDir = '../Images/') {
 
 // Function to handle inserting the post
 function insertPostWithImage($connection, $username, $caption, $imagePath) {
-    $query = "INSERT INTO posts (content_image, username, created_at, post_bio) VALUES (?, ?, CURDATE(), ?)";
+    $query = "INSERT INTO posts (content_image, username, created_at, caption) VALUES (?, ?, CURDATE(), ?)";
     $stmt = mysqli_prepare($connection, $query);
     mysqli_stmt_bind_param($stmt, "sss", $imagePath, $username, $caption);
 

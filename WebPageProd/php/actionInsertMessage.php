@@ -7,7 +7,7 @@ session_start();
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_SESSION['loggedin']) && $_SESSION['loggedin'] == true) {
     $username = $_SESSION['username']; // The logged-in user's username
     $sentTo = $_POST['sentTo']; // The user to who the message is sent
-    $message = mysqli_real_escape_string($connection, $_POST['message']);
+    $message = $_POST['message'];
     $messageID = hexdec(uniqid());
 
     // Check if the recipient exists in the profile database
