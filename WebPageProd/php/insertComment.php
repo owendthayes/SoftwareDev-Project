@@ -26,7 +26,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_SESSION['username']) && iss
         $resultPostOwner = mysqli_stmt_get_result($stmtPostOwner);
         $postOwnerRow = mysqli_fetch_assoc($resultPostOwner);
         
-        if ($postOwnerRow) {
+        if ($postOwnerRow && $username != $postOwnerRow['username']) {
             $recipientUsername = $postOwnerRow['username']; // Recipient of the notification
 
             // Insert notification for the post owner about the new comment
