@@ -396,8 +396,9 @@ footer::after {
     clear: both;
 }
 
-.compname{
-    font-family: 'Franklin-Gothic', sans-serif;
+.compname h1 {
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    color: white;
 }
 
 .otherbutton{
@@ -411,23 +412,74 @@ footer::after {
     border-color: #8e0ce3;
 }
 
-.inversebutton{
-    box-shadow: 0px 4px 8px 0px rgba(243, 236, 255, 0.6);
-    font-family: 'railway', sans-serif;
-    color: #8e0ce3;
-    padding: 5px 10px;
-    background: linear-gradient(150deg, #d8ceff, #e5beff);
-    border-radius: 10px;
+.inversebutton {
+    padding: 10px 20px;
+    border-radius: 5px;
+    background: linear-gradient(45deg, #451ded, #8e0ce3);
+    color: white;
+    border: none;
     cursor: pointer;
-    border-color: white;
+    transition: background 0.3s ease-in-out;
+    font-size: 18px;
+    letter-spacing: 1px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
 }
 
-.loginTextBox
-{
-    border: 2px solid #ffffff;
-    background-color: #00060b;
-    color:#ffffff;
+.inversebutton:hover {
+    background: linear-gradient(45deg, #8e0ce3, #451ded);
+}
+
+.error-message {
+    color: #ff3860;
+    background: #ff386022;
+    padding: 8px;
+    border-radius: 4px;
+    margin: 10px 0;
+}
+
+.loginDiv label, .signUpDiv label{
+    color: white;
+    margin-bottom: .5rem;
+    display: inline-block;
+}
+
+.loginDiv .otherbutton, .signUpDiv .otherbutton {
+    background: none;
+    color: #8e0ce3;
+    border: 2px solid #8e0ce3;
+    padding: 10px 20px;
+    font-size: 18px;
     border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+    display: inline-block;
+    margin-top: 20px;
+}
+
+.loginDiv .otherbutton:hover, .signUpDiv .otherbutton:hover {
+    background: #8e0ce3;
+    color: white;
+}
+
+.loginTextBox {
+    width: 80%;
+    padding: 10px;
+    margin-bottom: 20px;
+    background-color: transparent;
+    border: none;
+    border-bottom: 2px solid #ffffff;
+    color: #ffffff;
+    font-size: 16px;
+    transition: all 0.3s ease-in-out;
+}
+
+.loginTextBox:focus {
+    outline: none;
+    border-bottom: 2px solid #8e0ce3;
+}
+
+.loginTextBox::placeholder {
+    color: rgb(160, 160, 160);
 }
 
 ::placeholder
@@ -437,36 +489,34 @@ footer::after {
 
 /*CSS FOR LOGIN.HTML AND SIGNUP.HTML ######################################################################################################################################*/
 
-.loginDiv
-{
+.loginDiv{
     text-align: center;
-    height: 50%;
-    width: 50%;
+    position: absolute;
     top: 50%;
     left: 50%;
-    border: 5px solid white ;
-    background-color: #0a0c1b;
     transform: translate(-50%, -50%);
-    position: absolute;
-    padding-top: 5%;
-    border-radius: 10px;
-    margin-top: 10px;
+    width: 30%;
+    margin-top: 50px;
+    padding: 3rem;
+    background: rgba(10, 12, 27, 0.8);
+    border-radius: 15px;
+    border: 1px solid #451ded;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
 }
 
-.signUpDiv
-{
+.signUpDiv{
     text-align: center;
-    height: 60%;
-    width: 50%;
+    position: absolute;
     top: 50%;
     left: 50%;
-    border: 5px solid white ;
-    background-color: #0a0c1b;
     transform: translate(-50%, -50%);
-    position: absolute;
-    padding-top: 5%;
-    border-radius: 10px;
-    margin-top: 50px;
+    width: 30%;
+    margin-top: 130px;
+    padding: 3rem;
+    background: rgba(10, 12, 27, 0.8);
+    border-radius: 15px;
+    border: 1px solid #451ded;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
 }
 
 /*CSS FOR MESSAGES.HTML ####################################################################################################################################################*/
@@ -782,6 +832,7 @@ footer::after {
     border-radius:5px;
     font-family:"Franklin Gothic", "sans-serif";
     color:white;
+    padding: 10px;
     margin-top: 5px;
     width:50%;
     float:right;
