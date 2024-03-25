@@ -7,7 +7,7 @@ session_start();
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_SESSION['loggedin']) && $_SESSION['loggedin'] == true) {
     $username = $_SESSION['username']; // The logged-in user's username
     $groupID = $_POST['groupid']; // The user to whom the message is sent
-    $message = mysqli_real_escape_string($connection, $_POST['message']);
+    $message = $_POST['message'];
     $messageID = hexdec(uniqid());
 
     // Add the current time and date
