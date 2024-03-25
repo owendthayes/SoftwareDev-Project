@@ -500,7 +500,6 @@ if (!$groupDetails) {
                         <div class="user-removal">
                             <h3>User Removal from Groups</h3>
                             <!-- Group members will be dynamically loaded here -->
-                            <!-- Example member with a remove button -->
                             <form action="php/removeFromGroup.php" enctype="multipart/form-data" method="post">
                                 <div class="group-member">
                                     <input type="hidden" name="groupid" value="<?php echo $groupid; ?>">
@@ -515,26 +514,16 @@ if (!$groupDetails) {
                             </form>
                         </div>
                 
-                        <!-- Block Users
-                        <div class="block-users">
-                            <h3>Block Users</h3>
-                            Users will be dynamically loaded here
-                             Example user with a block button
-                            <div class="user">
-                                <p>Username</p>
-                                <button type="submit" class="leaveGroupBut">Leave Group</button>
-                            </div>
-                        </div> -->
                 
                         <!-- Content Filter Toggle -->
-                        <div class="content-filter">
+                        <!-- <div class="content-filter">
                             <h3>Content Filter</h3><br>
                             <div class="filtercheckbox">
                                 <label for="content-filter-toggle">Filter Inappropriate Content:</label>
                                 <input type="checkbox" id="content-filter-toggle">
                             </div>
                         </div>
-                        <button class="otherButton" onclick="createTextPostButton()" style="color:white; font-size:25px; height: 80px; width: 150px; margin-top: 20px;">Submit Changes</button>
+                        <button class="otherButton" onclick="createTextPostButton()" style="color:white; font-size:25px; height: 80px; width: 150px; margin-top: 20px;">Submit Changes</button> -->
                     </div>
 
                     <div class="block-users">
