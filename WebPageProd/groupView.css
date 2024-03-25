@@ -83,7 +83,7 @@ html{
     border-radius: 10px;
     outline: none;
     box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
-    font-family: 'Beon', sans-serif;
+    font-family: 'Franklin Gothic', sans-serif;
 }
 
 .searchnav button {
@@ -1427,7 +1427,7 @@ canvas {
     margin-bottom: 20px;
     text-align: center;
     align-items: center;
-    font-family: 'Beon', sans-serif;
+    font-family: 'Franklin Gothic', sans-serif;
 }
 .user-infop h3{
     position: relative;
@@ -1468,7 +1468,7 @@ canvas {
     border: none;
     background-color: #000;
     cursor: pointer;
-    font-family: 'Beon', sans-serif;
+    font-family: 'Franklin Gothic', sans-serif;
     color: #fbffff;
 }
 .chat-footer .attachment-btn{
@@ -1541,7 +1541,7 @@ canvas {
 }
 
 .my-message .message-content {
-    font-family: 'Beon', sans-serif;
+    font-family: 'Franklin Gothic', sans-serif;
     background: #9750e9;
     color: white;
 }
@@ -1595,7 +1595,7 @@ canvas {
 }
 
 .faq-question {
-    font-family: 'Beon', sans-serif;
+    font-family: 'Franklin Gothic', sans-serif;
     padding: 0.5em;
     width: 100%;
     text-align: left;
@@ -1612,7 +1612,7 @@ canvas {
 }
 
 .faq-answer {
-    font-family: 'Beon', sans-serif;
+    font-family: 'Franklin Gothic', sans-serif;
     max-height: 0;
     overflow: hidden;
     transition: max-height 0.3s ease;
