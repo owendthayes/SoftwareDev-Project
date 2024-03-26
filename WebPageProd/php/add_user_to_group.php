@@ -36,7 +36,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         mysqli_stmt_close($memberCheckStmt);
 
         if ($isMember) {
-            // echo "User is already a member of the group.";
+            // Return JSON response indicating that the user is already a member
             echo json_encode(array("success" => false, "error" => "User is already a member of the group."));
         } else {
             // Begin transaction
@@ -50,39 +50,21 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 mysqli_stmt_close($addUserStmt);
 
                 if ($addResult) {
-                    // Get group name for notification content
-                    $groupQuery = "SELECT groupname FROM groups WHERE groupid = ?";
-                    $groupStmt = mysqli_prepare($connection, $groupQuery);
-                    mysqli_stmt_bind_param($groupStmt, 'i', $groupid);
-                    mysqli_stmt_execute($groupStmt);
-                    $groupResult = mysqli_stmt_get_result($groupStmt);
-                    $group = mysqli_fetch_assoc($groupResult);
-                    $groupName = $group['groupname'] ?? 'a group';
-                    mysqli_stmt_close($groupStmt);
-
-                    // Insert notification that user was added to the group
-                    $notificationQuery = "INSERT INTO notifications (recipient_username, sender_username, activity_type, object_type, object_id, content, time_sent) VALUES (?, ?, 'group_join', 'group', ?, CONCAT('You have been added to the group ', ?), CURRENT_TIMESTAMP())";
-                    $notificationStmt = mysqli_prepare($connection, $notificationQuery);
-                    mysqli_stmt_bind_param($notificationStmt, 'ssis', $userSearch, $_SESSION['username'], $groupid, $groupName);
-                    mysqli_stmt_execute($notificationStmt);
-                    mysqli_stmt_close($notificationStmt);
-
+                    // Commit transaction
                     mysqli_commit($connection);
-                    //echo "success";
+                    // Return JSON response indicating success
                     echo json_encode(array("success" => true, "message" => "User added successfully."));
-                    //header("Location: " . $_SERVER['HTTP_REFERER']);
                 } else {
                     throw new Exception("Error adding user to the group: " . mysqli_error($connection));
-                    //echo "Error adding user to the group: " . mysqli_error($connection);
-                    echo json_encode(array("success" => false, "error" => "Error adding user to the group: " . mysqli_error($connection)));
                 }
             } catch (Exception $e) {
+                // Rollback transaction and return error message
                 mysqli_rollback($connection);
-                echo $e->getMessage();
+                echo json_encode(array("success" => false, "error" => $e->getMessage()));
             }
         }
     } else {
-        //echo "User does not exist.";
+        // Return JSON response indicating that the user does not exist
         echo json_encode(array("success" => false, "error" => "User does not exist."));
     }
 }
