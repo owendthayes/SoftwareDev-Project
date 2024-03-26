@@ -23,7 +23,7 @@ function saveUploadedImage($fileKey, $uploadDir = '../Images/') {
 
 // Function to handle inserting the post
 function insertPostWithImage($connection, $username, $caption, $imagePath, $groupid) {
-    $query = "INSERT INTO posts (groupid, content_image, username, created_at, caption) VALUES (?,?, ?, CURDATE(), ?)";
+    $query = "INSERT INTO posts (groupid, content_image, username, created_at, caption) VALUES (?,?, ?, NOW(), ?)";
     $stmt = mysqli_prepare($connection, $query);
     mysqli_stmt_bind_param($stmt, "isss", $groupid, $imagePath, $username, $caption);
 
