@@ -299,10 +299,9 @@ if (!$groupDetails) {
                         </div>
 
                         <div>
-                            <div style="display: flex;">
+                            <div>
                                 <h2>Collaborative Pads</h2>
-                                <button class="otherButton" onclick="showPad()" style="color:white; font-size:x-large; height: 40px; width: 40px; margin-top: 15px; margin-left: 850px; margin-bottom: 15px;">+</button>
-                            
+                                <button class="otherButton" onclick="showPad()" style="color:white; font-size:x-large; height: 40px; width: 40px; margin-top: 15px; margin-left: 950px; margin-bottom: 15px;">+</button>
                                 <div id="createPad" style="display: none;">
                                     <form id="padForm" enctype="multipart/form-data" onsubmit="return createPad();">
                                         <label for="padInput">Pad Name:</label>
@@ -312,6 +311,7 @@ if (!$groupDetails) {
                                     </form>
                                     <a id="padError" style="display: none; color: red">Error Pad Already Exists</a>             
                                 </div>
+                                <br>
                             </div>
                             <div class="padSec">
                                 <?php foreach ($pads as $pad): ?>
