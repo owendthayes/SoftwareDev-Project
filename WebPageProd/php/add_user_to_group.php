@@ -36,7 +36,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         mysqli_stmt_close($memberCheckStmt);
 
         if ($isMember) {
-            echo "User is already a member of the group.";
+            // echo "User is already a member of the group.";
+            echo json_encode(array("success" => false, "error" => "User is already a member of the group."));
         } else {
             // Begin transaction
             mysqli_begin_transaction($connection);
@@ -67,9 +68,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     mysqli_stmt_close($notificationStmt);
 
                     mysqli_commit($connection);
-                    header("Location: " . $_SERVER['HTTP_REFERER']);
+                    //echo "success";
+                    echo json_encode(array("success" => true, "message" => "User added successfully."));
+                    //header("Location: " . $_SERVER['HTTP_REFERER']);
                 } else {
                     throw new Exception("Error adding user to the group: " . mysqli_error($connection));
+                    //echo "Error adding user to the group: " . mysqli_error($connection);
+                    echo json_encode(array("success" => false, "error" => "Error adding user to the group: " . mysqli_error($connection)));
                 }
             } catch (Exception $e) {
                 mysqli_rollback($connection);
@@ -77,7 +82,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             }
         }
     } else {
-        echo "User does not exist.";
+        //echo "User does not exist.";
+        echo json_encode(array("success" => false, "error" => "User does not exist."));
     }
 }
 
