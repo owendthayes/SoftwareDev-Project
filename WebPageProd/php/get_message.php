@@ -26,7 +26,7 @@ if (isset($_SESSION['loggedin']) && $_SESSION['loggedin'] == true) {
 
     $chatID = getChatId($username, $sentTo, $connection);
 
-    $query = "SELECT * FROM messages WHERE chatID = ? ORDER BY timestamp";
+    $query = "SELECT messages.*, profile.profile_image FROM messages LEFT JOIN profile ON messages.sender = profile.username WHERE chatID = ? ORDER BY timestamp";
     $stmt = mysqli_prepare($connection, $query);
 
     if($stmt){
@@ -37,14 +37,14 @@ if (isset($_SESSION['loggedin']) && $_SESSION['loggedin'] == true) {
         while ($row = mysqli_fetch_assoc($result)) {
             if($row['sender'] == $username){
                 $output .= '<div class="message my-message">
-                                <img src="Images/defaultAvatar.png" alt="My Profile" class="profile-pic">
+                                <img src="' . $row['profile_image'] . '" alt="My Profile" class="profile-pic">
                                 <p class="message-content">'. $row['content_text'] .'</p>
                             </div>';
             }
             else{
                 $output .= '<div class="message their-message">
                                 <div class="theirMessage">
-                                    <img src="Images/defaultAvatar.png" alt="User Profile" class="profile-pic">
+                                    <img src="' . $row['profile_image'] . '" alt="User Profile" class="profile-pic">
                                     <p class="message-content">'. $row['content_text'] .'</p>
                                     <p class="messageDate">'. $row['timestamp'] .'</p>
                                 </div>
