@@ -294,7 +294,7 @@ if (!$groupDetails) {
 
                         <div>
                             <h2>Collaborative Pads</h2>
-                            <button class="otherButton" onclick="showPad()" style="color:white; font-size:x-large; height: 40px; width: 40px; margin-top: 15px; margin-left: 10px;">+</button>
+                            <button class="otherButton" onclick="showPad()" style="color:white; font-size:x-large; height: 40px; width: 40px; margin-top: 15px; margin-left: 10px; float: right;">+</button>
                             <div id="createPad" style="display: none;">
                                 <form id="padForm" enctype="multipart/form-data" onsubmit="return createPad();">
                                     <label for="padInput">Pad Name:</label>
