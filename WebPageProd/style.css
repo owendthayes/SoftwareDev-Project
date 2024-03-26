@@ -974,6 +974,11 @@ footer::after {
     margin-right:10px;
 }
 
+.proMessButton{
+    color: #fcfcfb;
+    text-decoration: none;
+}
+
 .profileMessageButton, .profileFollowButton{
     position: relative;
     right: 112px;
@@ -1061,6 +1066,8 @@ footer::after {
     height: 120px;
     width:120px;
     margin-left:500px;
+    position: relative;
+    left: 120px;
 }
 
 #editProfileForm, #createImagePost, #createTextPost {
