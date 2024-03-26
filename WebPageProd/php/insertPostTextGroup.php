@@ -13,7 +13,7 @@ if (!isset($_SESSION['username'])) {
 // Function to handle inserting the post
 function insertTextPost($connection, $username, $textPost, $caption, $groupid) {
     // Prepare a query for insertion
-    $query = "INSERT INTO posts (groupid, content_text, username, created_at, caption) VALUES (?, ?, ?, CURDATE(), ?)";
+    $query = "INSERT INTO posts (groupid, content_text, username, created_at, caption) VALUES (?, ?, ?, NOW(), ?)";
     
     // Create a prepared statement
     $stmt = mysqli_prepare($connection, $query);
