@@ -15,19 +15,32 @@ $row_follow_check = mysqli_fetch_assoc($result_follow_check);
 $count_follow = $row_follow_check['count'];
 mysqli_stmt_close($stmt_follow_check);
 
+$subqueryBlockedUsers = "
+    SELECT blocked FROM block WHERE blocker = ?
+    UNION
+    SELECT blocker FROM block WHERE blocked = ?
+";
+
 if ($count_follow > 0) {
     // Query to get the user's posts and the posts of users they follow, where groupid is NULL
-    $query = "SELECT p.*, u.profile_image, COUNT(l.postid) as like_count 
+    $query = "
+    SELECT p.*, u.profile_image, COUNT(l.postid) as like_count 
     FROM posts p
-    LEFT JOIN follow f ON p.username = f.following
     LEFT JOIN profile u ON p.username = u.username
     LEFT JOIN likes l ON p.postid = l.postid
-    WHERE (f.follower = ? OR p.username = ?) AND p.groupid IS NULL
+    LEFT JOIN follow f ON p.username = f.following AND f.follower = ?
+    WHERE 
+        p.username NOT IN ($subqueryBlockedUsers)
+        AND (p.username = ? OR f.follower = ?) 
+        AND p.groupid IS NULL
     GROUP BY p.postid
-    ORDER BY p.created_at DESC;
+    ORDER BY p.created_at DESC
     ";
+
     $stmt = mysqli_prepare($connection, $query);
-    mysqli_stmt_bind_param($stmt, "ss", $username, $username);
+    mysqli_stmt_bind_param($stmt, "sssss", $username, $username, $username, $username, $username);
+    mysqli_stmt_execute($stmt);
+    $result = mysqli_stmt_get_result($stmt);
 } else {
     // If the user does not follow anyone, retrieve only their own posts where groupid is NULL
     $query = "SELECT p.*, u.profile_image FROM posts p
