@@ -313,7 +313,7 @@ if (!$groupDetails) {
                                 </div>
                                 <br>
                             </div>
-                            <div class="padSec">
+                            <div class="padSec" id="padSec">
                                 <?php foreach ($pads as $pad): ?>
                                     <div class="padSecEach">
                                         <div class="fileIconEach"><i class="fa fa-file"></i></div>
@@ -769,6 +769,8 @@ if (!$groupDetails) {
                 // Toggle the visibility of the edit profile form
                 var form = document.getElementById('createPad');
                 form.style.display = form.style.display === 'none' ? 'block' : 'none';
+                var padSec = document.getElementById('padSec');
+                padSec.style.marginTop = padSec.style.marginTop === '0px' ? '550px' : '0px';
             }
 
             function createPad() {
