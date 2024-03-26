@@ -36,19 +36,41 @@ if (isset($_SESSION['loggedin']) && $_SESSION['loggedin'] == true) {
 
         while ($row = mysqli_fetch_assoc($result)) {
             if($row['sender'] == $username){
-                $output .= '<div class="message my-message">
-                                <img src="' . $row['profile_image'] . '" alt="My Profile" class="profile-pic">
-                                <p class="message-content">'. $row['content_text'] .'</p>
-                            </div>';
+                if (strpos($row['content_text'], '../Images') === 0) {
+                    // If it's an image, display it as an <img> tag
+                    $imagePath = str_replace('../Images', 'Images', $row['content_text']);
+                    $output .= '<div class="message my-message">
+                                    <div class="myMessage">
+                                        <img src="' . $imagePath . '" alt="Image" class="message-image">
+                                        <p class="messageDate">' . $row['timestamp'] . '</p>
+                                    </div>
+                                </div>';
+                }else{
+                    $output .= '<div class="message my-message">
+                        <img src="' . $row['profile_image'] . '" alt="My Profile" class="profile-pic">
+                        <p class="message-content">'. $row['content_text'] .'</p>
+                    </div>';
+                }
             }
             else{
-                $output .= '<div class="message their-message">
+                if (strpos($row['content_text'], '../Images') === 0) {
+                    // If it's an image, display it as an <img> tag
+                    $imagePath = str_replace('../Images', 'Images', $row['content_text']);
+                    $output .= '<div class="message their-message">
+                                    <div class="theirMessage">
+                                        <img src="' . $imagePath . '" alt="Image" class="message-image">
+                                        <p class="messageDate">' . $row['timestamp'] . '</p>
+                                    </div>
+                                </div>';
+                }else{
+                    $output .= '<div class="message their-message">
                                 <div class="theirMessage">
                                     <img src="' . $row['profile_image'] . '" alt="User Profile" class="profile-pic">
                                     <p class="message-content">'. $row['content_text'] .'</p>
                                     <p class="messageDate">'. $row['timestamp'] .'</p>
                                 </div>
                             </div>';
+                }
             }
         }
         echo $output;
