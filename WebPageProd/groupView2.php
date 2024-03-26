@@ -192,10 +192,12 @@ if (!$groupDetails) {
                 </div>
                 <aside class="members" id="members">
                     <h2 class="h2">Members</h2>
-                    <div id="memberList"> <!-- This is where the original member list is displayed -->
+                    <div id="memberList">
                         <?php foreach ($groupMembers as $member): ?>
                             <div class="member">
-                                <?php echo $member['username']; ?> - <?php echo $member['gpermissions']; ?> - <?php echo $member['fpermissions']; ?>
+                                <a style="color: black; text-decoration: none;" href="profile.php?user_id=<?php echo urlencode($member['username']); ?>">
+                                    <?php echo htmlspecialchars($member['username']); ?>
+                                </a> - <?php echo htmlspecialchars($member['gpermissions']); ?> - <?php echo htmlspecialchars($member['fpermissions']); ?>
                             </div>
                         <?php endforeach; ?>
                     </div>
@@ -472,17 +474,6 @@ if (!$groupDetails) {
                             </form>
                         </div>
                 
-                        <!-- Message Deletion 
-                        <div class="message-deletion">
-                            <h3>Message Deletion</h3>
-                            Messages will be dynamically loaded here
-                            Example message with a delete button
-                            <div class="message">
-                                <p>Example message text</p>
-                                <button class="delete-message" class="modButton">Delete</button>
-                            </div>
-                        </div>-->
-                
                         <!-- User Addition Panel -->
                         <div class="user-addition-panel">
                             <h3>Add User to Group</h3>
@@ -493,6 +484,7 @@ if (!$groupDetails) {
                                 <input type="submit" id="searchUserButton" value="Add To Group">
                                 <div id="userSearchResults" class="user-search-results"></div>
                             </form>
+                            <div id="addError" class="error-message"></div>
                         </div>
 
                         
@@ -621,6 +613,48 @@ if (!$groupDetails) {
                 </div>
             </div>
         </div>
+
+        
+        <script>
+    $(document).ready(function() {
+        $('#searchUserButton').click(function(event) {
+            event.preventDefault(); // Prevent the default form submission
+
+            var groupid = <?php echo $groupid; ?>;
+            var userSearch = $('#userSearch').val().trim();
+
+            if(userSearch === '') {
+                $('#addError').text('Please enter a username.'); // Display error if the search is empty
+                return;
+            }
+
+            $.ajax({
+                url: 'php/add_user_to_group.php',
+                type: 'POST',
+                data: {
+                    groupid: groupid,
+                    userSearch: userSearch
+                },
+                dataType: 'json', // Expect JSON response
+                success: function(response) {
+                    // Clear any previous error message
+                    $('#addError').text('');
+                    
+                    if(response.success) {
+                        $('#addError').text(response.message);
+                        // Optional: Code to update the user list without refreshing the page
+                        window.location.reload();
+                    } else {
+                        $('#addError').text(response.error);
+                    }
+                },
+                error: function(xhr, status, error) {
+                    $('#addError').text('An error occurred: ' + error);
+                }
+            });
+        });
+    });
+</script>
 
         <script>
             // Store the original member list
