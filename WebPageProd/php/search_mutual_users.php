@@ -12,14 +12,15 @@ if (isset($_SESSION['username'])) {
         //$query = "SELECT username FROM profile WHERE username LIKE CONCAT('%', ?, '%')";
 
         $query = "SELECT DISTINCT following 
-        FROM follow 
-        WHERE follower = ? 
-          AND following IN (SELECT follower FROM follow WHERE following = ?)
-          AND following LIKE CONCAT('%', ?, '%')";
+            FROM follow WHERE follower = ?  AND following IN (
+                SELECT follower FROM follow WHERE following = ? AND follower IN (
+                    SELECT following FROM follow WHERE follower = ?))
+            AND following LIKE CONCAT('%', ?, '%')";
+
         $stmt = mysqli_prepare($connection, $query);
 
         if ($stmt) {
-            mysqli_stmt_bind_param($stmt, "sss", $username, $username, $searchTerm);
+            mysqli_stmt_bind_param($stmt, "ssss", $username, $username, $username, $searchTerm);
             mysqli_stmt_execute($stmt);
             $result = mysqli_stmt_get_result($stmt);
 

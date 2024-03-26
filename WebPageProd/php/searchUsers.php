@@ -18,7 +18,7 @@ if (isset($_POST['searchQuery']) && isset($_SESSION['username'])) {
     // Query for public groups
     $groupQuery = "SELECT g.groupid AS name, g.groupname AS detail, 'Group' AS type
                    FROM groups g
-                   WHERE g.groupname LIKE ? AND g.is_privpub= 'public'";
+                   WHERE g.groupname LIKE ? AND g.type= 'public'";
 
     // Combine queries with UNION
     $combinedQuery = "($userQuery) UNION ($groupQuery)";

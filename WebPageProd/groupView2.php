@@ -115,6 +115,21 @@ if ($groupid) {
 
     mysqli_stmt_close($activityLogStmt);
 
+    // Query to get activity logs for the specific group
+    $padsQuery = "SELECT DISTINCT SUBSTRING_INDEX(SUBSTRING_INDEX(`key`, '-', -1),':',1) AS `key` FROM `store` WHERE SUBSTRING_INDEX(`key`, '-', 1) = ?";
+    $padsStmt = mysqli_prepare($connection, $padsQuery);
+    $padid = "pad:".$groupid;
+    mysqli_stmt_bind_param($padsStmt, "s", $padid);
+    mysqli_stmt_execute($padsStmt);
+    $padsResult = mysqli_stmt_get_result($padsStmt);
+
+    $pads = array();
+    while ($logRow = mysqli_fetch_assoc($padsResult)) {
+        $pads[] = $logRow["key"];
+    }
+
+    mysqli_stmt_close($padsStmt);
+
     mysqli_free_result($memberResult);
     mysqli_close($connection);
 }
@@ -274,6 +289,28 @@ if (!$groupDetails) {
                                 <div class="dateChangedEach">February 14th</div>
                                 <div class="removeFileEach"><i class="fa fa-trash-o"></i></div>
                             </div> -->
+                        </div>
+
+                        <div>
+                            <h2>Collaborative Pads</h2>
+                            <button class="otherButton" onclick="showPad()" style="color:white; font-size:x-large; height: 40px; width: 40px; margin-top: 15px; margin-left: 10px;">+</button>
+                            <div id="createPad" style="display: none;">
+                                <form id="padForm" enctype="multipart/form-data" onsubmit="return createPad();">
+                                    <label for="padInput">Pad Name:</label>
+                                    <input type="text" id="padNameInput" name="id" required> 
+                                    <input type="hidden" name="gid" value="<?php echo $groupid; ?>"> 
+                                    <input type="submit" value="Create Pad">
+                                </form>             
+                                <a id="padError" style="display: none; color: red">Error Pad Already Exists</a>             
+                            </div>
+                            <div class="padSec">
+                                <?php foreach ($pads as $pad): ?>
+                                    <div class="padSecEach">
+                                        <div class="fileIconEach"><i class="fa fa-file"></i></div>
+                                        <a href="./php/fileView.php/?gid=<?php echo $groupid . "&id=" . $pad; ?>" target="_blank"><?php echo $pad; ?></a>
+                                    </div>
+                                <?php endforeach; ?>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -711,6 +748,37 @@ if (!$groupDetails) {
                     };
                     xhr.send('fileId=' + fileId);
                 }
+            }
+
+            function showPad(){
+                // Toggle the visibility of the edit profile form
+                var form = document.getElementById('createPad');
+                form.style.display = form.style.display === 'none' ? 'block' : 'none';
+            }
+
+            function createPad() {
+                var form = document.getElementById('padForm');
+                var id = form.elements['id'].value;
+                var pads = <?php echo json_encode($pads); ?>;
+                var groupid = <?php echo $groupid; ?>;
+
+                for (var i = 0; i < pads.length; i++) {
+                    if (pads[i] === id) {
+                        var error = document.getElementById('padError');
+                        error.style.display = 'block';
+                        return false;
+                    }
+                }
+
+                var params = new URLSearchParams();
+                params.append('gid', groupid);
+                params.append('id', id);
+
+                window.open('php/fileView.php?' + params.toString(), '_blank');
+
+                location.reload();
+                
+                return false;
             }
 
             function deleteLog(logId) {
