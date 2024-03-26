@@ -18,6 +18,8 @@
         mysqli_stmt_execute($stmt);
         $result = mysqli_stmt_get_result($stmt);
         $notifications = mysqli_fetch_all($result, MYSQLI_ASSOC);
+        $hasNotifications = !empty($notifications);
+
 
         mysqli_free_result($result);
         mysqli_close($connection);
@@ -33,6 +35,19 @@
         <link rel="icon" href="Images/logo.png">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <style>
+        /* CSS for the notification badge */
+        .notification-badge {
+            position: relative;
+            top: -15px;
+            left: -8px;
+            background-color: purple;
+            color: white;
+            border-radius: 50%;
+            padding: 4px;
+            font-size: 2px;
+        }
+    </style>
     </head>
     <body>
         <section class="navigation">
@@ -44,7 +59,12 @@
                     </div>
                     <div class="navi">
                             <a href="feed.php">Feed</a>
-                            <a href="notifications.php">Notifications</a>
+                            <a href="notifications.php">
+                                Notifications
+                                <?php if ($hasNotifications): ?>
+                                    <span class="notification-badge"></span> <!-- Add notification badge -->
+                                <?php endif; ?>
+                            </a>
                             <a href="#" id="showSearch">Search</a> 
                             <a href="groupFiles.php">Groups</a>
                             <a href="messages2.php">Messages</a>
@@ -62,7 +82,8 @@
                 </div>
             </nav>
         </section>
-        <section>        
+        <section>
+            <?php if ($hasNotifications): ?>
             <form method="POST" action="php/clearNotifications.php">
                 <button type="submit" class="clearAllButton" name="clearAll">Clear All</button>
             </form>
@@ -70,23 +91,51 @@
                 <div class="notifications">
                     <p class="notificationTitle">Notifications</p>
                 </div>
-                <?php foreach ($notifications as $notification): ?>
 
-                    <div class="notificationItem">
-                        <div class="notificationContentContainer">
-                            <div class="notification">
-                                <image class="notificationAvatar" src="<?php echo (!empty($notification['profile_image']) ? htmlspecialchars($notification['profile_image']) : 'Images/defaultAvatar.png'); ?>"></image>
-                                <p class="notificationUsername"><?php echo htmlspecialchars($notification['sender_username']); ?></p>
-                                <p class="notificationText"><?php echo htmlspecialchars($notification['activity_type']); ?></p>
-                                <p class="notificationContent"><?php echo htmlspecialchars($notification['content']); ?></p>
-                                <form method="POST" action="php/deleteNotifications.php">
-                                    <input type="hidden" name="notificationId" value="<?php echo $notification['id']; ?>">
-                                    <button class="clearNotification" type="submit" name="deleteNotification"><image src="Images/clearBin.png" class="notificationImage"></image></button>
-                                </form>                    
+                <?php else: ?>
+                <div class="noNotificationsMessage">
+                    <h1 style="color:white; text-align: center;">No notifications</h1>
+                </div>
+                <?php endif; ?>
+                <?php if ($hasNotifications): ?>
+                    <?php foreach ($notifications as $notification): ?>
+                        <div class="notificationItem">
+                            <div class="notificationContentContainer">
+                                <div class="notification">
+                                    <image class="notificationAvatar" src="<?php echo (!empty($notification['profile_image']) ? htmlspecialchars($notification['profile_image']) : 'Images/defaultAvatar.png'); ?>"></image>
+                                    <p class="notificationUsername"><?php echo htmlspecialchars($notification['sender_username']); ?></p>
+                                    <p class="notificationText"><?php echo htmlspecialchars($notification['activity_type']); ?></p>
+                                    <?php
+                                    // Determine the link based on activity type
+                                    $link = '';
+                                    switch ($notification['activity_type']) {
+                                        case 'message':
+                                            $link = 'messages2.php';
+                                            break;
+                                        case 'like':
+                                            $link = 'feed.php';
+                                            break;
+                                        case 'comment':
+                                            $link = 'feed.php';
+                                            break;
+                                        case 'follow':
+                                            $link = 'profile.php?user_id=' . $notification['sender_username'];
+                                            break;
+                                        default:
+                                            $link = '#'; // Default link if activity type is unknown
+                                            break;
+                                    }
+                                    ?>
+                                    <a href="<?php echo $link; ?>" class="notificationContent"><?php echo htmlspecialchars($notification['content']); ?></a>
+                                    <form method="POST" action="php/deleteNotifications.php">
+                                        <input type="hidden" name="notificationId" value="<?php echo $notification['id']; ?>">
+                                        <button class="clearNotification" type="submit" name="deleteNotification"><image src="Images/clearBin.png" class="notificationImage"></image></button>
+                                    </form>                    
+                                </div>
                             </div>
                         </div>
-                    </div>
-                <?php endforeach; ?>
+                    <?php endforeach; ?>
+                <?php endif; ?>
             </div>
         </section>
 
