@@ -54,6 +54,9 @@ foreach ($feedPosts as $key => $post) {
     $result_like_check = mysqli_stmt_get_result($stmt_like_check);
     $like_data = mysqli_fetch_assoc($result_like_check);
     $feedPosts[$key]['liked_by_user'] = $like_data['like_count'] > 0;
+    if (!isset($post['like_count'])) {
+        $feedPosts[$key]['like_count'] = 0;
+    }
     mysqli_stmt_close($stmt_like_check);
 }
 
