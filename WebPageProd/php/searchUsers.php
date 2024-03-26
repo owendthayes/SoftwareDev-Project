@@ -1,52 +1,51 @@
 <?php
+include 'server_connection.php';
 session_start();
-include 'server_connection.php'; // Adjust the path as necessary
-
-// Check if the user is logged in and a file has been uploaded
-if (!isset($_SESSION['username']) || !isset($_FILES['fileToUpload'])) {
-    die("You must be logged in and a file must be selected.");
-}
-
 $connection = connect_to_database();
 
-// Get group ID from the form input
-$groupid = $_POST['groupid'] ?? null;
-
-// Check if file was uploaded without errors
-if ($_FILES['fileToUpload']['error'] === UPLOAD_ERR_OK) {
-    // Process your file here
-    $tmpName = $_FILES['fileToUpload']['tmp_name'];
-    $fileName = basename($_FILES['fileToUpload']['name']);
-    $fileSize = $_FILES['fileToUpload']['size'];
-    $fileType = $_FILES['fileToUpload']['type'];
-
-    // Specify where you want to store files
-    $uploadDir = "../uploads/"; // Ensure this directory exists and is writable
-    $filePath = $uploadDir . $fileName;
+if (isset($_POST['searchQuery']) && isset($_SESSION['username'])) {
+    $searchQuery = mysqli_real_escape_string($connection, $_POST['searchQuery']);
+    $currentUser = $_SESSION['username'];
     
-    // Check if file already exists
-    if (file_exists($filePath)) {
-        echo "Sorry, file already exists.";
-    } elseif (move_uploaded_file($tmpName, $filePath)) {
-        // File is uploaded successfully
-        // Prepare an insert statement
-        $query = "INSERT INTO group_files (groupid, file_name, file_path, uploaded_by, upload_time) VALUES (?, ?, ?, ?, NOW())";
-        $stmt = mysqli_prepare($connection, $query);
-        mysqli_stmt_bind_param($stmt, "isss", $groupid, $fileName, $filePath, $_SESSION['username']);
-        
-        if (mysqli_stmt_execute($stmt)) {
-            echo "The file ". htmlspecialchars($fileName). " has been uploaded.";
-            header("Location: " . $_SERVER['HTTP_REFERER']);
-        } else {
-            echo "Error uploading file: " . mysqli_error($connection);
-        }
-        mysqli_stmt_close($stmt);
-    } else {
-        echo "Sorry, there was an error uploading your file.";
-    }
-} else {
-    echo "Error: " . $_FILES['fileToUpload']['error'];
-}
+    // Query for users including blocked ones but excluding those who have blocked the logged-in user
+    $userQuery = "SELECT p.username AS name, p.realName AS detail, 'User' AS type
+                  FROM profile p
+                  WHERE (p.username LIKE ? OR p.realName LIKE ?)
+                  AND p.username NOT IN (
+                      SELECT blocker FROM block WHERE blocked = ?
+                  )";
 
-mysqli_close($connection);
+    // Query for public groups
+    $groupQuery = "SELECT g.groupid AS name, g.groupname AS detail, 'Group' AS type
+                   FROM groups g
+                   WHERE g.groupname LIKE ? AND g.type= 'public'";
+
+    // Combine queries with UNION
+    $combinedQuery = "($userQuery) UNION ($groupQuery)";
+
+    // Prepare the combined statement
+    $stmt = mysqli_prepare($connection, $combinedQuery);
+    $searchTerm = '%' . $searchQuery . '%';
+    // Bind parameters for both queries
+    mysqli_stmt_bind_param($stmt, "ssss", $searchTerm, $searchTerm, $currentUser, $searchTerm);
+    mysqli_stmt_execute($stmt);
+    $result = mysqli_stmt_get_result($stmt);
+
+    // Fetch and output results
+    while ($row = mysqli_fetch_assoc($result)) {
+        $displayName = htmlspecialchars($row['detail']); // Use 'detail' for display name, which is 'groupname' for groups
+        $type = htmlspecialchars($row['type']);
+    
+        if ($type === 'User') {
+            // User type output format
+            echo "<div><a href='profile.php?user_id=" . htmlspecialchars($row['name']) . "'>" . htmlspecialchars($row['name']) . " - " . $displayName . " (" . $type . ")</a></div>";
+        } elseif ($type === 'Group') {
+            // Group type output format, passing groupid in the URL
+            echo "<div><a href='groupView2.php?groupid=" . htmlspecialchars($row['name']) . "'>" . $displayName . " (" . $type . ")</a></div>";
+        }
+    } 
+
+    mysqli_stmt_close($stmt);
+    mysqli_close($connection);
+}
 ?>
