@@ -52,6 +52,15 @@ if (isset($_SESSION['username'])) {
         mysqli_stmt_fetch($followingStmt);
         mysqli_stmt_close($followingStmt);
 
+        // Query to check if the logged in user has blocked this profile
+        $blockCheckQuery = "SELECT COUNT(*) FROM block WHERE blocker = ? AND blocked = ?";
+        $blockCheckStmt = mysqli_prepare($connection, $blockCheckQuery);
+        mysqli_stmt_bind_param($blockCheckStmt, "ss", $_SESSION['username'], $username);
+        mysqli_stmt_execute($blockCheckStmt);
+        mysqli_stmt_bind_result($blockCheckStmt, $hasBlocked);
+        mysqli_stmt_fetch($blockCheckStmt);
+        mysqli_stmt_close($blockCheckStmt);
+
         // Query to see if the user is already followed
         $followingCountQuery = "SELECT COUNT(*) FROM follow WHERE follower = ? and following = ?";
         $followingBoolStmt = mysqli_prepare($connection, $followingCountQuery);
@@ -85,7 +94,7 @@ if (isset($_SESSION['username'])) {
 
 <html>
     <head>
-        <link rel="stylesheet" href="style.css?version=51">
+        <link rel="stylesheet" href="style.css?version=1">
         <title> CreativSync - Profile</title>
         <link rel="icon" href="Images/logo.png">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
@@ -145,12 +154,21 @@ if (isset($_SESSION['username'])) {
             </div>
                 <image class="profileAvatar" src="<?php echo $profileImage; ?>"></image>
                 <div class="profileButtonsContainer">
-                    <button class="profileMessageButton">Send Message</button>
-                    <button class="profileFollowButton">Follow</button>
-                    <form action="php/blockUser.php" method="post">
-                        <input type="hidden" name="blocked" value="<?php echo $username; ?>">
-                        <button type="submit" class="profileBlockButton">Block</button>
-                    </form>
+                    <?php if ($username !== $_SESSION['username']): // If not the user's own profile ?>
+                        <?php if (!$hasBlocked): ?>
+                            <button class="profileMessageButton"><a href="messages2.php?recipient=<?php echo urlencode($username); ?>" class="proMessButton">Send Message</a></button>
+                            <button class="profileFollowButton">Follow</button>
+                            <form action="php/blockUser.php" method="post">
+                                <input type="hidden" name="blocked" value="<?php echo $username; ?>">
+                                <button type="submit" class="profileBlockButton">Block</button>
+                            </form>
+                        <?php else: ?>
+                            <form action="php/unblockUser.php" method="post"> <!-- You need to create unblockUser.php -->
+                                <input type="hidden" name="unblocked" value="<?php echo $username; ?>">
+                                <button type="submit" class="profileUnblockButton">Unblock</button>
+                            </form>
+                        <?php endif; ?>
+                    <?php endif; ?>
                 </div>
             </div>
 
