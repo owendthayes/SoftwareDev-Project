@@ -7,13 +7,10 @@ if (isset($_POST['searchQuery']) && isset($_SESSION['username'])) {
     $searchQuery = mysqli_real_escape_string($connection, $_POST['searchQuery']);
     $currentUser = $_SESSION['username'];
     
-    // Query for users excluding blocked ones
+    // Query for users including blocked ones but excluding those who have blocked the logged-in user
     $userQuery = "SELECT p.username AS name, p.realName AS detail, 'User' AS type
                   FROM profile p
                   WHERE (p.username LIKE ? OR p.realName LIKE ?)
-                  AND p.username NOT IN (
-                      SELECT blocked FROM block WHERE blocker = ?
-                  )
                   AND p.username NOT IN (
                       SELECT blocker FROM block WHERE blocked = ?
                   )";
@@ -21,7 +18,7 @@ if (isset($_POST['searchQuery']) && isset($_SESSION['username'])) {
     // Query for public groups
     $groupQuery = "SELECT g.groupid AS name, g.groupname AS detail, 'Group' AS type
                    FROM groups g
-                   WHERE g.groupname LIKE ? AND g.type= 'public'";
+                   WHERE g.groupname LIKE ? AND g.is_privpub= 'public'";
 
     // Combine queries with UNION
     $combinedQuery = "($userQuery) UNION ($groupQuery)";
@@ -30,7 +27,7 @@ if (isset($_POST['searchQuery']) && isset($_SESSION['username'])) {
     $stmt = mysqli_prepare($connection, $combinedQuery);
     $searchTerm = '%' . $searchQuery . '%';
     // Bind parameters for both queries
-    mysqli_stmt_bind_param($stmt, "sssss", $searchTerm, $searchTerm, $currentUser, $currentUser, $searchTerm);
+    mysqli_stmt_bind_param($stmt, "ssss", $searchTerm, $searchTerm, $currentUser, $searchTerm);
     mysqli_stmt_execute($stmt);
     $result = mysqli_stmt_get_result($stmt);
 
