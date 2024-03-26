@@ -1047,7 +1047,7 @@ footer::after {
     margin-right:10px;
 }
 
-.profileBlockButton
+.profileBlockButton, .profileUnblockButton
 {
     margin:2.5px;
     font-family: "Franklin Gothic", "sans-serif";
