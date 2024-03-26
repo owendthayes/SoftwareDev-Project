@@ -342,7 +342,7 @@ if ($groupid) {
     
                 var messageList;
                 $.ajax({
-                    url: './php/get_group_message.php', // Update the URL to your PHP script
+                    url: 'php/get_group_message.php', // Update the URL to your PHP script
                     type: 'POST',
                     data: {
                         'groupid': "<?php echo $groupid?>"
