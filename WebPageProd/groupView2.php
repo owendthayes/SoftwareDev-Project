@@ -7,6 +7,7 @@ $groupid = isset($_GET['groupid']) ? $_GET['groupid'] : null;
 
 $userIsMember = false; // Initialize user member status
 $groupDetails = null;
+$userIsOwner = false;
 $groupMembers = [];
 $userIsAdmin = false; // Initialize user admin status
 $userIsEditor = false; // Initialize user editor status
@@ -38,6 +39,11 @@ if ($groupid) {
         // Check if logged-in user is admin
         if ($row['username'] == $_SESSION['username'] && $row['gpermissions'] == 'admin') {
             $userIsAdmin = true;
+        }
+
+        // Check if logged-in user is admin
+        if ($row['username'] == $_SESSION['username'] && $row['gpermissions'] == 'owner') {
+            $userIsOwner = true;
         }
 
         // Check if logged-in user is editor
@@ -114,22 +120,6 @@ if ($groupid) {
     }
 
     mysqli_stmt_close($activityLogStmt);
-
-    // Query to get pads
-    
-    $padsQuery = "SELECT DISTINCT SUBSTRING_INDEX(SUBSTRING_INDEX(`key`, '-', -1),':',1) AS `key` FROM `store` WHERE SUBSTRING_INDEX(`key`, '-', 1) = ?";
-    $padsStmt = mysqli_prepare($connection, $padsQuery);
-    $padid = "pad:".$groupid;
-    mysqli_stmt_bind_param($padsStmt, "s", $padid);
-    mysqli_stmt_execute($padsStmt);
-    $padsResult = mysqli_stmt_get_result($padsStmt);
-
-    $pads = array();
-    while ($logRow = mysqli_fetch_assoc($padsResult)) {
-        $pads[] =   $logRow["key"];
-    }
-
-    mysqli_stmt_close($padsStmt);
 
     mysqli_free_result($memberResult);
     mysqli_close($connection);
@@ -226,7 +216,7 @@ if (!$groupDetails) {
                         <a href="#" onclick="showFiles()">Files</a>
                         <a href="#" onclick="showPosts()">Posts</a>
                         <a href="#" onclick="showLog()">Activity Log</a> 
-                        <?php if ($userIsAdmin): ?>
+                        <?php if ($userIsAdmin || $userIsOwner): ?>
                             <a href="#" onclick="showMorderation()">Moderation</a>
                         <?php endif; ?>
                         <?php if ($userIsEditor): ?>
@@ -290,28 +280,6 @@ if (!$groupDetails) {
                                 <div class="dateChangedEach">February 14th</div>
                                 <div class="removeFileEach"><i class="fa fa-trash-o"></i></div>
                             </div> -->
-                        </div>
-
-                        <div>
-                            <h2>Collaborative Pads</h2>
-                            <button class="otherButton" onclick="showPad()" style="color:white; font-size:x-large; height: 40px; width: 40px; margin-top: 15px; margin-left: 10px; float: right;">+</button>
-                            <div id="createPad" style="display: none;">
-                                <form id="padForm" enctype="multipart/form-data" onsubmit="return createPad();">
-                                    <label for="padInput">Pad Name:</label>
-                                    <input type="text" id="padNameInput" name="id" required> 
-                                    <input type="hidden" name="gid" value="<?php echo $groupid; ?>"> 
-                                    <input type="submit" value="Create Pad">
-                                </form>
-                                <a id="padError" style="display: none; color: red">Error Pad Already Exists</a>             
-                            </div>
-                            <div class="padSec">
-                                <?php foreach ($pads as $pad): ?>
-                                    <div class="padSecEach">
-                                        <div class="fileIconEach"><i class="fa fa-file"></i></div>
-                                        <a href="./php/fileView.php/?gid=<?php echo $groupid . "&id=" . $pad; ?>" target="_blank"><?php echo $pad; ?></a>
-                                    </div>
-                                <?php endforeach; ?>
-                            </div>
                         </div>
                     </div>
                 </div>
@@ -480,9 +448,12 @@ if (!$groupDetails) {
                                 <label for="user-select">Select User:</label>
                                 <select id="user-select" name="username">
                                     <?php foreach ($groupMembers as $member): ?>
-                                        <option name="role" value="<?php echo $member['username']; ?>"><?php echo $member['username']; ?> - <?php echo $member['gpermissions']; ?></option>
+                                        <?php if ($member['gpermissions'] !== 'owner'): ?>
+                                            <option name="role" value="<?php echo $member['username']; ?>"><?php echo $member['username']; ?> - <?php echo $member['gpermissions']; ?></option>
+                                        <?php endif; ?>
                                     <?php endforeach; ?>
                                 </select>
+
 
                                 <label for="role-select">Assign Role:</label>
                                 <select id="role-select" name="grole">
@@ -536,7 +507,9 @@ if (!$groupDetails) {
                                     <p>Username</p>
                                     <select id="user-select" name="username">
                                         <?php foreach ($groupMembers as $member): ?>
-                                            <option name="frole" value="<?php echo $member['username']; ?>"><?php echo $member['username']; ?> - <?php echo $member['gpermissions'];?> - <?php echo $member['fpermissions']; ?></option>
+                                            <?php if ($member['gpermissions'] !== 'owner'): ?>
+                                                <option name="frole" value="<?php echo $member['username']; ?>"><?php echo $member['username']; ?> - <?php echo $member['gpermissions'];?> - <?php echo $member['fpermissions']; ?></option>
+                                            <?php endif; ?>
                                         <?php endforeach; ?>
                                     </select>
                                     <button type="submit" class="remove-user" class="modButton">Remove from Group</button>
@@ -749,37 +722,6 @@ if (!$groupDetails) {
                     };
                     xhr.send('fileId=' + fileId);
                 }
-            }
-
-            function showPad(){
-                // Toggle the visibility of the edit profile form
-                var form = document.getElementById('createPad');
-                form.style.display = form.style.display === 'none' ? 'block' : 'none';
-            }
-
-            function createPad() {
-                var form = document.getElementById('padForm');
-                var id = form.elements['id'].value;
-                var pads = <?php echo json_encode($pads); ?>;
-                var groupid = <?php echo $groupid; ?>;
-
-                for (var i = 0; i < pads.length; i++) {
-                    if (pads[i] === id) {
-                        var error = document.getElementById('padError');
-                        error.style.display = 'block';
-                        return false;
-                    }
-                }
-
-                var params = new URLSearchParams();
-                params.append('gid', groupid);
-                params.append('id', id);
-
-                window.open('php/fileView.php?' + params.toString(), '_blank');
-
-                location.reload();
-
-                return false;
             }
 
             function deleteLog(logId) {
