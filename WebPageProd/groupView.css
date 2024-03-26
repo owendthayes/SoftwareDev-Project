@@ -294,6 +294,22 @@ html{
 /* .fileName, .lastChangedby, .dateChanged {
     flex: 1;
 } */
+
+.padSec {
+    display: flex;
+    flex-direction: column;
+}
+
+.padSecEach {
+    display: flex;
+    align-items: flex-start;
+    padding: 10px 35px;
+    border-bottom: 1px solid #ddd;
+}
+.padSecEach a {
+    align-self: flex-start;
+    text-decoration: none;
+}
   
   /* File section list */
 .fileSecEach {
