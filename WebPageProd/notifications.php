@@ -35,19 +35,6 @@
         <link rel="icon" href="Images/logo.png">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-        <style>
-        /* CSS for the notification badge */
-        .notification-badge {
-            position: relative;
-            top: -15px;
-            left: -8px;
-            background-color: purple;
-            color: white;
-            border-radius: 50%;
-            padding: 4px;
-            font-size: 2px;
-        }
-    </style>
     </head>
     <body>
         <section class="navigation">
