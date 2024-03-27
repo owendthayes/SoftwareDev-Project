@@ -583,6 +583,7 @@ if (!$groupDetails) {
                     </div>
 
                     <div class="block-users">
+                    <?php if ($userIsOwner): ?>
                         <h3>Delete Group</h3>
                         <div class="user">
                             <form action="php/deleteGroup.php" method="post">
@@ -590,6 +591,7 @@ if (!$groupDetails) {
                                 <button type="submit" class="deleteGroupBut">Delete Group</button>
                             </form>
                         </div>
+                        <?php endif; ?>
                     </div>
                 </div>
 
