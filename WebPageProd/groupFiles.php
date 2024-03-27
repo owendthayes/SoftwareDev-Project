@@ -13,9 +13,9 @@ if (!isset($_SESSION['username'])) {
 $username = mysqli_real_escape_string($connection, $_SESSION['username']);
 
 // Query to select groups where the logged-in user is a participant
-$query = "SELECT g.* FROM groups g
-          INNER JOIN group_participants gp ON g.groupid = gp.groupid
-          WHERE gp.username = '$username'";
+$query = "SELECT `g`.* FROM `groups` `g`
+          INNER JOIN `group_participants` `gp` ON `g`.`groupid` = `gp`.`groupid`
+          WHERE `gp`.`username` = '$username'";
 
 $result = mysqli_query($connection, $query);
 
