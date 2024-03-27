@@ -70,10 +70,10 @@ if (isset($_SESSION['username'])) {
         mysqli_stmt_fetch($followingBoolStmt);
         mysqli_stmt_close($followingBoolStmt);
 
-        $groupQuery = "SELECT g.groupid, g.groupname, g.groupdp 
-               FROM groups g 
-               INNER JOIN group_participants gp ON g.groupid = gp.groupid 
-               WHERE gp.username = ?";
+        $groupQuery = "SELECT g.`groupid`, g.`groupname`, g.`groupdp`
+                    FROM `groups` AS g
+                    INNER JOIN `group_participants` AS gp ON g.`groupid` = gp.`groupid`
+                    WHERE gp.`username` = ?";
         $groupStmt = mysqli_prepare($connection, $groupQuery);
         mysqli_stmt_bind_param($groupStmt, "s", $username);
         mysqli_stmt_execute($groupStmt);

@@ -14,7 +14,7 @@
     $groupid = $_GET['gid'];
     $sessionID = session_id();
 
-    $padURL = "http://localhost:5000/p/" . $groupid . "-" . $fileid; 
+    $padURL = "http://localhost:9001/p/" . $groupid . "-" . $fileid; 
 
     $query = "SELECT * FROM group_participants WHERE username = ? AND groupid = ?";
     $stmt = mysqli_prepare($connection, $query);

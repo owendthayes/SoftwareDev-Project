@@ -770,7 +770,7 @@ if (!$groupDetails) {
                 var form = document.getElementById('createPad');
                 form.style.display = form.style.display === 'none' ? 'block' : 'none';
                 var padSec = document.getElementById('padSec');
-                padSec.style.marginTop = padSec.style.marginTop === '0px' ? '55px' : '0px';
+                padSec.style.marginTop = padSec.style.marginTop === '55px' ? '0px' : '55px';
             }
 
             function createPad() {
