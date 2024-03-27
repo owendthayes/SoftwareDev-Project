@@ -71,7 +71,7 @@ if ($groupid) {
                             <a href="feed.php">Feed</a>
                             <a href="notifications.php">Notifications</a>
                             <a href="" id="showSearch">Search</a> 
-                            <a href="groupsFiles.php">Groups</a>
+                            <a href="groupFiles.php">Groups</a>
                             <a href="messages2.php">Messages</a>
                             <button><a href="profile.php">Profile</a></button>
                     </div>

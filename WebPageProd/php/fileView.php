@@ -38,7 +38,7 @@
         print '</head>'."\n";
         print '<body>'."\n";
         print '<script type="text/javascript">'."\n";
-        print 'document.cookie = "sessionID='.$sessionID.';path=/;";'."\n";
+        print 'document.cookie = "sessionID='.$sessionID.';path=/;SameSite=None";'."\n";
         print '</script>'."\n";
         print '<iframe src="'.$padURL.'" frameborder="0" name="servFrame" width="100%" height="100%"></iframe>'."\n";
         print '</body>'."\n";
