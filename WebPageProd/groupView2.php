@@ -16,7 +16,7 @@ if ($groupid) {
     $connection = connect_to_database();
 
     // Fetch group details
-    $query = "SELECT * FROM `groups` WHERE `groupid` = ?";
+    $query = "SELECT * FROM groups WHERE groupid = ?";
     $stmt = mysqli_prepare($connection, $query);
     mysqli_stmt_bind_param($stmt, "i", $groupid);
     mysqli_stmt_execute($stmt);
@@ -94,7 +94,7 @@ if ($groupid) {
 
 
     // Query to get all files for the specific group
-    $fileQuery = "SELECT file_id, file_name, uploaded_by, modified FROM group_files WHERE groupid = ? ORDER BY modified DESC";
+    $fileQuery = "SELECT file_id, file_name, uploaded_by, upload_time FROM group_files WHERE groupid = ? ORDER BY upload_time DESC";
     $fileStmt = mysqli_prepare($connection, $fileQuery);
     mysqli_stmt_bind_param($fileStmt, "i", $groupid);
     mysqli_stmt_execute($fileStmt);
@@ -149,7 +149,7 @@ if (!$groupDetails) {
 
 <html>
     <head>
-        <link rel="stylesheet" href="groupView.css?version=51">
+        <link rel="stylesheet" href="groupView.css?version=1">
         <title> CreativSync - Profile</title>
         <link rel="icon" href="Images/logo.png">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
@@ -240,8 +240,10 @@ if (!$groupDetails) {
                         <?php endif; ?>
                         <?php if ($userIsEditor): ?>
                             <a href="#" onclick="showfileEdit()">New File</a>
-                        <?php endif; ?>                      
-                        <button><a href="groupMessages.php?groupid=<?php echo $groupid; ?>">Group Chat</a></button>
+                        <?php endif; ?>               
+                        <?php if ($userIsMember): ?>       
+                            <button><a href="groupMessages.php?groupid=<?php echo $groupid; ?>">Group Chat</a></button>
+                        <?php endif ?>
                     </div>
                 </nav>
                 
@@ -266,7 +268,9 @@ if (!$groupDetails) {
                             <div class="fileName"><h3>Name</h3></div>
                             <div class="lastChangedby">Last Changed By</div>
                             <div class="dateChanged">Modified</div>
-                            <div class="removeFile">Remove File</div>
+                            <?php if ($userIsMember): ?>
+                                <div class="removeFile">Remove File</div>
+                            <?php endif; ?>
                             <div class="removeFile">Download File</div>
                         </nav>
 
@@ -277,8 +281,10 @@ if (!$groupDetails) {
                             <div class="fileIconEach"><i class="fa fa-file"></i></div>
                             <div class="fileNameEach"><?php echo htmlspecialchars($file['file_name']); ?></div>
                             <div class="lastChangedbyEach"><?php echo htmlspecialchars($file['uploaded_by']); ?></div>
-                            <div class="dateChangedEach"><?php echo htmlspecialchars(date("F jS, Y", strtotime($file['modified']))); ?></div>
-                            <div class="removeFileEach" onclick="removeFile(<?php echo $file['file_id']; ?>)"><i class="fa fa-trash-o"></i></div>
+                            <div class="dateChangedEach"><?php echo htmlspecialchars(date("F jS, Y", strtotime($file['upload_time']))); ?></div>
+                            <?php if ($userIsMember): ?>
+                                <div class="removeFileEach" onclick="removeFile(<?php echo $file['file_id']; ?>)"><i class="fa fa-trash-o"></i></div>
+                            <?php endif; ?>
                             <!-- Download Button -->
                             <div class="downloadFileEach">
                                 <a href="uploads/<?php echo $file['file_name']; ?>" download="<?php echo $file['file_name']; ?>">
@@ -299,21 +305,24 @@ if (!$groupDetails) {
                         </div>
 
                         <div>
-                            <div>
+                        <?php if ($userIsMember): ?>
+                            <div class="padsHead">
                                 <h2>Collaborative Pads</h2>
-                                <button class="otherButton" onclick="showPad()" style="color:white; font-size:x-large; height: 40px; width: 40px; margin-top: 15px; margin-left: 950px; margin-bottom: 15px;">+</button>
-                                <div id="createPad" style="display: none;">
-                                    <form id="padForm" enctype="multipart/form-data" onsubmit="return createPad();">
-                                        <label for="padInput">Pad Name:</label>
-                                        <input type="text" id="padNameInput" name="id" required> 
-                                        <input type="hidden" name="gid" value="<?php echo $groupid; ?>"> 
-                                        <input type="submit" value="Create Pad">
-                                    </form>
-                                    <a id="padError" style="display: none; color: red">Error Pad Already Exists</a>             
+                                <div class="padsHeadSub">
+                                    <button class="otherButtonPad" onclick="showPad()">+</button>
+                                    <div id="createPad" style="display: none;">
+                                        <form id="padForm" enctype="multipart/form-data" onsubmit="return createPad();">
+                                            <label for="padInput">Pad Name:</label>
+                                            <input type="text" id="padNameInput" name="id" required> 
+                                            <input type="hidden" name="gid" value="<?php echo $groupid; ?>"> 
+                                            <input type="submit" value="Create Pad">
+                                        </form>
+                                        <a id="padError" style="display: none; color: red">Error Pad Already Exists</a>             
+                                    </div>
                                 </div>
                                 <br>
                             </div>
-                            <div class="padSec" id="padSec">
+                            <div class="padSec">
                                 <?php foreach ($pads as $pad): ?>
                                     <div class="padSecEach">
                                         <div class="fileIconEach"><i class="fa fa-file"></i></div>
@@ -321,6 +330,7 @@ if (!$groupDetails) {
                                     </div>
                                 <?php endforeach; ?>
                             </div>
+                        <?php endif; ?>
                         </div>
                     </div>
                 </div>
@@ -328,11 +338,13 @@ if (!$groupDetails) {
                 <div class="groupViewMain2" style="display: none;">
                 <!-- maybe feed posts -->
                     <div class="feedHead">
-                        <div class="groupSettings" style="color:white; display:flex; position: relative; left: 130px;">
-                            <h1>Post Something!</h4>
-                            <button class = "otherButton" onclick="createImagePostButton()" style="color:white; font-size:x-large; height: 40px; width: 150px; margin-top: 20px; margin-left: 10px;">Post Image</button>
-                            <button class = "otherButton" onclick="createTextPostButton()" style="color:white; font-size:x-large; height: 40px; width: 150px; margin-top: 20px; margin-left: 10px;">Post Text</button>
-                        </div>
+                        <?php if ($userIsMember): ?>
+                            <div class="groupSettings" style="color:white; display:flex; position: relative; left: 130px;">
+                                <h1>Post Something!</h4>
+                                <button class = "otherButton" onclick="createImagePostButton()" style="color:white; font-size:x-large; height: 40px; width: 150px; margin-top: 20px; margin-left: 10px;">Post Image</button>
+                                <button class = "otherButton" onclick="createTextPostButton()" style="color:white; font-size:x-large; height: 40px; width: 150px; margin-top: 20px; margin-left: 10px;">Post Text</button>
+                            </div>
+                        <?php endif ?>
                     </div>
                     
                     <!-- Hidden form for profile editing -->
@@ -694,7 +706,6 @@ if (!$groupDetails) {
                     
                     if(response.success) {
                         $('#addError').text(response.message);
-                        // Optional: Code to update the user list without refreshing the page
                         window.location.reload();
                     } else {
                         $('#addError').text(response.error);
@@ -769,8 +780,6 @@ if (!$groupDetails) {
                 // Toggle the visibility of the edit profile form
                 var form = document.getElementById('createPad');
                 form.style.display = form.style.display === 'none' ? 'block' : 'none';
-                var padSec = document.getElementById('padSec');
-                padSec.style.marginTop = padSec.style.marginTop === '55px' ? '0px' : '55px';
             }
 
             function createPad() {
