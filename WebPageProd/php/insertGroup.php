@@ -41,7 +41,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $groupImagePath = "Images/" . $groupImageName; // Assuming the Images/ directory is in the root
 
         // Insert the group into the database
-        $insertGroupQuery = "INSERT INTO groups (groupname, groupdp, groupdesc, type, host) VALUES (?, ?, ?, ?, ?)";
+        $insertGroupQuery = "INSERT INTO `groups` (groupname, groupdp, groupdesc, type, host) VALUES (?, ?, ?, ?, ?)";
         if ($stmt = mysqli_prepare($connection, $insertGroupQuery)) {
             mysqli_stmt_bind_param($stmt, "sssss", $groupName, $groupImagePath, $groupDesc, $isPrivPub, $username);
             mysqli_stmt_execute($stmt);
