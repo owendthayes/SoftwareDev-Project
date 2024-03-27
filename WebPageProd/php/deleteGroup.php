@@ -29,7 +29,7 @@ if (isset($_SESSION['username']) && isset($_POST['groupid'])) {
         mysqli_stmt_execute($stmt);
 
         // Delete the group from groups
-        $deleteGroupQuery = "DELETE FROM groups WHERE groupid = ?";
+        $deleteGroupQuery = "DELETE FROM `groups` WHERE groupid = ?";
         $stmt = mysqli_prepare($connection, $deleteGroupQuery);
         mysqli_stmt_bind_param($stmt, "i", $groupid);
         mysqli_stmt_execute($stmt);
