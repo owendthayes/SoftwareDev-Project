@@ -6,7 +6,7 @@ include 'server_connection.php'; // Make sure you have the correct path to your 
 function isSoleAdmin($groupid, $username) {
     $connection = connect_to_database();
     // Check the number of admins other than the user being removed
-    $stmt = mysqli_prepare($connection, "SELECT COUNT(*) as admin_count FROM group_participants WHERE groupid = ? AND gpermissions = 'admin' AND username != ?");
+    $stmt = mysqli_prepare($connection, "SELECT COUNT(*) as admin_count FROM group_participants WHERE groupid = ? AND gpermissions = 'owner' AND username != ?");
     mysqli_stmt_bind_param($stmt, 'is', $groupid, $username);
     mysqli_stmt_execute($stmt);
     $result = mysqli_stmt_get_result($stmt);
@@ -27,7 +27,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     // Check if the current user is the sole admin
     if (isSoleAdmin($groupid, $username)) {
-        echo "Cannot delete sole admin. You are the sole admin of the group.";
+        echo "Cannot delete sole owner. You are the sole admin of the group.";
         mysqli_close($connection);
         exit;
     }
