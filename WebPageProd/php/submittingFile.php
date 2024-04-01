@@ -30,9 +30,9 @@ if ($_FILES['fileToUpload']['error'] === UPLOAD_ERR_OK) {
     } elseif (move_uploaded_file($tmpName, $filePath)) {
         // File is uploaded successfully
         // Prepare an insert statement
-        $query = "INSERT INTO group_files (groupid, file_name, file_path, uploaded_by, last_changed_by, modified) VALUES (?, ?, ?, ?, ?, NOW())";
+        $query = "INSERT INTO group_files (groupid, file_name, file_path, uploaded_by, upload_time) VALUES (?, ?, ? ,?, NOW())";
         $stmt = mysqli_prepare($connection, $query);
-        mysqli_stmt_bind_param($stmt, "issss", $groupid, $fileName, $filePath, $_SESSION['username'], $_SESSION['username']);
+        mysqli_stmt_bind_param($stmt, "isss", $groupid, $fileName, $filePath, $_SESSION['username']);
         
         if (mysqli_stmt_execute($stmt)) {
             echo "The file ". htmlspecialchars($fileName). " has been uploaded.";
