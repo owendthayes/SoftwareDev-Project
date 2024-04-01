@@ -1,7 +1,7 @@
 <?php
     function connect_to_database()
     {
-        $connection = mysqli_connect('sabaik6fx8he7pua.chr7pe7iynqr.eu-west-1.rds.amazonaws.com', 'tdwv5mzzm6w7r47e', 'itva609ozgv6p532', 'sex1laaapx3pi3es');
+        $connection = mysqli_connect('sabaik6fx8he7pua.chr7pe7iynqr.eu-west-1.rds.amazonaws.com', 'uauqa4lh7ekaidim', 'h097tylestzbdl4g', 'gbnmqplwbiep0tuu');
 
     if (mysqli_connect_errno()) {
         echo "<h1>Connection Error</h1>";
