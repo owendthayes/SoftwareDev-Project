@@ -1555,3 +1555,13 @@ footer::after {
 }
 .groupdescription h2{margin: 0;}
 
+@media only screen and (max-width: 360px) {
+    .loginDiv {
+        width: 60%;
+    }
+    .signUpDiv{
+        width: 70%;
+        height: 80%;
+    }
+  }
+
