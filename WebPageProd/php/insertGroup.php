@@ -41,15 +41,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $groupImagePath = "Images/" . $groupImageName; // Assuming the Images/ directory is in the root
 
         // Insert the group into the database
-        $insertGroupQuery = "INSERT INTO `groups` (groupname, groupdp, groupdesc, type, host) VALUES (?, ?, ?, ?, ?)";
+        $insertGroupQuery = "INSERT INTO `groups` (groupname, groupdp, groupdesc, type) VALUES (?, ?, ?, ?)";
         if ($stmt = mysqli_prepare($connection, $insertGroupQuery)) {
-            mysqli_stmt_bind_param($stmt, "sssss", $groupName, $groupImagePath, $groupDesc, $isPrivPub, $username);
+            mysqli_stmt_bind_param($stmt, "ssss", $groupName, $groupImagePath, $groupDesc, $isPrivPub);
             mysqli_stmt_execute($stmt);
             $groupId = mysqli_insert_id($connection);
             mysqli_stmt_close($stmt);
 
             // Add the logged-in user as an admin and editor in the group_participants table
-            $insertParticipantQuery = "INSERT INTO group_participants (groupid, username, gpermissions, fpermissions) VALUES (?, ?, 'admin', 'editor')";
+            $insertParticipantQuery = "INSERT INTO group_participants (groupid, username, gpermissions, fpermissions) VALUES (?, ?, 'owner', 'editor')";
             if ($stmt = mysqli_prepare($connection, $insertParticipantQuery)) {
                 mysqli_stmt_bind_param($stmt, "is", $groupId, $username);
                 mysqli_stmt_execute($stmt);
