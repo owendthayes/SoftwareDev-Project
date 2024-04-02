@@ -13,7 +13,7 @@ if ($groupid) {
     $connection = connect_to_database();
 
     // Fetch group details
-    $query = "SELECT * FROM 'groups' WHERE groupid = ?";
+    $query = "SELECT * FROM `groups` WHERE groupid = ?";
     $stmt = mysqli_prepare($connection, $query);
     mysqli_stmt_bind_param($stmt, "i", $groupid);
     mysqli_stmt_execute($stmt);
