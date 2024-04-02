@@ -17,8 +17,8 @@ if (isset($_SESSION['username']) && isset($_POST['username'])) {
         $stmt->close();
 
         // Prepare the statement to insert the notification
-        $notificationQuery = "INSERT INTO notifications (recipient_username, sender_username, activity_type, object_type, object_id, content) 
-                              VALUES (?, ?, 'follow', 'user', 0, ?)";
+        $notificationQuery = "INSERT INTO notifications (recipient_username, sender_username, activity_type, object_type, content) 
+                              VALUES (?, ?, 'follow', 'user', ?)";
         $notificationStmt = mysqli_prepare($connection, $notificationQuery);
         $content = $follower . ' started following you.';
         mysqli_stmt_bind_param($notificationStmt, "sss", $following, $follower, $content);
