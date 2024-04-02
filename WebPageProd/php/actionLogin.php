@@ -29,7 +29,7 @@
                     } else {
                         #echo "The password you entered was not valid.";
                         $_SESSION['error_message'] = "The password you entered was not valid.";
-                        header("Location: ../login.php"); // Replace 'index.php' with your login page
+                        header("Location: ../login.php"); 
                         exit;
                     }
                 }
