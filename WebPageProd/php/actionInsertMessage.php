@@ -1,6 +1,6 @@
 <?php
 include 'server_connection.php';
-include 'getChatId.php';
+include 'getChatID.php';
 $connection = connect_to_database();
 session_start();
 
