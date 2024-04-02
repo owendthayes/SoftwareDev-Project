@@ -2,7 +2,7 @@
 
 session_start();
 include 'server_connection.php';
-include 'getChatId.php';
+include 'getChatID.php';
 $connection = connect_to_database();
 
 if (isset($_SESSION['loggedin']) && $_SESSION['loggedin'] == true) {

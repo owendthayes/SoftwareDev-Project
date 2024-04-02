@@ -5,12 +5,12 @@ session_start();
 
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_SESSION['username'])) {
     $username = $_SESSION['username'];
-    
+
     // Initialize variables to null
     $fullName = null;
     $aboutMe = null;
     $profileImagePath = null;
-    
+
     // Check if full name is provided
     if (!empty($_POST['fullName'])) {
         $fullName = $_POST['fullName'];
@@ -26,7 +26,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_SESSION['username'])) {
         $fileName = basename($_FILES['profileImage']['name']);
         $fileTmpName = $_FILES['profileImage']['tmp_name'];
         $fileDestination = '../Images/' . $fileName; // Specify your path to the image folder
-        
+
         // Move the file to the image folder
         if (move_uploaded_file($fileTmpName, $fileDestination)) {
             $profileImagePath = 'Images/' . $fileName; // Store 'Images/' followed by the image filename
@@ -39,7 +39,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_SESSION['username'])) {
     // Build the SQL query
     $query = "UPDATE profile SET ";
     $queryParams = [];
-    
+
     // Update full name if provided
     if ($fullName !== null) {
         $query .= "realName = ?, ";
@@ -60,10 +60,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_SESSION['username'])) {
 
     // Remove trailing comma and space
     $query = rtrim($query, ", ");
-    
-    // Finalize query with WHERE clause
-    $query .= " WHERE username = ?";
-    array_push($queryParams, $username);
+
+    // Check if any fields are being updated
+    if (count($queryParams) > 0) {
+        // Finalize query with WHERE clause
+        $query .= " WHERE username = ?";
+        array_push($queryParams, $username);
+    } else {
+        echo "No changes were made.";
+        exit;
+    }
 
     // Prepare and execute statement
     $stmt = mysqli_prepare($connection, $query);
@@ -85,5 +91,3 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_SESSION['username'])) {
 } else {
     echo "Invalid request or not logged in.";
 }
-
-?>
